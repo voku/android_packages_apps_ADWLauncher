@@ -14,16 +14,16 @@
      limitations under the License.
 -->
 
-<com.android.launcher.DragLayer
+<org.adw.launcher.DragLayer
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:launcher="http://schemas.android.com/apk/res/com.android.launcher"
+    xmlns:launcher="http://schemas.android.com/apk/res/org.adw.launcher"
 
     android:id="@+id/drag_layer"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
     <!-- The workspace contains 5 screens of cells -->
-    <com.android.launcher.Workspace
+    <org.adw.launcher.Workspace
         android:id="@+id/workspace"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -38,7 +38,7 @@
         <include android:id="@+id/cell6" layout="@layout/workspace_screen" />
         <include android:id="@+id/cell7" layout="@layout/workspace_screen" />
 
-    </com.android.launcher.Workspace>
+    </org.adw.launcher.Workspace>
 
     <ViewStub
         android:id="@+id/stub_drawer"
@@ -53,9 +53,9 @@
 		android:layout_height="fill_parent"
 		android:gravity="center_vertical"
 		android:layout_gravity="right|center_vertical">
-	    <com.android.launcher.ActionButton
+	    <org.adw.launcher.ActionButton
 	        android:src="@drawable/rab_empty"
-	        android:background="@drawable/rab_bg"
+	        launcher:background="@drawable/rab_bg"
 	        android:scaleType="center"
 	        android:layout_width="wrap_content"
 	        android:id="@+id/btn_rab"
@@ -68,9 +68,9 @@
 			android:layout_height="50dip"
 			android:background="@drawable/handle"
 			/>
-	    <com.android.launcher.ActionButton
+	    <org.adw.launcher.ActionButton
 	        android:src="@drawable/lab_empty"
-	        android:background="@drawable/lab_bg"
+	        launcher:background="@drawable/lab_bg"
 	        android:scaleType="center"
 	        android:layout_width="wrap_content"
 	        android:id="@+id/btn_lab"
@@ -92,7 +92,7 @@
         android:layout_width="wrap_content" 
         android:layout_gravity="top|right"
         android:onClick="nextScreen"/>
-    <com.android.launcher.SliderView
+    <org.adw.launcher.SliderView
         android:id="@+id/all_apps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
         launcher:slideDirections="left"
         launcher:targetDistance="45dip" />
 
-    <com.android.launcher.DeleteZone
+    <org.adw.launcher.DeleteZone
         android:id="@+id/delete_zone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
         android:layout_gravity="right|center_vertical"
         android:visibility="invisible"
         launcher:direction="vertical" />
-    <com.android.launcher.DockBar
+    <org.adw.launcher.DockBar
         android:id="@+id/dockbar"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
@@ -131,7 +131,7 @@
             android:id="@id/close_dockbar"
             android:layout_width="wrap_content"
             android:layout_gravity="center"/>
-        <com.android.launcher.MiniLauncher
+        <org.adw.launcher.MiniLauncher
             android:id="@+id/mini_content"
             android:background="@drawable/dockbar_bg"
             android:layout_width="fill_parent"
@@ -141,5 +141,5 @@
             launcher:cells="6"
             launcher:orientation="vertical"		
             />
-    </com.android.launcher.DockBar>
-</com.android.launcher.DragLayer>
+    </org.adw.launcher.DockBar>
+</org.adw.launcher.DragLayer>

@@ -14,9 +14,9 @@
      limitations under the License.
 -->
 
-<com.android.launcher.Search 
+<org.adw.launcher.Search 
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:launcher="http://schemas.android.com/apk/res/com.android.launcher2"
+    xmlns:launcher="http://schemas.android.com/apk/res/org.adw.launcher"
     android:id="@+id/widget_search"  
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -52,10 +52,10 @@
             android:layout_width="wrap_content"
             android:layout_height="42dip"
             android:layout_marginLeft="4dip"
-            android:background="@*android:drawable/btn_search_dialog_voice"
+            android:background="@drawable/btn_search_dialog_voice"
             android:src="@*android:drawable/ic_btn_speak_now"
         />
 
     </LinearLayout>
 
-</com.android.launcher.Search>
+</org.adw.launcher.Search>
