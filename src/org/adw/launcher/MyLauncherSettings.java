@@ -71,7 +71,7 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
 			}
 		});
         Preference uiHideLabels = (Preference) findPreference("uiHideLabels");
-        lwpSupport.setOnPreferenceChangeListener(this);
+        uiHideLabels.setOnPreferenceChangeListener(this);
     }
 	@Override
 	protected void onPause(){
