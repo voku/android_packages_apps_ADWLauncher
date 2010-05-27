@@ -19,7 +19,9 @@
 -->
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.adw.launcher">
+    package="org.adw.launcher"
+    android:versionCode="1" android:versionName="@string/adw_version"
+    android:installLocation="internalOnly">
 
     <permission
         android:name="org.adw.launcher.permission.INSTALL_SHORTCUT"
