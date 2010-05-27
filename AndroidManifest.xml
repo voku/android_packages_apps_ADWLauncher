@@ -123,7 +123,7 @@
             android:readPermission="org.adw.launcher.permission.READ_SETTINGS" />
 
     </application>
-    <uses-sdk android:minSdkVersion="4"/>
+    <uses-sdk android:minSdkVersion="5"/>
 	<supports-screens
 		android:largeScreens="true"
 		android:normalScreens="true"
