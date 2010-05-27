@@ -142,4 +142,9 @@ public final class AlmostNexusSettingsHelper {
 		float scale=(float)newD/10f;
 		return scale;
 	}
+	public static boolean getUIHideLabels(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("uiHideLabels", false);
+		return newD;
+	}
 }
