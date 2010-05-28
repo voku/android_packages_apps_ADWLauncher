@@ -1539,7 +1539,11 @@ public final class Launcher extends Activity implements View.OnClickListener, On
     }
 
     private void showNotifications() {
-        try {
+    	if(hideStatusBar){
+    		fullScreen(false);
+    		mShouldHideStatusbaronFocus=true;
+    	}
+    	try {
             Object service = getSystemService("statusbar");
             if (service != null) {
                 Method expand = service.getClass().getMethod("expand");
