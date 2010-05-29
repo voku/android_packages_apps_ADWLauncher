@@ -4,6 +4,7 @@ import org.adw.launcher.DragController.DragListener;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -194,6 +195,6 @@ public class ActionButton extends ImageView implements DropTarget, DragListener 
 		if(!hide)
 			this.setBackgroundDrawable(bgResource);
 		else
-			this.setBackgroundDrawable(null);
+			this.setBackgroundColor(Color.TRANSPARENT);
 	}
 }
