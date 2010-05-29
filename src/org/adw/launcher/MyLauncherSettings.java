@@ -143,17 +143,6 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
 				AlertDialog alert = builder.create();
 				alert.show();
 			}
-		}else if(preference.getKey().equals("lwpSupport")){
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(mMsg)
-			       .setCancelable(false)
-			       .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int id) {
-							shouldRestart=true;
-			           }
-			       });
-			AlertDialog alert = builder.create();
-			alert.show();
 		}else if(preference.getKey().equals("uiHideLabels")){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage(mMsg)

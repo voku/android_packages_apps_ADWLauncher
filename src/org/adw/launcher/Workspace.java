@@ -422,7 +422,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     public void computeScroll() {
         if (mScroller.computeScrollOffset()) {
             scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
-            updateWallpaperOffset();
+            if(lwpSupport)updateWallpaperOffset();
             postInvalidate();
         } else if (mNextScreen != INVALID_SCREEN) {
             mCurrentScreen = Math.max(0, Math.min(mNextScreen, getChildCount() - 1));
@@ -447,8 +447,14 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     @Override
     protected void dispatchDraw(Canvas canvas) {
         boolean restore = false;
+        // If the all apps drawer is open and the drawing region for the workspace
+        // is contained within the drawer's bounds, we skip the drawing. This requires
+        // the drawer to be fully opaque.
+        if((mLauncher.isAllAppsVisible() && mLauncher.isAllAppsOpaque()) || mLauncher.isFullScreenPreviewing()){
+        	return;
+        }
         //ADW: If using old wallpaper rendering method...
-        if(!lwpSupport){
+        if(!lwpSupport && mWallpaper!=null){
         	float x = getScrollX() * mWallpaperOffset;
     		if (x + mWallpaperWidth < getRight() - getLeft()) {
     			x = getRight() - getLeft() - mWallpaperWidth;
@@ -459,12 +465,6 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
         		x=(getScrollX()-mWallpaperWidth+(getRight()-getLeft()));
         	}
     		canvas.drawBitmap(mWallpaper, x, (getBottom() - mWallpaperHeight) / 2, mPaint);
-        }
-        // If the all apps drawer is open and the drawing region for the workspace
-        // is contained within the drawer's bounds, we skip the drawing. This requires
-        // the drawer to be fully opaque.
-        if((mLauncher.isAllAppsVisible() && mLauncher.isAllAppsOpaque()) || mLauncher.isFullScreenPreviewing()){
-        	return;
         }
         // ViewGroup.dispatchDraw() supports many features we don't need:
         // clip to padding, layout animation, animation listener, disappearing
@@ -539,7 +539,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     	}
         if (mFirstLayout) {
             scrollTo(mCurrentScreen * width, 0);
-            updateWallpaperOffset(width * (getChildCount() - 1));
+            if(lwpSupport)updateWallpaperOffset(width * (getChildCount() - 1));
             mFirstLayout = false;
         }
     }
@@ -558,7 +558,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
             }
         }
         //ADW:updateWallpaperoffset
-        updateWallpaperOffset();
+        if(lwpSupport)updateWallpaperOffset();
     }
 
     @Override
@@ -713,6 +713,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
                     if (!currentScreen.lastDownOnOccupiedCell()) {
                         getLocationOnScreen(mTempCell);
                         // Send a tap to the wallpaper if the last down was on empty space
+                        if(lwpSupport)
                         mWallpaperManager.sendWallpaperCommand(getWindowToken(), 
                                 "android.wallpaper.tap",
                                 mTempCell[0] + (int) ev.getX(),
@@ -787,14 +788,14 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
                 if (deltaX < 0) {
                     if (getScrollX() > -mScrollingBounce) {
                         scrollBy(Math.min(deltaX,mScrollingBounce), 0);
-                        updateWallpaperOffset();
+                        if(lwpSupport)updateWallpaperOffset();
                     }
                 } else if (deltaX > 0) {
                     final int availableToScroll = getChildAt(getChildCount() - 1).getRight() -
                             getScrollX() - getWidth()+mScrollingBounce;
                     if (availableToScroll > 0) {
                         scrollBy(deltaX, 0);
-                        updateWallpaperOffset();
+                        if(lwpSupport)updateWallpaperOffset();
                     }
                 }
             }
@@ -1432,7 +1433,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
 		if(!lwpSupport){
 			final Drawable drawable = mWallpaperManager.getDrawable();
 			if (drawable instanceof BitmapDrawable) {
-				mWallpaper = ((BitmapDrawable) drawable).getBitmap();
+				mWallpaper=Bitmap.createBitmap(((BitmapDrawable) drawable).getBitmap());
 				mWallpaperLoaded=true;
 			}
 		}else{
