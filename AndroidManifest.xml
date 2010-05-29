@@ -20,7 +20,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.adw.launcher"
-    android:versionCode="2" android:versionName="0.7.1 standalone"
+    android:versionCode="3" android:versionName="0.7.2 standalone"
     android:installLocation="internalOnly">
 
     <permission
