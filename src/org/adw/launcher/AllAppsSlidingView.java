@@ -1830,8 +1830,10 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
 		mScroller.forceFinished(true);
 		if(!forceOpaque){
 			mTexture=mLauncher.getBlurredBg();
-	        mTextureWidth = mTexture.getWidth();
-	        mTextureHeight = mTexture.getHeight();
+			if(mTexture!=null){
+				mTextureWidth = mTexture.getWidth();
+				mTextureHeight = mTexture.getHeight();
+			}
 		}
 		setVisibility(View.VISIBLE);
 		findCurrentHolder();
