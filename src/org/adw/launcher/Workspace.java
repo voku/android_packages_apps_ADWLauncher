@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.drawable.BitmapDrawable;
@@ -119,13 +120,14 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     int mHomeScreensLoaded = 0;
     //ADW: port from donut wallpaper drawing
     private Paint mPaint;
-    private Bitmap mWallpaper;
+    //private Bitmap mWallpaper;
     private int mWallpaperWidth;
     private int mWallpaperHeight;
     private float mWallpaperOffset;
     private boolean mWallpaperLoaded;
     private boolean lwpSupport=true;
     private boolean wallpaperHack=true;
+    private BitmapDrawable mWallpaperDrawable;
     //ADW: speed for desktop transitions
     private int mScrollingSpeed=600;
     //ADW: bounce scroll
@@ -439,7 +441,8 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     public boolean isOpaque() {
         //ADW: hack to use old rendering
         if(!lwpSupport && mWallpaperLoaded){
-            return !mWallpaper.hasAlpha();
+            //return !mWallpaper.hasAlpha();
+        	return mWallpaperDrawable.getOpacity()==PixelFormat.OPAQUE;
         }else{
         	return false;
         }
@@ -449,7 +452,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     protected void dispatchDraw(Canvas canvas) {
         boolean restore = false;
         //ADW: If using old wallpaper rendering method...
-        if(!lwpSupport && mWallpaper!=null){
+        if(!lwpSupport && mWallpaperDrawable!=null){
         	float x = getScrollX() * mWallpaperOffset;
     		if (x + mWallpaperWidth < getRight() - getLeft()) {
     			x = getRight() - getLeft() - mWallpaperWidth;
@@ -459,7 +462,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
         	if(getScrollX()>getChildAt(getChildCount() - 1).getRight() - (getRight() - getLeft())){
         		x=(getScrollX()-mWallpaperWidth+(getRight()-getLeft()));
         	}
-    		canvas.drawBitmap(mWallpaper, x, (getBottom() - mWallpaperHeight) / 2, mPaint);
+    		canvas.drawBitmap(mWallpaperDrawable.getBitmap(), x, (getBottom() - mWallpaperHeight) / 2, mPaint);
         }
         // If the all apps drawer is open and the drawing region for the workspace
         // is contained within the drawer's bounds, we skip the drawing. This requires
@@ -528,10 +531,12 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     		    final int _width = isPortrait ? display.getWidth() : display.getHeight();
     		    final int _height = isPortrait ? display.getHeight() : display.getWidth();
     		    
-    		    mWallpaper = Utilities.centerToFit(mWallpaper, _width * Launcher.WALLPAPER_SCREENS_SPAN,
+    		    /*mWallpaper = Utilities.centerToFit(mWallpaper, _width * Launcher.WALLPAPER_SCREENS_SPAN,
     		            _height, mLauncher);
     		    mWallpaperWidth = mWallpaper.getWidth();
-    		    mWallpaperHeight = mWallpaper.getHeight();
+    		    mWallpaperHeight = mWallpaper.getHeight();*/
+    		    mWallpaperWidth = mWallpaperDrawable.getIntrinsicWidth();
+    		    mWallpaperHeight = mWallpaperDrawable.getIntrinsicHeight();
     		}
 
     		final int wallpaperWidth = mWallpaperWidth;
@@ -1434,17 +1439,20 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
      */
 	public void setWallpaper(){
 		if(mWallpaperManager.getWallpaperInfo()!=null || !wallpaperHack){
-			if(mWallpaper!=null){
-				mWallpaper.recycle();
+			//if(mWallpaperDrawable!=null){
+				mWallpaperDrawable=null;
 				mWallpaperLoaded=false;
-			}
+			//}
 			lwpSupport=true;
 		}else{
 			final Drawable drawable = mWallpaperManager.getDrawable();
-			if (drawable instanceof BitmapDrawable) {
-				mWallpaper=Bitmap.createBitmap(((BitmapDrawable) drawable).getBitmap());
+			Log.d("WORKSPACE","drawable gotten");
+			//if (drawable instanceof BitmapDrawable) {
+				Log.d("WORKSPACE","drawable is a BITMAP drawable");
+				//mWallpaper=Bitmap.createBitmap(((BitmapDrawable) drawable).getBitmap());
+				mWallpaperDrawable=(BitmapDrawable) drawable;
 				mWallpaperLoaded=true;
-			}
+			//}
 			lwpSupport=false;
 		}
 		mLauncher.setWindowBackground(lwpSupport);
