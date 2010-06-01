@@ -415,7 +415,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
 
     private void updateWallpaperOffset(int scrollRange) {
     	//ADW: we set a condition to not move wallpaper beyond the "bounce" zone
-    	if(getScrollX()<=getChildAt(getChildCount() - 1).getRight() - (getRight() - getLeft())){
+    	if(getScrollX()>0 && getScrollX()<getChildAt(getChildCount() - 1).getLeft()){
     		mWallpaperManager.setWallpaperOffsetSteps(1.0f / (getChildCount() - 1), 0 );
     		mWallpaperManager.setWallpaperOffsets(getWindowToken(), getScrollX() / (float) scrollRange, 0);
     	}
