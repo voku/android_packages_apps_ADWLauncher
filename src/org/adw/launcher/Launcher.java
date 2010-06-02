@@ -498,7 +498,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 				((AllAppsGridView) mAllAppsGrid).setNumColumns(AlmostNexusSettingsHelper.getColumnsLandscape(Launcher.this));
 			}
 		}
-		mWorkspace.setWallpaper();
+		mWorkspace.setWallpaper(false);
         if (mRestoring) {
             startLoaders();
         }
@@ -3022,7 +3022,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
                 if (launcher != null) {
                 	final Workspace workspace=launcher.getWorkspace();
                     if(workspace!=null){
-                    	workspace.setWallpaper();
+                    	workspace.setWallpaper(true);
                     }
                 }
             }
