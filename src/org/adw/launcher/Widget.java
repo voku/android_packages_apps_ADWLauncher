@@ -17,8 +17,6 @@
 package org.adw.launcher;
 
 
-import android.content.ContentValues;
-import android.graphics.Bitmap;
 
 /**
  * Represents one instance of a Launcher widget, such as search.

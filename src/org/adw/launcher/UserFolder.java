@@ -40,6 +40,7 @@ public class UserFolder extends Folder implements DropTarget {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public void onDrop(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
         final ApplicationInfo item = (ApplicationInfo) dragInfo;
         //noinspection unchecked
@@ -57,6 +58,7 @@ public class UserFolder extends Folder implements DropTarget {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onDropCompleted(View target, boolean success) {
         if (success) {
             //noinspection unchecked
