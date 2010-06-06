@@ -20,8 +20,8 @@ import static android.util.Log.d;
 import static android.util.Log.e;
 import static android.util.Log.w;
 
-import com.android.launcher.DockBar.DockBarListener;
-import com.android.launcher.SliderView.OnTriggerListener;
+import org.adw.launcher.DockBar.DockBarListener;
+import org.adw.launcher.SliderView.OnTriggerListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
