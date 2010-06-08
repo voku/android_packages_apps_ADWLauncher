@@ -584,6 +584,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     	}
         if (mFirstLayout) {
             scrollTo(mCurrentScreen * width, 0);
+            mScroller.startScroll(0, 0, mCurrentScreen * width, 0, 0);
             if(lwpSupport)updateWallpaperOffset(width * (getChildCount() - 1));
             mFirstLayout = false;
         }
