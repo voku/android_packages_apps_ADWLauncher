@@ -3,34 +3,51 @@ package demo.multitouch.controller;
 /**
  * MultiTouchController.java
  * 
- * (c) Luke Hutchison (luke.hutch@mit.edu)
+ * Author: Luke Hutchison (luke.hutch@mit.edu)
+ *   Please drop me an email if you use this code so I can list your project here!
  * 
- * Modified for official level 5 API by Cyanogen (shade@chemlab.org)
- *
- * Support for compilation under Android 1.5/1.6 added my mmin of handyCalc. 
+ * Usage:
+ *   Create a class that extends View and implements MultiTouchObjectCanvas<T>, where T is the type of object that you want the controller
+ *   to be able to drag and scale.  See comments in the definition interface MultiTouchObjectCanvas<T> below for information on correctly
+ *   implementing the interface.
  * 
- * Released under the Apache License v2.
+ * Changelog:
+ *   2010-06-09 v1.3    Ported to Android-2.2 (handle ACTION_POINTER_* actions); fixed several bugs; refactoring; documentation (LH) 
+ *   2010-05-17 v1.2.1  Dual-licensed under Apache and GPL licenses
+ *   2010-02-18 v1.2    Support for compilation under Android 1.5/1.6 using introspection (mmin, author of handyCalc)
+ *   2010-01-08 v1.1.1  Bugfixes to Cyanogen's patch that only showed up in more complex uses of controller (LH) 
+ *   2010-01-06 v1.1    Modified for official level 5 MT API (Cyanogen)
+ *   2009-01-25 v1.0    Original MT controller, released for hacked G1 kernel (LH) 
+ * 
+ * Known usages:
+ * - Yuan Chin's fork of ADW Launcher to support multitouch
+ * - David Byrne's fractal viewing app Fractoid
+ * - mmin's handyCalc calculator
+ * - My own "MultiTouch Visualizer 2" in the Market
+ * - Formerly: The browser in cyanogenmod (and before that, JesusFreke), and other firmwares like dwang5.  This usage has been
+ *   replaced with official pinch/zoom in Maps, Browser and Gallery[3D] as of API level 5.
+ * 
+ * License:
+ *   Dual-licensed under the Apache License v2 and the GPL v2.
  */
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 
 /**
- * A class that simplifies the implementation of multitouch in applications. Subclass this and read the fields here as needed in
- * subclasses.
+ * A class that simplifies the implementation of multitouch in applications. Subclass this and read the fields here as needed in subclasses.
  * 
  * @author Luke Hutchison
  */
 public class MultiTouchController<T> {
 
 	/**
-	 * Time in ms required after a change in event status (e.g. putting down or lifting off the second finger) before events
-	 * actually do anything -- helps eliminate noisy jumps that happen on change of status
+	 * Time in ms required after a change in event status (e.g. putting down or lifting off the second finger) before events actually do anything --
+	 * helps eliminate noisy jumps that happen on change of status
 	 */
-	private static final long EVENT_SETTLE_TIME_INTERVAL = 0; //Default: 100. Wysie: If set to 100, quick pinches are not triggered. 20 is nice too.
+	private static final long EVENT_SETTLE_TIME_INTERVAL = 20;
 
 	// The biggest possible abs val of the change in x or y between multitouch events
 	// (larger dx/dy events are ignored) -- helps eliminate jumping on finger 2 up/down
@@ -42,6 +59,9 @@ public class MultiTouchController<T> {
 
 	// The smallest possible distance between multitouch points (used to avoid div-by-zero errors and display glitches)
 	private static final float MIN_MULTITOUCH_SEPARATION = 30.0f;
+
+	// The max number of touch points that can be present on the screen at once
+	public static final int MAX_TOUCH_POINTS = 10;
 
 	// --
 
@@ -67,6 +87,8 @@ public class MultiTouchController<T> {
 
 	// --
 
+	// Note: the mode number is also the number of fingers down on the screen (except 2 => 2+)
+
 	private static final int MODE_NOTHING = 0;
 
 	private static final int MODE_DRAG = 1;
@@ -78,14 +100,14 @@ public class MultiTouchController<T> {
 	// ------------------------------------------------------------------------------------
 
 	/** Constructor that sets handleSingleTouchEvents to true */
-	public MultiTouchController(MultiTouchObjectCanvas<T> objectCanvas, Resources res) {
-		this(objectCanvas, res, true);
+	public MultiTouchController(MultiTouchObjectCanvas<T> objectCanvas) {
+		this(objectCanvas, true);
 	}
 
 	/** Full constructor */
-	public MultiTouchController(MultiTouchObjectCanvas<T> objectCanvas, Resources res, boolean handleSingleTouchEvents) {
-		this.currPt = new PointInfo(res);
-		this.prevPt = new PointInfo(res);
+	public MultiTouchController(MultiTouchObjectCanvas<T> objectCanvas, boolean handleSingleTouchEvents) {
+		this.currPt = new PointInfo();
+		this.prevPt = new PointInfo();
 		this.handleSingleTouchEvents = handleSingleTouchEvents;
 		this.objectCanvas = objectCanvas;
 	}
@@ -93,16 +115,14 @@ public class MultiTouchController<T> {
 	// ------------------------------------------------------------------------------------
 
 	/**
-	 * Whether to handle single-touch events/drags before multi-touch is initiated or not; if not, they are handled by subclasses.
-	 * Default: true
+	 * Whether to handle single-touch events/drags before multi-touch is initiated or not; if not, they are handled by subclasses. Default: true
 	 */
 	protected void setHandleSingleTouchEvents(boolean handleSingleTouchEvents) {
 		this.handleSingleTouchEvents = handleSingleTouchEvents;
 	}
 
 	/**
-	 * Whether to handle single-touch events/drags before multi-touch is initiated or not; if not, they are handled by subclasses.
-	 * Default: true
+	 * Whether to handle single-touch events/drags before multi-touch is initiated or not; if not, they are handled by subclasses. Default: true
 	 */
 	protected boolean getHandleSingleTouchEvents() {
 		return handleSingleTouchEvents;
@@ -119,10 +139,13 @@ public class MultiTouchController<T> {
 	private static Method m_getHistoricalPressure;
 	private static Method m_getX;
 	private static Method m_getY;
+	private static int ACTION_POINTER_UP = 6;
+	private static int ACTION_POINTER_INDEX_SHIFT = 8;
 
 	static {
-		boolean succeed = false;
+		boolean succeeded = false;
 		try {
+			// Android 2.0.1 stuff:
 			m_getPointerCount = MotionEvent.class.getMethod("getPointerCount");
 			m_findPointerIndex = MotionEvent.class.getMethod("findPointerIndex", Integer.TYPE);
 			m_getPressure = MotionEvent.class.getMethod("getPressure", Integer.TYPE);
@@ -131,72 +154,85 @@ public class MultiTouchController<T> {
 			m_getHistoricalPressure = MotionEvent.class.getMethod("getHistoricalPressure", Integer.TYPE, Integer.TYPE);
 			m_getX = MotionEvent.class.getMethod("getX", Integer.TYPE);
 			m_getY = MotionEvent.class.getMethod("getY", Integer.TYPE);
-			succeed = true;
-		} catch(Exception e) {
+
+			// Android 2.2 stuff (optional here, the original Android 2.2 consts are declared above,
+			// and these actions aren't used previous to Android 2.2):
+			Field up = MotionEvent.class.getField("ACTION_POINTER_UP");
+			if (up != null)
+				ACTION_POINTER_UP = up.getInt(null);
+			Field shift = MotionEvent.class.getField("ACTION_POINTER_INDEX_SHIFT");
+			if (shift != null)
+				ACTION_POINTER_INDEX_SHIFT = shift.getInt(null);
+
+			succeeded = true;
+		} catch (Exception e) {
 		}
-		multiTouchSupported = succeed;
+		multiTouchSupported = succeeded;
 	}
 
 	// ------------------------------------------------------------------------------------
 
+	private static final float[] xVals = new float[MAX_TOUCH_POINTS];
+	private static final float[] yVals = new float[MAX_TOUCH_POINTS];
+	private static final float[] pressureVals = new float[MAX_TOUCH_POINTS];
+	private static final int[] pointerIdxs = new int[MAX_TOUCH_POINTS];
+
 	/** Process incoming touch events */
 	public boolean onTouchEvent(MotionEvent event) {
-		if(!multiTouchSupported)
-			return false;
 		try {
-			int pointerCount = (Integer) m_getPointerCount.invoke(event);
+			int pointerCount = multiTouchSupported ? (Integer) m_getPointerCount.invoke(event) : 1;
 			if (dragMode == MODE_NOTHING && !handleSingleTouchEvents && pointerCount == 1)
 				// Not handling initial single touch events, just pass them on
 				return false;
 
-			// Handle history first, if any (we sometimes get history with ACTION_MOVE events)
+			// Handle history first (we sometimes get history with ACTION_MOVE events)
+			int action = event.getAction();
 			int histLen = event.getHistorySize() / pointerCount;
-
-			// Don't try to fetch second touchpoint if only one exists
-			int secondPointerIndex = (Integer) m_findPointerIndex.invoke(event, 1);
-
-			for (int i = 0; i < histLen; i++) {
-				float pressureI = (Float) m_getPressure.invoke(event, i);
-				if (secondPointerIndex >= 0) {
-					float historicalX = (Float) m_getHistoricalX.invoke(event, secondPointerIndex, i);
-					float historicalY = (Float) m_getHistoricalY.invoke(event, secondPointerIndex, i);
-					float historicalPressure = (Float) m_getHistoricalPressure.invoke(event, secondPointerIndex, i);
-					decodeTouchEvent(event.getHistoricalX(i), event.getHistoricalY(i), pressureI, pointerCount,
-							historicalX, historicalY, historicalPressure, MotionEvent.ACTION_MOVE, true, event
-									.getHistoricalEventTime(i));
+			for (int histIdx = 0; histIdx <= histLen; histIdx++) {
+				// Read from history entries until histIdx == histLen, then read from current event
+				if (!multiTouchSupported || pointerCount == 1) {
+					xVals[0] = histIdx < histLen ? event.getHistoricalX(histIdx) : event.getX();
+					yVals[0] = histIdx < histLen ? event.getHistoricalY(histIdx) : event.getY();
+					pressureVals[0] = histIdx < histLen ? event.getHistoricalPressure(histIdx) : event.getPressure();
 				} else {
-					// Can't read from invalid pointer index
-					decodeTouchEvent(event.getHistoricalX(i), event.getHistoricalY(i), pressureI, pointerCount,
-							0, 0, 0.0f, MotionEvent.ACTION_MOVE, true, event.getHistoricalEventTime(i));
+					// Read x, y and pressure of each pointer
+					int numPointers = Math.min(pointerCount, MAX_TOUCH_POINTS);
+					for (int i = 0; i < numPointers; i++) {
+						int ptrIdx = (Integer) m_findPointerIndex.invoke(event, i);
+						pointerIdxs[i] = ptrIdx;
+						// N.B. if pointerCount == 1, then the following methods throw an array index out of range exception,
+						// and the code above is therefore required not just for Android 1.5/1.6 but also for when there is
+						// only one touch point on the screen -- pointlessly inconsistent :(
+						xVals[i] = (Float) (histIdx < histLen ? m_getHistoricalX.invoke(event, ptrIdx, histIdx) : m_getX.invoke(event, ptrIdx));
+						yVals[i] = (Float) (histIdx < histLen ? m_getHistoricalY.invoke(event, ptrIdx, histIdx) : m_getY.invoke(event, ptrIdx));
+						pressureVals[i] = (Float) (histIdx < histLen ? m_getHistoricalPressure.invoke(event, ptrIdx, histIdx) : m_getPressure.invoke(
+								event, ptrIdx));
+					}
 				}
+				// Decode event
+				decodeTouchEvent(pointerCount, xVals, yVals, pressureVals,
+						pointerIdxs, //
+						/* action = */histIdx < histLen ? MotionEvent.ACTION_MOVE : action, //
+						/* down = */histIdx < histLen ? true : action != MotionEvent.ACTION_UP
+								&& (action & ((1 << ACTION_POINTER_INDEX_SHIFT) - 1)) != ACTION_POINTER_UP && action != MotionEvent.ACTION_CANCEL,
+						event.getHistoricalEventTime(histIdx));
 			}
 
-			// Handle actual event at end of history
-			if (secondPointerIndex >= 0) {
-				float pressure = (Float) m_getPressure.invoke(event, secondPointerIndex);
-				float x = (Float) m_getX.invoke(event, secondPointerIndex);
-				float y = (Float) m_getY.invoke(event, secondPointerIndex);
-				decodeTouchEvent(event.getX(), event.getY(), event.getPressure(), pointerCount, x, y, pressure, event
-						.getAction(), event.getAction() != MotionEvent.ACTION_UP && event.getAction() != MotionEvent.ACTION_CANCEL,
-						event.getEventTime());
-			} else {
-				// Can't read from invalid pointer index
-				decodeTouchEvent(event.getX(), event.getY(), event.getPressure(), pointerCount, 0, 0, 0.0f, event
-						.getAction(), event.getAction() != MotionEvent.ACTION_UP && event.getAction() != MotionEvent.ACTION_CANCEL,
-						event.getEventTime());
-			}
 			return true;
 		} catch (Exception e) {
-			// Just ignore and continue
+			// In case any of the introspection stuff fails
 			return false;
 		}
 	}
 
-	private void decodeTouchEvent(float x, float y, float pressure, int pointerCount, float x2, float y2, float pressure2,
-			int action, boolean down, long eventTime) {
-
-		prevPt.set(currPt);
-		currPt.set(x, y, pressure, pointerCount, x2, y2, pressure2, action, down, eventTime);
+	private void decodeTouchEvent(int pointerCount, float[] x, float[] y, float[] pressure, int[] pointerIdxs, int action, boolean down,
+			long eventTime) {
+		// Swap curr/prev points
+		PointInfo tmp = prevPt;
+		prevPt = currPt;
+		currPt = tmp;
+		// Overwrite old prev point
+		currPt.set(pointerCount, x, y, pressure, pointerIdxs, action, down, eventTime);
 		multiTouchController();
 	}
 
@@ -347,7 +383,13 @@ public class MultiTouchController<T> {
 
 	/** A class that packages up all MotionEvent information with all derived multitouch information (if available) */
 	public static class PointInfo {
-		private float x, y, dx, dy, size, diameter, diameterSq, angle, pressure, pressure2;
+		private float[] xs = new float[MAX_TOUCH_POINTS];
+		private float[] ys = new float[MAX_TOUCH_POINTS];
+		private float[] pressures = new float[MAX_TOUCH_POINTS];
+		private int[] pointerIdxs = new int[MAX_TOUCH_POINTS];
+		private int numPoints;
+
+		private float xMid, yMid, pressureMid, dx, dy, diameter, diameterSq, angle;
 
 		private boolean down, isMultiTouch, diameterSqIsCalculated, diameterIsCalculated, angleIsCalculated;
 
@@ -355,38 +397,58 @@ public class MultiTouchController<T> {
 
 		private long eventTime;
 
-		// --
+		// -------------------------------------------------------------------------------------------------------------------------------------------
 
-		private int displayWidth, displayHeight;
+		private void set(int numPoints, float[] x, float[] y, float[] pressure, int[] pointerIdxs, int action, boolean down, long eventTime) {
+			// Log.i("Multitouch", "x: " + x + " y: " + y + " pointerCount: " + pointerCount +
+			// " x2: " + x2 + " y2: " + y2 + " action: " + action + " down: " + down);
+			this.eventTime = eventTime;
+			this.action = action;
+			this.numPoints = numPoints;
+			for (int i = 0; i < numPoints; i++) {
+				this.xs[i] = x[i];
+				this.ys[i] = y[i];
+				this.pressures[i] = pressure[i];
+				this.pointerIdxs[i] = pointerIdxs[i];
+			}
+			this.down = down;
+			this.isMultiTouch = numPoints >= 2;
 
-		// --
+			if (isMultiTouch) {
+				xMid = (x[0] + x[1]) * .5f;
+				yMid = (y[0] + y[1]) * .5f;
+				pressureMid = (pressure[0] + pressure[1]) * .5f;
+				dx = Math.abs(x[1] - x[0]);
+				dy = Math.abs(y[1] - y[0]);
 
-		public PointInfo(Resources res) {
-			DisplayMetrics metrics = res.getDisplayMetrics();
-			this.displayWidth = metrics.widthPixels;
-			this.displayHeight = metrics.heightPixels;
-		}
-
-		// --
-
-		public PointInfo(PointInfo other) {
-			this.set(other);
+			} else {
+				// Single-touch event
+				xMid = x[0];
+				yMid = y[0];
+				pressureMid = pressure[0];
+				dx = dy = 0.0f;
+			}
+			// Need to re-calculate the expensive params if they're needed
+			diameterSqIsCalculated = diameterIsCalculated = angleIsCalculated = false;
 		}
 
 		/** Copy all fields */
 		public void set(PointInfo other) {
-			this.displayWidth = other.displayWidth;
-			this.displayHeight = other.displayHeight;
-			this.x = other.x;
-			this.y = other.y;
+			this.numPoints = other.numPoints;
+			for (int i = 0; i < numPoints; i++) {
+				this.xs[i] = other.xs[i];
+				this.ys[i] = other.ys[i];
+				this.pressures[i] = other.pressures[i];
+				this.pointerIdxs[i] = other.pointerIdxs[i];
+			}
+			this.xMid = other.xMid;
+			this.yMid = other.yMid;
+			this.pressureMid = other.pressureMid;
 			this.dx = other.dx;
 			this.dy = other.dy;
-			this.size = other.size;
 			this.diameter = other.diameter;
 			this.diameterSq = other.diameterSq;
 			this.angle = other.angle;
-			this.pressure = other.pressure;
-			this.pressure2 = other.pressure2;
 			this.down = other.down;
 			this.action = other.action;
 			this.isMultiTouch = other.isMultiTouch;
@@ -396,35 +458,18 @@ public class MultiTouchController<T> {
 			this.eventTime = other.eventTime;
 		}
 
-		private void set(float x, float y, float pressure, int pointerCount, float x2, float y2, float pressure2, int action,
-				boolean down, long eventTime) {
+		// -------------------------------------------------------------------------------------------------------------------------------------------
 
-			//	Log.i("Multitouch", "x: " + x + " y: " + y + " pointerCount: " + pointerCount +
-			//			" x2: " + x2 + " y2: " + y2 + " action: " + action + " down: " + down);
+		public boolean isMultiTouch() {
+			return isMultiTouch;
+		}
 
-			this.eventTime = eventTime;
-			this.action = action;
-			this.x = x;
-			this.y = y;
-			this.pressure = pressure;
-			this.pressure2 = pressure2;
-			this.down = down;
-			this.isMultiTouch = pointerCount == 2;
-			
-			if (isMultiTouch) {
-				float xMid = (x2 + x) * .5f;
-				float yMid = (y2 + y) * .5f;
-				dx = Math.abs(x2 - x);
-				dy = Math.abs(y2 - y);
-				this.x = xMid;
-				this.y = yMid;
+		public float getMultiTouchWidth() {
+			return dx;
+		}
 
-			} else {
-				// Single-touch event
-				dx = dy = 0.0f;
-			}
-			// Need to re-calculate the expensive params if they're needed
-			diameterSqIsCalculated = diameterIsCalculated = angleIsCalculated = false;
+		public float getMultiTouchHeight() {
+			return dy;
 		}
 
 		// Fast integer sqrt, by Jim Ulery. Should be faster than Math.sqrt()
@@ -467,40 +512,68 @@ public class MultiTouchController<T> {
 		}
 
 		/**
-		 * Calculate the angle of a multitouch event, and cache it. Actually gives the smaller of the two angles between the x
-		 * axis and the line between the two touchpoints, so range is [0,Math.PI/2]. Uses Math.atan2().
+		 * Calculate the angle of a multitouch event, and cache it. Actually gives the smaller of the two angles between the x axis and the line
+		 * between the two touchpoints, so range is [0,Math.PI/2]. Uses Math.atan2().
 		 */
 		public float getMultiTouchAngle() {
 			if (!angleIsCalculated) {
-				angle = (float) Math.atan2(dy, dx);
+				if (!isMultiTouch)
+					angle = 0.0f;
+				else
+					angle = (float) Math.atan2(ys[1] - ys[0], xs[1] - xs[0]);
 				angleIsCalculated = true;
 			}
 			return angle;
 		}
 
+		// -------------------------------------------------------------------------------------------------------------------------------------------
+
+		/** Return the total number of touch points */
+		public int getNumTouchPoints() {
+			return numPoints;
+		}
+
+		/** Return the X coord of the first touch point if there's only one, or the midpoint between first and second touch points if two or more. */
 		public float getX() {
-			return x;
+			return xMid;
 		}
 
+		/** Return the array of X coords -- only the first getNumTouchPoints() of these is defined. */
+		public float[] getXs() {
+			return xs;
+		}
+
+		/** Return the X coord of the first touch point if there's only one, or the midpoint between first and second touch points if two or more. */
 		public float getY() {
-			return y;
+			return yMid;
 		}
 
-		public float getMultiTouchWidth() {
-			return dx;
+		/** Return the array of Y coords -- only the first getNumTouchPoints() of these is defined. */
+		public float[] getYs() {
+			return ys;
 		}
 
-		public float getMultiTouchHeight() {
-			return dy;
+		/**
+		 * Return the array of pointer indices -- only the first getNumTouchPoints() of these is defined. These don't have to be all the numbers from
+		 * 0 to getNumTouchPoints()-1 inclusive, numbers can be skipped if a finger is lifted and the touch sensor is capable of detecting that that
+		 * particular touch point is no longer down. Note that most sensors do not have this capability: when finger 1 is lifted up finger 2 becomes
+		 * the new finger 1.
+		 */
+		public int[] getPointerIndices() {
+			return pointerIdxs;
 		}
 
+		/** Return the pressure the first touch point if there's only one, or the average pressure of first and second touch points if two or more. */
 		public float getPressure() {
-			return pressure;
+			return pressureMid;
 		}
 
-		public float getPressure2() {
-			return pressure2;
+		/** Return the array of pressures -- only the first getNumTouchPoints() of these is defined. */
+		public float[] getPressures() {
+			return pressures;
 		}
+
+		// -------------------------------------------------------------------------------------------------------------------------------------------
 
 		public boolean isDown() {
 			return down;
@@ -508,10 +581,6 @@ public class MultiTouchController<T> {
 
 		public int getAction() {
 			return action;
-		}
-
-		public boolean isMultiTouch() {
-			return isMultiTouch;
 		}
 
 		public long getEventTime() {
@@ -522,8 +591,7 @@ public class MultiTouchController<T> {
 	// ------------------------------------------------------------------------------------
 
 	/**
-	 * A class that is used to store scroll offsets and scale information for objects that are managed by the multitouch
-	 * controller
+	 * A class that is used to store scroll offsets and scale information for objects that are managed by the multitouch controller
 	 */
 	public static class PositionAndScale {
 		private float xOff, yOff, scale;
@@ -554,25 +622,56 @@ public class MultiTouchController<T> {
 
 	public static interface MultiTouchObjectCanvas<T> {
 
-		/** See if there is a draggable object at the current point. Returns the object at the point, or null if nothing to drag. */
-		public T getDraggableObjectAtPoint(PointInfo pt);
+		/**
+		 * See if there is a draggable object at the current point. Returns the object at the point, or null if nothing to drag. To start a multitouch
+		 * drag/stretch operation, this routine must return some non-null reference to an object. This object is passed into the other methods in this
+		 * interface when they are called.
+		 * 
+		 * @param touchPoint
+		 *            The point being tested (in object coordinates). Return the topmost object under this point, or if dragging/stretching the whole
+		 *            canvas, just return a reference to the canvas.
+		 * @return a reference to the object under the point being tested, or null to cancel the drag operation. If dragging/stretching the whole
+		 *         canvas (e.g. in a photo viewer), always return non-null, otherwise the stretch operation won't work.
+		 */
+		public T getDraggableObjectAtPoint(PointInfo touchPoint);
 
 		/**
-		 * Get the screen coords of the dragged object's origin, and scale multiplier to convert screen coords to obj coords. Call
-		 * the .set() method on the passed PositionAndScale object.
+		 * Get the screen coords of the dragged object's origin, and scale multiplier to convert screen coords to obj coords. The job of this routine
+		 * is to call the .set() method on the passed PositionAndScale object to record the initial position and scale of the object (in object
+		 * coordinates) before any dragging/stretching takes place.
+		 * 
+		 * @param obj
+		 *            The object being dragged/stretched.
+		 * @param objPosAndScaleOut
+		 *            Output parameter: You need to call objPosAndScaleOut.set() to record the current position and scale of obj.
 		 */
 		public void getPositionAndScale(T obj, PositionAndScale objPosAndScaleOut);
 
 		/**
-		 * Set the position and scale of the dragged object, in object coords. Return true for success, or false if those
-		 * parameters are out of range.
+		 * Callback to update the position and scale (in object coords) of the currently-dragged object.
+		 * 
+		 * @param obj
+		 *            The object being dragged/stretched.
+		 * @param newObjPosAndScale
+		 *            The new position and scale of the object, in object coordinates. Use this to move/resize the object before returning.
+		 * @param touchPoint
+		 *            Info about the current touch point, including multitouch information and utilities to calculate and cache multitouch pinch
+		 *            diameter etc. (Note: touchPoint is volatile, if you want to keep any fields of touchPoint, you must copy them before the method
+		 *            body exits.)
+		 * @return true if setting the position and scale of the object was successful, or false if the position or scale parameters are out of range
+		 *         for this object.
 		 */
 		public boolean setPositionAndScale(T obj, PositionAndScale newObjPosAndScale, PointInfo touchPoint);
 
 		/**
-		 * Select an object at the given point. Can be used to bring the object to top etc. Only called when first touchpoint goes
-		 * down, not when multitouch is initiated. Also called with null when drag op stops.
+		 * Select an object at the given point. Can be used to bring the object to top etc. Only called when first touchpoint goes down, not when
+		 * multitouch is initiated. Also called with null on touch-up.
+		 * 
+		 * @param obj
+		 *            The object being selected by single-touch, or null on touch-up.
+		 * @param touchPoint
+		 *            The current touch point.
 		 */
-		public void selectObject(T obj, PointInfo pt);
+		public void selectObject(T obj, PointInfo touchPoint);
 	}
 }

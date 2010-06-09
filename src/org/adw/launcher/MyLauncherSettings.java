@@ -193,7 +193,7 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
     	}
     };
     private int readHighlightsColorFocus() {
-    	return AlmostNexusSettingsHelper.getHighlightsColor(this);
+    	return AlmostNexusSettingsHelper.getHighlightsColorFocus(this);
     }
 
     ColorPickerDialog.OnColorChangedListener mHighlightsColorFocusListener =
