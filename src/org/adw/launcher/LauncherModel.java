@@ -72,7 +72,8 @@ public class LauncherModel {
     private DesktopItemsLoader mDesktopItemsLoader;
     private Thread mApplicationsLoaderThread;
     private Thread mDesktopLoaderThread;
-
+    private int mDesktopColumns;
+    private int mDesktopRows;
     private final HashMap<ComponentName, ApplicationInfo> mAppInfoCache =
             new HashMap<ComponentName, ApplicationInfo>(INITIAL_ICON_CACHE_CAPACITY);
 
@@ -614,7 +615,9 @@ public class LauncherModel {
     void loadUserItems(boolean isLaunching, Launcher launcher, boolean localeChanged,
             boolean loadApplications) {
         if (DEBUG_LOADERS) d(LOG_TAG, "loading user items in " + Thread.currentThread().toString());
-
+        //ADW: load columns/rows settings
+        mDesktopRows=AlmostNexusSettingsHelper.getDesktopRows(launcher);
+        mDesktopColumns=AlmostNexusSettingsHelper.getDesktopColumns(launcher);
         if (isLaunching && isDesktopLoaded()) {
             if (DEBUG_LOADERS) d(LOG_TAG, "  --> items loaded, return");
             if (loadApplications) startApplicationsLoader(launcher, true);
@@ -753,7 +756,6 @@ public class LauncherModel {
                 while (!mStopped && c.moveToNext()) {
                     try {
                         int itemType = c.getInt(itemTypeIndex);
-
                         switch (itemType) {
                         case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:
                         case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
@@ -1166,6 +1168,8 @@ public class LauncherModel {
         if (desktopItems != null) {
             final int count = desktopItems.size();
             for (int i = 0; i < count; i++) {
+                //ADW: Don't load items outer current columns/rows limits
+                if(desktopItems.get(i).cellX<mDesktopColumns && desktopItems.get(i).cellY<mDesktopRows)
                 addOccupiedCells(occupied, screen, desktopItems.get(i));
             }
         }
@@ -1187,7 +1191,8 @@ public class LauncherModel {
         if (item.screen == screen) {
             for (int xx = item.cellX; xx < item.cellX + item.spanX; xx++) {
                 for (int yy = item.cellY; yy < item.cellY + item.spanY; yy++) {
-                    occupied[xx][yy] = true;
+                    if(xx<mDesktopColumns && yy<mDesktopRows)
+                    	occupied[xx][yy] = true;
                 }
             }
         }
