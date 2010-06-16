@@ -16,6 +16,7 @@
 
 package org.adw.launcher;
 
+import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -44,6 +45,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import mobi.intuitit.android.widget.WidgetCellLayout;
+import mobi.intuitit.android.widget.WidgetSpace;
+
 import org.metalev.multitouch.controller.MultiTouchController;
 import org.metalev.multitouch.controller.MultiTouchController.MultiTouchObjectCanvas;
 import org.metalev.multitouch.controller.MultiTouchController.PointInfo;
@@ -55,7 +59,7 @@ import org.metalev.multitouch.controller.MultiTouchController.PositionAndScale;
  * screen contains a number of icons, folders or widgets the user can interact with.
  * A workspace is meant to be used with a fixed width only.
  */
-public class Workspace extends ViewGroup implements DropTarget, DragSource, DragScroller, MultiTouchObjectCanvas<Object> {
+public class Workspace extends WidgetSpace implements DropTarget, DragSource, DragScroller, MultiTouchObjectCanvas<Object> {
     private static final int INVALID_SCREEN = -1;
     
     /**
@@ -69,7 +73,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
 
     private boolean mFirstLayout = true;
 
-    private int mCurrentScreen;
+    //private int mCurrentScreen;
     private int mNextScreen = INVALID_SCREEN;
     private CustomScroller mScroller;
     private VelocityTracker mVelocityTracker;
@@ -105,7 +109,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     private int[] mTempCell = new int[2];
     private int[] mTempEstimate = new int[2];
 
-    private boolean mAllowLongPress;
+    //private boolean mAllowLongPress;
     private boolean mLocked;
 
     private int mTouchSlop;
@@ -156,6 +160,9 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
 	private static final double ZOOM_LOG_BASE_INV = 1.0 / Math.log(2.0 / ZOOM_SENSITIVITY);
 	//ADW: we don't need bouncing while using the previews
 	private boolean mRevertInterpolatorOnScrollFinish=false;
+	//ADW: custom desktop rows/columns
+	private int mDesktopRows;
+	private int mDesktopColumns;
     /**
      * Used to inflate the Workspace from XML.
      *
@@ -199,7 +206,9 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
         mTouchSlop = configuration.getScaledTouchSlop();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
         //Wysie: Use MultiTouchController only for multitouch events
-        multiTouchController = new MultiTouchController<Object>(this, false); 
+        multiTouchController = new MultiTouchController<Object>(this, false);
+        mDesktopRows=AlmostNexusSettingsHelper.getDesktopRows(getContext());
+        mDesktopColumns=AlmostNexusSettingsHelper.getDesktopColumns(getContext());
     }
 
     @Override
@@ -371,7 +380,12 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
             return;
             //throw new IllegalStateException("The screen must be >= 0 and < " + getChildCount());
         }
-
+        //ADW: we cannot accept an item from a position greater that current desktop columns/rows
+        Log.d("WORKSPACE","Trying to add an item to x="+x+" and y="+y);
+        if(x>=mDesktopColumns || y>=mDesktopRows){
+        	return;
+        }
+        Log.d("WORKSPACE","Allowed");
         clearVacantCache();
 
         final CellLayout group = (CellLayout) getChildAt(screen);
@@ -455,6 +469,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
             if(lwpSupport)updateWallpaperOffset();
             postInvalidate();
         } else if (mNextScreen != INVALID_SCREEN) {
+        	int lastScreen = mCurrentScreen;
             mCurrentScreen = Math.max(0, Math.min(mNextScreen, getChildCount() - 1));
             //ADW: dots
             indicatorLevels(mCurrentScreen);
@@ -463,7 +478,18 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
             clearChildrenCache();
             //ADW: Revert back the interpolator when needed
             if(mRevertInterpolatorOnScrollFinish)setBounceAmount(mScrollingBounce);
-        }
+			//ADW: use intuit code to allow extended widgets
+			// notify widget about screen changed
+			View changedView;
+			if (lastScreen != mCurrentScreen) {
+				changedView = getChildAt(lastScreen); // A screen get out
+			if (changedView instanceof WidgetCellLayout)
+				((WidgetCellLayout) changedView).onViewportOut();
+			}
+			changedView = getChildAt(mCurrentScreen); // A screen get in
+			if (changedView instanceof WidgetCellLayout)
+			((WidgetCellLayout) changedView).onViewportIn();
+			}
     }
 
     @Override
@@ -491,6 +517,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
         	if(getScrollX()>getChildAt(getChildCount() - 1).getRight() - (getRight() - getLeft())){
         		x=(getScrollX()-mWallpaperWidth+(getRight()-getLeft()));
         	}
+        	if(getChildCount()==1)x=getScrollX();
     		canvas.drawBitmap(mWallpaperDrawable.getBitmap(), x, (getBottom() - mWallpaperHeight) / 2, mPaint);
         }
         if(!mSensemode){
@@ -692,7 +719,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     		if(ev.getAction()==MotionEvent.ACTION_DOWN){
     			findClickedPreview(ev.getX(),ev.getY());
     		}
-    		return false;
+    		return true;
     	}
     	
         //Wysie: If multitouch event is detected
@@ -830,7 +857,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
         /*if (multiTouchController.onTouchEvent(ev)) {
             return false;
         }*/
-        if (mLocked || mLauncher.isAllAppsVisible()) {
+        if (mLocked || mLauncher.isAllAppsVisible() || mSensemode) {
             return true;
         }
 
@@ -1159,6 +1186,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     
     void setLauncher(Launcher launcher) {
         mLauncher = launcher;
+        registerProvider();
     }
 
     public void setDragger(DragController dragger) {
@@ -1631,11 +1659,15 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
 		for(int i=0;i<getChildCount();i++){
 			RectF tmp=getScaledChild(getChildAt(i));
 			if (tmp.contains(x+getScrollX(), y+getScrollY())){
-		        mLauncher.dismissPreviews();
-		        mScroller.setInterpolator(new ElasticInterpolator(0));
-		        mRevertInterpolatorOnScrollFinish=true;
-		        snapToScreen(i);
-		        postInvalidate();
+				if(mCurrentScreen!=i){
+			        mLauncher.dismissPreviews();
+			        mScroller.setInterpolator(new ElasticInterpolator(0));
+			        mRevertInterpolatorOnScrollFinish=true;
+			        snapToScreen(i);
+			        postInvalidate();
+				}else{
+					mLauncher.dismissPreviews();
+				}
 			}
 		}
 	}
@@ -1674,5 +1706,11 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
             return true;
         }
         return false;
+	}
+
+	@Override
+	public Activity getLauncherActivity() {
+		// TODO Auto-generated method stub
+		return mLauncher;
 	}
 }
