@@ -9,6 +9,7 @@
         <item>显示/隐藏通知栏</item>
         <item>显示默认桌面/显示提示栏</item>
         <item>打开/关闭扩展栏</item>
+        <item>Open App...</item>
      </string-array>
     <string-array name="menu_binding_values">
         <item>1</item>
@@ -19,5 +20,6 @@
         <item>6</item>
         <item>7</item>
         <item>8</item>
+        <item>9</item>
     </string-array>
 </resources>

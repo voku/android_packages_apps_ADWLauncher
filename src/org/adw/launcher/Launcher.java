@@ -266,17 +266,28 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 	private boolean showAB2=false;
 	private boolean scrollableSupport=false;
 	/**
-	 * ADW: Home binding constants
+	 * ADW: Home/Swype down binding constants
 	 */
-	private static final int BIND_DEFAULT=1;
-	private static final int BIND_HOME_PREVIEWS=2;
-	private static final int BIND_PREVIEWS=3;
-	private static final int BIND_APPS=4;
-	private static final int BIND_STATUSBAR=5;
-	private static final int BIND_NOTIFICATIONS=6;
-	private static final int BIND_HOME_NOTIFICATIONS=7;
-	private static final int BIND_DOCKBAR=8;
+	protected static final int BIND_DEFAULT=1;
+	protected static final int BIND_HOME_PREVIEWS=2;
+	protected static final int BIND_PREVIEWS=3;
+	protected static final int BIND_APPS=4;
+	protected static final int BIND_STATUSBAR=5;
+	protected static final int BIND_NOTIFICATIONS=6;
+	protected static final int BIND_HOME_NOTIFICATIONS=7;
+	protected static final int BIND_DOCKBAR=8;
+	protected static final int BIND_APP_LAUNCHER=9;
+	
 	private int mHomeBinding=BIND_PREVIEWS;
+	
+	/**
+	* wjax: Swipe Down binding enum
+	*/
+	private int mSwipedownAction = BIND_NOTIFICATIONS;
+	/**
+	* wjax: Swipe UP binding enum
+	*/
+	private int mSwipeupAction = BIND_NOTIFICATIONS;
 	/**
 	 * ADW:Wallpaper intent receiver
 	 */
@@ -2534,6 +2545,8 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 		allowDrawerAnimations=AlmostNexusSettingsHelper.getDrawerAnimated(Launcher.this);
 		newPreviews=AlmostNexusSettingsHelper.getNewPreviews(this);
 		mHomeBinding=AlmostNexusSettingsHelper.getHomeBinding(this);
+		mSwipedownAction=AlmostNexusSettingsHelper.getSwipeDownActions(this);
+		mSwipeupAction=AlmostNexusSettingsHelper.getSwipeUpActions(this);
 		fullScreenPreviews=AlmostNexusSettingsHelper.getFullScreenPreviews(this);
 		hideStatusBar=AlmostNexusSettingsHelper.getHideStatusbar(this);
 		showDots=AlmostNexusSettingsHelper.getUIDots(this);
@@ -3124,10 +3137,213 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 				mDockBar.open();
 			}
 			break;
+		case BIND_APP_LAUNCHER:
+			// Launch or bring to front selected app
+			// Get PackageName and ClassName of selected App
+			String package_name = AlmostNexusSettingsHelper.getHomeBindingAppToLaunchPackageName(this);
+			String name = AlmostNexusSettingsHelper.getHomeBindingAppToLaunchName(this);
+			// Create Intent to Launch App
+			Intent i = new Intent();
+			i.setAction(Intent.ACTION_MAIN);
+			i.addCategory(Intent.CATEGORY_LAUNCHER);
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+			i.setComponent(new ComponentName(package_name, name));
+			try {
+				startActivity(i);
+			} catch (Exception e) {}
+			break;
 		default:
 			break;
 		}
 	}
+	
+	
+	/**
+	 * wjax: Swipe down binding action
+	 */
+	public void fireSwipeDownAction(){
+    	//wjax: switch SwipeDownAction button binding user selection
+        switch (mSwipedownAction) {
+		case BIND_DEFAULT:
+			dismissPreviews();
+			if (!mWorkspace.isDefaultScreenShowing()) {
+				mWorkspace.moveToDefaultScreen();
+			}
+			break;
+		case BIND_HOME_PREVIEWS:
+        	if (!mWorkspace.isDefaultScreenShowing()) {
+        		dismissPreviews();
+                mWorkspace.moveToDefaultScreen();
+            }else{
+            	if(!showingPreviews){
+            		showPreviews(mHandleView, 0, mWorkspace.mHomeScreens);
+            	}else{
+            		dismissPreviews();
+            	}
+            }
+			break;
+		case BIND_PREVIEWS:
+        	if(!showingPreviews){
+        		showPreviews(mHandleView, 0, mWorkspace.mHomeScreens);
+        	}else{
+        		dismissPreviews();
+        	}
+			break;
+		case BIND_APPS:
+			dismissPreviews();
+			if(isAllAppsVisible()){
+				closeDrawer();
+			}else{
+				showAllApps(true);
+			}
+			break;
+		case BIND_STATUSBAR:
+			WindowManager.LayoutParams attrs = getWindow().getAttributes();
+	    	if((attrs.flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN){
+		    	// go non-full screen
+		    	attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		    	getWindow().setAttributes(attrs);
+	    	}else{
+		    	// go full screen
+		    	attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+		    	getWindow().setAttributes(attrs);
+	    	}
+			break;
+		case BIND_NOTIFICATIONS:
+			dismissPreviews();
+			showNotifications();
+			break;
+		case BIND_HOME_NOTIFICATIONS:
+        	if (!mWorkspace.isDefaultScreenShowing()) {
+        		dismissPreviews();
+                mWorkspace.moveToDefaultScreen();
+            }else{
+    			dismissPreviews();
+    			showNotifications();
+            }
+			break;
+		case BIND_DOCKBAR:
+			dismissPreviews();
+			if(mDockBar.isOpen()){
+				mDockBar.close();
+			}else{
+				mDockBar.open();
+			}
+			break;
+		case BIND_APP_LAUNCHER:
+			// Launch or bring to front selected app
+			// Get PackageName and ClassName of selected App
+			String package_name = AlmostNexusSettingsHelper.getSwipeDownAppToLaunchPackageName(this);
+			String name = AlmostNexusSettingsHelper.getSwipeDownAppToLaunchName(this);
+			// Create Intent to Launch App
+			Intent i = new Intent();
+			i.setAction(Intent.ACTION_MAIN);
+			i.addCategory(Intent.CATEGORY_LAUNCHER);
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+			i.setComponent(new ComponentName(package_name, name));
+			try {
+				startActivity(i);
+			} catch (Exception e) {}
+			break;
+		default:
+			break;
+		}
+	}
+	
+	/**
+	 * wjax: Swipe up binding action
+	 */
+	public void fireSwipeUpAction(){
+    	//wjax: switch SwipeUpAction button binding user selection
+        switch (mSwipeupAction) {
+		case BIND_DEFAULT:
+			dismissPreviews();
+			if (!mWorkspace.isDefaultScreenShowing()) {
+				mWorkspace.moveToDefaultScreen();
+			}
+			break;
+		case BIND_HOME_PREVIEWS:
+        	if (!mWorkspace.isDefaultScreenShowing()) {
+        		dismissPreviews();
+                mWorkspace.moveToDefaultScreen();
+            }else{
+            	if(!showingPreviews){
+            		showPreviews(mHandleView, 0, mWorkspace.mHomeScreens);
+            	}else{
+            		dismissPreviews();
+            	}
+            }
+			break;
+		case BIND_PREVIEWS:
+        	if(!showingPreviews){
+        		showPreviews(mHandleView, 0, mWorkspace.mHomeScreens);
+        	}else{
+        		dismissPreviews();
+        	}
+			break;
+		case BIND_APPS:
+			dismissPreviews();
+			if(isAllAppsVisible()){
+				closeDrawer();
+			}else{
+				showAllApps(true);
+			}
+			break;
+		case BIND_STATUSBAR:
+			WindowManager.LayoutParams attrs = getWindow().getAttributes();
+	    	if((attrs.flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN){
+		    	// go non-full screen
+		    	attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		    	getWindow().setAttributes(attrs);
+	    	}else{
+		    	// go full screen
+		    	attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+		    	getWindow().setAttributes(attrs);
+	    	}
+			break;
+		case BIND_NOTIFICATIONS:
+			dismissPreviews();
+			showNotifications();
+			break;
+		case BIND_HOME_NOTIFICATIONS:
+        	if (!mWorkspace.isDefaultScreenShowing()) {
+        		dismissPreviews();
+                mWorkspace.moveToDefaultScreen();
+            }else{
+    			dismissPreviews();
+    			showNotifications();
+            }
+			break;
+		case BIND_DOCKBAR:
+			dismissPreviews();
+			if(mDockBar.isOpen()){
+				mDockBar.close();
+			}else{
+				mDockBar.open();
+			}
+			break;
+		case BIND_APP_LAUNCHER:
+			// Launch or bring to front selected app
+			// Get PackageName and ClassName of selected App
+			String package_name = AlmostNexusSettingsHelper.getSwipeUpAppToLaunchPackageName(this);
+			String name = AlmostNexusSettingsHelper.getSwipeUpAppToLaunchName(this);
+			// Create Intent to Launch App
+			Intent i = new Intent();
+			i.setAction(Intent.ACTION_MAIN);
+			i.addCategory(Intent.CATEGORY_LAUNCHER);
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+			i.setComponent(new ComponentName(package_name, name));
+			try {
+				startActivity(i);
+			} catch (Exception e) {}
+			break;
+		default:
+			break;
+		}
+	}
+	
+	
+	
 	public boolean isScrollableAllowed(){
 		return scrollableSupport;
 	}

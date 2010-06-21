@@ -9,6 +9,7 @@
                 <item>Abre/cierra las notificaciones</item>
                 <item>Ir al escritorio por defecto/abrir las notificaciones</item>
                 <item>Abre/cierra el DockBar</item>
+                <item>Lanza Aplicación...</item>
        </string-array>
 
        <!-- Do not translate. -->
@@ -21,5 +22,6 @@
                 <item>6</item>
                 <item>7</item>
                 <item>8</item>
+                <item>9</item>
        </string-array>
 </resources>

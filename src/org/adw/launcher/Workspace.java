@@ -71,7 +71,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 
     private final WallpaperManager mWallpaperManager;
 
-    private boolean mFirstLayout = true;
+    private boolean mFirstLayout = true; 
 
     //private int mCurrentScreen;
     private int mNextScreen = INVALID_SCREEN;
@@ -93,6 +93,8 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 
     private final static int TOUCH_STATE_REST = 0;
     private final static int TOUCH_STATE_SCROLLING = 1;
+    private final static int TOUCH_SWIPE_DOWN_GESTURE = 2;
+    private final static int TOUCH_SWIPE_UP_GESTURE = 3;
 
     private int mTouchState = TOUCH_STATE_REST;
 
@@ -782,7 +784,17 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                         // Scroll if the user moved far enough along the X axis
                         mTouchState = TOUCH_STATE_SCROLLING;
                         enableChildrenCache();
+                    } else if (yMoved)
+                    {
+                    	// Only y axis movement. So may be a Swipe down or up gesture
+                    	if ((y - mLastMotionY) > 0)
+                    		mTouchState = TOUCH_SWIPE_DOWN_GESTURE;
+                    	else
+                    	{
+                    		mTouchState = TOUCH_SWIPE_UP_GESTURE;
+                    	}
                     }
+                    
                     // Either way, cancel any pending longpress
                     if (mAllowLongPress) {
                         mAllowLongPress = false;
@@ -811,8 +823,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-
-                if (mTouchState != TOUCH_STATE_SCROLLING) {
+                if (mTouchState != TOUCH_STATE_SCROLLING && mTouchState != TOUCH_SWIPE_DOWN_GESTURE && mTouchState != TOUCH_SWIPE_UP_GESTURE) {
                     final CellLayout currentScreen = (CellLayout) getChildAt(mCurrentScreen);
                     if (!currentScreen.lastDownOnOccupiedCell()) {
                         getLocationOnScreen(mTempCell);
@@ -823,8 +834,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                                 mTempCell[0] + (int) ev.getX(),
                                 mTempCell[1] + (int) ev.getY(), 0, null);
                     }
-                }
-                
+                } 
                 // Release the drag
                 clearChildrenCache();
                 mTouchState = TOUCH_STATE_REST;
@@ -935,6 +945,12 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     mVelocityTracker.recycle();
                     mVelocityTracker = null;
                 }
+            } else if (mTouchState == TOUCH_SWIPE_DOWN_GESTURE )
+            {
+            	mLauncher.fireSwipeDownAction();
+            } else if (mTouchState == TOUCH_SWIPE_UP_GESTURE )
+            {
+            	mLauncher.fireSwipeUpAction();
             }
             mTouchState = TOUCH_STATE_REST;
             break;
@@ -1686,18 +1702,18 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 	/**
 	 * Wysie: Multitouch methods/events
 	 */
-	@Override
+	//@Override wjax_o
 	public Object getDraggableObjectAtPoint(PointInfo pt) {
 		return this;
 	}
 
-	@Override
+	//@Override wjax_o
 	public void getPositionAndScale(Object obj,
 			PositionAndScale objPosAndScaleOut) {
 		objPosAndScaleOut.set(0.0f, 0.0f, true, 1.0f, false, 0.0f, 0.0f, false, 0.0f);
 	}
 
-	@Override
+	//@Override wjax_o
 	public void selectObject(Object obj, PointInfo pt) {
 		if(mStatus!=SENSE_OPEN){
 			mAllowLongPress=false;
@@ -1706,7 +1722,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 		}
 	}
 
-	@Override
+	// @Override wjax_o
 	public boolean setPositionAndScale(Object obj,
 			PositionAndScale update, PointInfo touchPoint) {
         float newRelativeScale = update.getScale();

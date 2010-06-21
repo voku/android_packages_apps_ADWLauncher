@@ -140,6 +140,12 @@
 
     <string name="pref_title_home_button_binding">Botón Home</string>
     <string name="pref_summary_home_button_binding">Selecciona una acción para el botón HOME</string>
+    
+    <string name="pref_title_swipedown_actions">Gesto arriba-abajo</string>
+    <string name="pref_summary_swipedown_actions">Selecciona una acción para el gesto arriba-abajo</string>
+    
+    <string name="pref_title_swipeup_actions">Gesto abajo-arriba</string>
+    <string name="pref_summary_swipeup_actions">Selecciona una acción para el gesto abajo-arriba</string>
 
     <string name="pref_title_desktop_dots">Paginador</string>
     <string name="pref_summary_desktop_dots">Muestra/oculta los puntitos estilo nexus</string>

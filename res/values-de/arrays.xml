@@ -9,5 +9,6 @@
                 <item>Öffne/Schliesse Benachrichtigungen</item>
                 <item>Zu Standardbildschirm/ Öffne Benachrichtigungen</item>
                 <item>Öffne/Schliesse Dockzeile</item>
+                <item>Anwendung starten...</item>
        </string-array>
 </resources>

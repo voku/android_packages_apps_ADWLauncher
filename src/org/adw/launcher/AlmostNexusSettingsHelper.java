@@ -6,14 +6,74 @@ import android.content.SharedPreferences;
 public final class AlmostNexusSettingsHelper {
 	private static final String ALMOSTNEXUS_PREFERENCES = "launcher.preferences.almostnexus";
 	private static final String[] restart_keys={"desktopScreens","drawerNew","uiHideLabels","highlights_color",
-		"highlights_color_focus","uiNewSelectors","desktopRows","desktopColumns","autosizeIcons",
-		"uiScrollableWidgets","desktopCache"};
+		"highlights_color_focus","uiNewSelectors","desktopRows","desktopColumns","autosizeIcons","uiScrollableWidgets"};
+	
+	
+	
 	public static boolean needsRestart(String key){
 		for(int i=0;i<restart_keys.length;i++){
 			if(restart_keys[i].equals(key))
+			{
+				android.util.Log.d("LAUNCHER","Reset needed by wjax");
 				return true;
+			}
 		}
 		return false;
+	}
+	
+	public static String getSwipeDownAppToLaunchPackageName(Context context)
+	{
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		return sp.getString("swipeDownAppToLaunchPackageName", "");
+	}
+	public static String getSwipeUpAppToLaunchPackageName(Context context)
+	{
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		return sp.getString("swipeUpAppToLaunchPackageName", "");
+	}
+	public static String getHomeBindingAppToLaunchPackageName(Context context)
+	{
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		return sp.getString("homeBindingAppToLaunchPackageName", "");
+	}
+	public static String getSwipeDownAppToLaunchName(Context context)
+	{
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		return sp.getString("swipeDownAppToLaunchName", "");
+	}
+	public static String getSwipeUpAppToLaunchName(Context context)
+	{
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		return sp.getString("swipeUpAppToLaunchName", "");
+	}
+	public static String getHomeBindingAppToLaunchName(Context context)
+	{
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		return sp.getString("homeBindingAppToLaunchName", "");
+	}
+	public static void setSwipeDownAppToLaunch(Context context, ApplicationInfo info)
+	{
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+	    SharedPreferences.Editor editor = sp.edit();
+	    editor.putString("swipeDownAppToLaunchPackageName", info.intent.getComponent().getPackageName());
+	    editor.putString("swipeDownAppToLaunchName", info.intent.getComponent().getClassName());
+	    editor.commit();
+	}
+	public static void setSwipeUpAppToLaunch(Context context, ApplicationInfo info)
+	{
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+	    SharedPreferences.Editor editor = sp.edit();
+	    editor.putString("swipeUpAppToLaunchPackageName", info.intent.getComponent().getPackageName());
+	    editor.putString("swipeUpAppToLaunchName", info.intent.getComponent().getClassName());
+	    editor.commit();
+	}
+	public static void setHomeBindingAppToLaunch(Context context, ApplicationInfo info)
+	{
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+	    SharedPreferences.Editor editor = sp.edit();
+	    editor.putString("homeBindingAppToLaunchPackageName", info.intent.getComponent().getPackageName());
+	    editor.putString("homeBindingAppToLaunchName", info.intent.getComponent().getClassName());
+	    editor.commit();
 	}
 	public static int getDesktopScreens(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
@@ -83,6 +143,16 @@ public final class AlmostNexusSettingsHelper {
 	public static int getHomeBinding(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
 		int newD = Integer.valueOf(sp.getString("homeBinding", context.getResources().getString(R.string.config_homeBinding)));
+		return newD;
+	}
+	public static int getSwipeDownActions(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = Integer.valueOf(sp.getString("swipedownActions", context.getResources().getString(R.string.config_swipedown_actions)));
+		return newD;
+	}
+	public static int getSwipeUpActions(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = Integer.valueOf(sp.getString("swipeupActions", context.getResources().getString(R.string.config_swipeup_actions)));
 		return newD;
 	}
 	public static boolean getUIDots(Context context) {
