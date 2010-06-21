@@ -1702,18 +1702,18 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 	/**
 	 * Wysie: Multitouch methods/events
 	 */
-	//@Override wjax_o
+	@Override
 	public Object getDraggableObjectAtPoint(PointInfo pt) {
 		return this;
 	}
 
-	//@Override wjax_o
+	@Override
 	public void getPositionAndScale(Object obj,
 			PositionAndScale objPosAndScaleOut) {
 		objPosAndScaleOut.set(0.0f, 0.0f, true, 1.0f, false, 0.0f, 0.0f, false, 0.0f);
 	}
 
-	//@Override wjax_o
+	@Override
 	public void selectObject(Object obj, PointInfo pt) {
 		if(mStatus!=SENSE_OPEN){
 			mAllowLongPress=false;
@@ -1722,7 +1722,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 		}
 	}
 
-	// @Override wjax_o
+	@Override
 	public boolean setPositionAndScale(Object obj,
 			PositionAndScale update, PointInfo touchPoint) {
         float newRelativeScale = update.getScale();
