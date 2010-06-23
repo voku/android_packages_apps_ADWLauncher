@@ -264,6 +264,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 	private boolean wallpaperHack=true;
 	private boolean showAB2=false;
 	private boolean scrollableSupport=false;
+	private DesktopIndicator mDesktopIndicator;
 	/**
 	 * ADW: Home binding constants
 	 */
@@ -284,6 +285,8 @@ public final class Launcher extends Activity implements View.OnClickListener, On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
+    	boolean persist=AlmostNexusSettingsHelper.getSystemPersistent(this);
+    	setPersistent(persist);
         mInflater = getLayoutInflater();
 
         mAppWidgetManager = AppWidgetManager.getInstance(this);
@@ -500,6 +503,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 				Log.d("LAUNCHER","SET COLUMNS");
 				((AllAppsSlidingView) mAllAppsGrid).setNumColumns(AlmostNexusSettingsHelper.getColumnsPortrait(Launcher.this));
 				((AllAppsSlidingView) mAllAppsGrid).setNumRows(AlmostNexusSettingsHelper.getRowsPortrait(Launcher.this));
+				((AllAppsSlidingView) mAllAppsGrid).setPageHorizontalMargin(AlmostNexusSettingsHelper.getPageHorizontalMargin(Launcher.this));
 			}else{
 				((AllAppsGridView) mAllAppsGrid).setNumColumns(AlmostNexusSettingsHelper.getColumnsPortrait(Launcher.this));
 			}
@@ -750,6 +754,9 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 				
 			}
 		});
+		if(AlmostNexusSettingsHelper.getDesktopIndicator(this)){
+			mDesktopIndicator=(DesktopIndicator) (findViewById(R.id.desktop_indicator));
+		}
 		updateAlmostNexusUI();
     }
 
@@ -901,7 +908,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
             public void onClick(DialogInterface dialog, int which) {
             	spans[0]=ncols.getCurrent();
             	spans[1]=nrows.getCurrent();
-            	prueba(appWidgetInfo,cInfo,spans,appWidgetId,insertAtFirst);
+            	realAddWidget(appWidgetInfo,cInfo,spans,appWidgetId,insertAtFirst);
             }
         });
 		alertDialog.show();
@@ -1004,7 +1011,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
                 if(!isAllAppsVisible() || mHomeBinding==BIND_APPS)
                 	fireHomeBinding();
             	if(mHomeBinding!=BIND_APPS){
-                	closeDrawer();
+                	closeDrawer(false);
                 }
                 final View v = getWindow().peekDecorView();
                 if (v != null && v.getWindowToken() != null) {
@@ -1075,6 +1082,12 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+    	//ADW: If we leave the menu open, on restoration it will try to auto find
+    	//the ocupied cells. But this could happed before the workspace is fully loaded,
+    	//so it can cause a NPE cause of the way we load the desktop columns/rows count.
+    	//I prefer to just close it than diggin the code to make it load later...
+    	//Accepting patches :-)
+    	closeOptionsMenu();
         super.onSaveInstanceState(outState);
 
         outState.putInt(RUNTIME_STATE_CURRENT_SCREEN, mWorkspace.getCurrentScreen());
@@ -1124,6 +1137,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
     @Override
     public void onDestroy() {
         mDestroyed = true;
+    	setPersistent(false);
         //ADW: unregister the sharedpref listener
         getSharedPreferences("launcher.preferences.almostnexus", Context.MODE_PRIVATE)
         .unregisterOnSharedPreferenceChangeListener(this);
@@ -1362,19 +1376,31 @@ public final class Launcher extends Activity implements View.OnClickListener, On
         final int[] xy = mCellCoordinates;
         final int spanX = info.spanX;
         final int spanY = info.spanY;
+		
+        AlertDialog.Builder builder;
+		AlertDialog alertDialog;
 
-        if (!findSlot(cellInfo, xy, spanX, spanY)) return;
-
-        sModel.addDesktopItem(info);
-        LauncherModel.addItemToDatabase(this, info, LauncherSettings.Favorites.CONTAINER_DESKTOP,
-        mWorkspace.getCurrentScreen(), xy[0], xy[1], false);
-
-        final View view = mInflater.inflate(info.layoutResource, null);
-        view.setTag(info);
-        Search search = (Search) view.findViewById(R.id.widget_search);
-        search.setLauncher(this);
-
-        mWorkspace.addInCurrentScreen(view, xy[0], xy[1], info.spanX, spanY);
+		final View dlg_layout = View.inflate(Launcher.this, R.layout.widget_span_setup, null);
+		final NumberPicker ncols=(NumberPicker)dlg_layout.findViewById(R.id.widget_columns_span);
+		ncols.setRange(1, mWorkspace.currentDesktopColumns());
+		ncols.setCurrent(spanX);
+		final NumberPicker nrows=(NumberPicker)dlg_layout.findViewById(R.id.widget_rows_span);
+		nrows.setRange(1, mWorkspace.currentDesktopRows());
+		nrows.setCurrent(spanY);
+		builder = new AlertDialog.Builder(Launcher.this);
+		builder.setView(dlg_layout);
+		alertDialog = builder.create();
+        alertDialog.setTitle(getResources().getString(R.string.widget_config_dialog_title));
+        alertDialog.setMessage(getResources().getString(R.string.widget_config_dialog_summary));
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(android.R.string.ok), 
+            new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            	int spanX=ncols.getCurrent();
+            	int spanY=nrows.getCurrent();
+            	realAddSearch(info,cellInfo,xy,spanX,spanY);
+            }
+        });
+		alertDialog.show();
     }
 
     void processShortcut(Intent intent, int requestCodeApplication, int requestCodeShortcut) {
@@ -1689,7 +1715,8 @@ public final class Launcher extends Activity implements View.OnClickListener, On
         for (int i = 0; i < count; i++) {
             ((ViewGroup) workspace.getChildAt(i)).removeAllViewsInLayout();
         }
-
+        final MiniLauncher miniLauncher=(MiniLauncher) mDragLayer.findViewById(R.id.mini_content);
+        miniLauncher.removeAllViewsInLayout();
         if (DEBUG_USER_INTERFACE) {
             android.widget.Button finishButton = new android.widget.Button(this);
             finishButton.setText("Finish");
@@ -1983,9 +2010,9 @@ public final class Launcher extends Activity implements View.OnClickListener, On
         		folderInfo.container==LauncherSettings.Favorites.CONTAINER_RAB ||
         		folderInfo.container==LauncherSettings.Favorites.CONTAINER_LAB2 ||
         		folderInfo.container==LauncherSettings.Favorites.CONTAINER_RAB2){
-        	mWorkspace.addInScreen(openFolder, mWorkspace.getCurrentScreen(), 0, 0, 4, 4);
+        	mWorkspace.addInScreen(openFolder, mWorkspace.getCurrentScreen(), 0, 0, mWorkspace.currentDesktopColumns(), mWorkspace.currentDesktopRows());
         }else{
-        	mWorkspace.addInScreen(openFolder, folderInfo.screen, 0, 0, 4, 4);
+        	mWorkspace.addInScreen(openFolder, folderInfo.screen, 0, 0, mWorkspace.currentDesktopColumns(), mWorkspace.currentDesktopRows());
         }
         openFolder.onOpen();
         //ADW: closing drawer, removed from onpause
@@ -2595,6 +2622,14 @@ public final class Launcher extends Activity implements View.OnClickListener, On
     	if(mWorkspace!=null){
     		mWorkspace.setWallpaperHack(wallpaperHack);
     	}
+    	if(mDesktopIndicator!=null){
+    		mDesktopIndicator.setType(AlmostNexusSettingsHelper.getDesktopIndicatorType(this));
+    		mDesktopIndicator.setAutoHide(AlmostNexusSettingsHelper.getDesktopIndicatorAutohide(this));
+    		if(mWorkspace!=null){
+    			mDesktopIndicator.setItems(mWorkspace.getChildCount());
+    		}
+    	}
+
     }
     /**
      * ADW: Create a copy of an application icon/shortcut with a reflection
@@ -3131,7 +3166,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 	public boolean isScrollableAllowed(){
 		return scrollableSupport;
 	}
-	private void prueba(AppWidgetProviderInfo appWidgetInfo,CellLayout.CellInfo cellInfo, int[]spans,int appWidgetId,boolean insertAtFirst){
+	private void realAddWidget(AppWidgetProviderInfo appWidgetInfo,CellLayout.CellInfo cellInfo, int[]spans,int appWidgetId,boolean insertAtFirst){
         // Try finding open space on Launcher screen
         final int[] xy = mCellCoordinates;
         if (!findSlot(cellInfo, xy, spans[0], spans[1])) {
@@ -3166,5 +3201,26 @@ public final class Launcher extends Activity implements View.OnClickListener, On
         if(appWidgetInfo!=null)
         	appwidgetReadyBroadcast(appWidgetId, appWidgetInfo.provider);
 	}
+	private void realAddSearch(Widget info,final CellLayout.CellInfo cellInfo,final int[] xy,int spanX,int spanY){
+        if (!findSlot(cellInfo, xy, spanX, spanY)) return;
+        info.spanX=spanX;
+        info.spanY=spanY;
+        sModel.addDesktopItem(info);
+        LauncherModel.addItemToDatabase(this, info, LauncherSettings.Favorites.CONTAINER_DESKTOP,
+        mWorkspace.getCurrentScreen(), xy[0], xy[1], false);
 
+        final View view = mInflater.inflate(info.layoutResource, null);
+        view.setTag(info);
+        Search search = (Search) view.findViewById(R.id.widget_search);
+        search.setLauncher(this);
+
+        mWorkspace.addInCurrentScreen(view, xy[0], xy[1], spanX, spanY);
+		
+	}
+	public static int getScreenCount(Context context){
+		return AlmostNexusSettingsHelper.getDesktopScreens(context);
+	}
+	public DesktopIndicator getDesktopIndicator(){
+		return mDesktopIndicator;
+	}
 }

@@ -270,7 +270,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         for (int i = 0; i < count; i++) {
             View child = currentScreen.getChildAt(i);
             CellLayout.LayoutParams lp = (CellLayout.LayoutParams) child.getLayoutParams();
-            if (lp.cellHSpan == 4 && lp.cellVSpan == 4 && child instanceof Folder) {
+            if (lp.cellHSpan == mDesktopColumns && lp.cellVSpan == mDesktopRows && child instanceof Folder) {
                 return (Folder) child;
             }
         }
@@ -287,7 +287,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             for (int i = 0; i < count; i++) {
                 View child = currentScreen.getChildAt(i);
                 CellLayout.LayoutParams lp = (CellLayout.LayoutParams) child.getLayoutParams();
-                if (lp.cellHSpan == 4 && lp.cellVSpan == 4 && child instanceof Folder) {
+                if (lp.cellHSpan == mDesktopColumns && lp.cellVSpan == mDesktopRows && child instanceof Folder) {
                     folders.add((Folder) child);
                     break;
                 }
@@ -471,15 +471,17 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         if (mScroller.computeScrollOffset()) {
             scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
             if(lwpSupport)updateWallpaperOffset();
+            if(mLauncher.getDesktopIndicator()!=null)mLauncher.getDesktopIndicator().indicate((float)mScroller.getCurrX()/(float)(getChildCount()*getWidth()));
             postInvalidate();
         } else if (mNextScreen != INVALID_SCREEN) {
         	int lastScreen = mCurrentScreen;
             mCurrentScreen = Math.max(0, Math.min(mNextScreen, getChildCount() - 1));
             //ADW: dots
-            indicatorLevels(mCurrentScreen);
+            //indicatorLevels(mCurrentScreen);
             Launcher.setScreen(mCurrentScreen);
             mNextScreen = INVALID_SCREEN;
             clearChildrenCache();
+            if(mLauncher.getDesktopIndicator()!=null)mLauncher.getDesktopIndicator().fullIndicate(mCurrentScreen);
             //ADW: Revert back the interpolator when needed
             if(mRevertInterpolatorOnScrollFinish)setBounceAmount(mScrollingBounce);
 			//ADW: use intuit code to allow extended widgets
@@ -903,6 +905,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     if (mScrollX > -mScrollingBounce) {
                         scrollBy(Math.min(deltaX,mScrollingBounce), 0);
                         if(lwpSupport)updateWallpaperOffset();
+                        if(mLauncher.getDesktopIndicator()!=null)mLauncher.getDesktopIndicator().indicate((float)getScrollX()/(float)(getChildCount()*getWidth()));
                     }
                 } else if (deltaX > 0) {
                     final int availableToScroll = getChildAt(getChildCount() - 1).getRight() -
@@ -910,6 +913,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     if (availableToScroll > 0) {
                         scrollBy(deltaX, 0);
                         if(lwpSupport)updateWallpaperOffset();
+                        if(mLauncher.getDesktopIndicator()!=null)mLauncher.getDesktopIndicator().indicate((float)getScrollX()/(float)(getChildCount()*getWidth()));
                     }
                 }
             }
@@ -952,8 +956,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     }
 
     void snapToScreen(int whichScreen) {
-        if (!mScroller.isFinished()) return;
-
+        //if (!mScroller.isFinished()) return;
         clearVacantCache();
         enableChildrenCache();
 
@@ -1198,6 +1201,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     void setLauncher(Launcher launcher) {
         mLauncher = launcher;
         if(mLauncher.isScrollableAllowed())registerProvider();
+        if(mLauncher.getDesktopIndicator()!=null)mLauncher.getDesktopIndicator().setItems(mHomeScreens);
     }
 
     public void setDragger(DragController dragger) {
@@ -1227,15 +1231,22 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 
     public void scrollLeft() {
         clearVacantCache();
-        if (mNextScreen == INVALID_SCREEN && mCurrentScreen > 0 && mScroller.isFinished()) {
+        if(mNextScreen!=INVALID_SCREEN){
+        	mCurrentScreen=mNextScreen;
+        	mNextScreen=INVALID_SCREEN;
+        }
+        if (mNextScreen == INVALID_SCREEN && mCurrentScreen > 0) {
             snapToScreen(mCurrentScreen - 1);
         }
     }
 
     public void scrollRight() {
         clearVacantCache();
-        if (mNextScreen == INVALID_SCREEN && mCurrentScreen < getChildCount() -1 &&
-                mScroller.isFinished()) {
+        if(mNextScreen!=INVALID_SCREEN){
+        	mCurrentScreen=mNextScreen;
+        	mNextScreen=INVALID_SCREEN;
+        }
+        if (mNextScreen == INVALID_SCREEN && mCurrentScreen < getChildCount() -1) {
             snapToScreen(mCurrentScreen + 1);
         }
     }
@@ -1285,7 +1296,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             for (int i = 0; i < count; i++) {
                 View child = currentScreen.getChildAt(i);
                 CellLayout.LayoutParams lp = (CellLayout.LayoutParams) child.getLayoutParams();
-                if (lp.cellHSpan == 4 && lp.cellVSpan == 4 && child instanceof Folder) {
+                if (lp.cellHSpan == mDesktopColumns && lp.cellVSpan == mDesktopRows && child instanceof Folder) {
                     Folder f = (Folder) child;
                     if (f.getInfo() == tag) {
                         return f;
@@ -1495,8 +1506,8 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     }
     void indicatorLevels(int mCurrent){
     	int numScreens=getChildCount();
-    	mPreviousIndicator.setLevel(mCurrentScreen);
-    	mNextIndicator.setLevel(numScreens-mCurrentScreen-1);    	
+    	mPreviousIndicator.setLevel(mCurrent);
+    	mNextIndicator.setLevel(numScreens-mCurrent-1);    	
     }
     /**
      * ADW: Make a local copy of wallpaper bitmap to use instead wallpapermanager

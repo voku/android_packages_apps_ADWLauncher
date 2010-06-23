@@ -24,8 +24,11 @@ import android.graphics.Rect;
 import android.graphics.drawable.TransitionDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.widget.Scroller;
 import android.widget.Toast;
 
 
@@ -39,6 +42,19 @@ public class MiniLauncher extends ViewGroup implements View.OnLongClickListener,
     private int mCellWidth=20;
     private int mCellHeight=20;
     private TransitionDrawable mBackground;
+    /**
+     * ADW: Scrolling vars
+     */
+    private Scroller mScroller;
+    private float mLastMotionX;
+    private float mLastMotionY;
+    private final static int TOUCH_STATE_REST = 0;
+    private final static int TOUCH_STATE_SCROLLING = 1;
+    private static final int TOUCH_STATE_DOWN = 2;
+    private int mTouchState = TOUCH_STATE_REST;
+    private int mTouchSlop;
+    private int mScrollingSpeed=600;
+    private boolean mScrollAllowed=false;
     public MiniLauncher(Context context) {
         super(context);
     }
@@ -50,15 +66,14 @@ public class MiniLauncher extends ViewGroup implements View.OnLongClickListener,
     public MiniLauncher(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 		
-		//this.setOnClickListener(this);
-		//this.setOnLongClickListener(this);
 		setHapticFeedbackEnabled(true);
 		TypedArray a=context.obtainStyledAttributes(attrs,R.styleable.MiniLauncher,defStyle,0);
 		mOrientation=a.getInt(R.styleable.MiniLauncher_orientation, mOrientation);
 		mNumCells=a.getInt(R.styleable.MiniLauncher_cells, mNumCells);
 		mCellWidth=a.getDimensionPixelSize(R.styleable.MiniLauncher_cellWidth, mCellWidth);
 		mCellHeight=a.getDimensionPixelSize(R.styleable.MiniLauncher_cellHeight, mCellHeight);
-		//Log.d("MINILAUNCHER","We have XCELLS"+mNumCells);
+        mScroller = new Scroller(getContext());
+        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }
 
     public boolean acceptDrop(DragSource source, int x, int y, int xOffset, int yOffset,
@@ -84,14 +99,8 @@ public class MiniLauncher extends ViewGroup implements View.OnLongClickListener,
       
     public void onDrop(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
 	final LauncherModel model = Launcher.getModel();
-	ItemInfo info = (ItemInfo) dragInfo;
-        //TODO:ADW Limit to X items till i manage to add scroll, removing, etc
-        if(getChildCount()>=mNumCells){
-        	Toast t=Toast.makeText(getContext(), "sorry, "+mNumCells+" items max... atm :-)", Toast.LENGTH_SHORT);
-        	t.show();
-		LauncherModel.deleteItemFromDatabase(mLauncher, info);
-        	return;
-        }
+		ItemInfo info = (ItemInfo) dragInfo;
+		boolean accept=true;
         switch (info.itemType) {
         case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:
         case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
@@ -102,21 +111,32 @@ public class MiniLauncher extends ViewGroup implements View.OnLongClickListener,
         case LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET:
         	Toast t=Toast.makeText(getContext(), "Widgets not supported... sorry :-)", Toast.LENGTH_SHORT);
         	t.show();
-		LauncherModel.deleteItemFromDatabase(mLauncher, info);
+        	accept=false;
         	return;
         default:
         	Toast t2=Toast.makeText(getContext(), "Unknown item. We can't add unknown item types :-)", Toast.LENGTH_SHORT);
         	t2.show();
-		LauncherModel.deleteItemFromDatabase(mLauncher, info);
+        	accept=false;
         	return;
         }
         info.cellX=getChildCount();
         //add it to launcher database
-        
-        model.addDesktopItem(info);
-        LauncherModel.addOrMoveItemInDatabase(mLauncher, info,
-                LauncherSettings.Favorites.CONTAINER_DOCKBAR, -1, getChildCount(), -1);        
-        addItemInDockBar(info);
+        if (info instanceof LauncherAppWidgetInfo) {
+            model.removeDesktopAppWidget((LauncherAppWidgetInfo) info);
+            final LauncherAppWidgetInfo launcherAppWidgetInfo = (LauncherAppWidgetInfo) info;
+            final LauncherAppWidgetHost appWidgetHost = mLauncher.getAppWidgetHost();
+            if (appWidgetHost != null) {
+                appWidgetHost.deleteAppWidgetId(launcherAppWidgetInfo.appWidgetId);
+            } 
+        }
+        if(accept){
+	        model.addDesktopItem(info);
+	        LauncherModel.addOrMoveItemInDatabase(mLauncher, info,
+	                LauncherSettings.Favorites.CONTAINER_DOCKBAR, -1, getChildCount(), -1);        
+	        addItemInDockBar(info);
+        }else{
+        	LauncherModel.deleteItemFromDatabase(mLauncher, info);
+        }
     }
 
     public void onDragEnter(DragSource source, int x, int y, int xOffset, int yOffset,
@@ -178,7 +198,6 @@ public class MiniLauncher extends ViewGroup implements View.OnLongClickListener,
     }
 
 	public boolean onLongClick(View v) {
-		//Log.d("DockBar","We are LONGclicking this view!"+v);
 		mDeleteView=v;
 		new AlertDialog.Builder(getContext())
 			  .setTitle("Confirm")
@@ -226,7 +245,6 @@ public class MiniLauncher extends ViewGroup implements View.OnLongClickListener,
 		                LauncherModel.moveItemInDatabase(mLauncher, info,
 		                        LauncherSettings.Favorites.CONTAINER_DOCKBAR, -1, info.cellX, -1);
 	                }
-	                Log.d("MINILAUNCHER","We've removed children!!!");
                 }
 				requestLayout();
 				mDeleteView=null;
@@ -274,13 +292,24 @@ public class MiniLauncher extends ViewGroup implements View.OnLongClickListener,
 		
 		int marginLeft=((getMeasuredWidth())/2)-(((count*mCellWidth)/2));
 		int marginTop=((getMeasuredHeight())/2)-(((count*mCellHeight)/2));
-		
+		if(getChildCount()>mNumCells){
+			if(mOrientation==HORIZONTAL){
+				marginLeft=0;
+				mCellWidth=(getMeasuredWidth()/mNumCells);
+			}else{
+				marginTop=0;
+				mCellHeight=(getMeasuredHeight()/mNumCells);
+			}
+			mScrollAllowed=true;
+			snapScroll();
+		}else{
+			mScrollAllowed=false;
+			scrollTo(0, 0);
+		}
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
             ItemInfo item=(ItemInfo) child.getTag();
             if (child.getVisibility() != GONE) {
-                //int childLeft=(mOrientation==HORIZONTAL)?marginLeft+(i*mCellWidth):0;
-                //int childTop = (mOrientation==VERTICAL)?marginTop+(i*mCellHeight):0;
                 int childLeft=(mOrientation==HORIZONTAL)?marginLeft+(item.cellX*mCellWidth):0;
                 int childTop = (mOrientation==VERTICAL)?marginTop+(item.cellX*mCellHeight):0;
                 int childRight = childLeft+mCellWidth;
@@ -290,4 +319,125 @@ public class MiniLauncher extends ViewGroup implements View.OnLongClickListener,
         }
 		
 	}
+    /**
+     * ADW: Lets add scrolling capabilities :P
+     */
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+    	if(!mScrollAllowed){
+    		return super.onInterceptTouchEvent(ev);
+    	}
+        final int action = ev.getAction();
+        if ((action == MotionEvent.ACTION_MOVE) && (mTouchState != TOUCH_STATE_REST)) {
+            return true;
+        }
+        final float x = ev.getX();
+        final float y = ev.getY();
+
+        switch (action) {
+            case MotionEvent.ACTION_MOVE:
+                final int xDiff = (int) Math.abs(x - mLastMotionX);
+                final int yDiff = (int) Math.abs(y - mLastMotionY);
+
+                final int touchSlop = mTouchSlop;
+                boolean xMoved = xDiff > touchSlop;
+                boolean yMoved = yDiff > touchSlop;
+                
+                if (xMoved || yMoved) {
+                    if (xMoved && mOrientation==HORIZONTAL) {
+                        mTouchState = TOUCH_STATE_SCROLLING;
+                    }else if(yMoved && mOrientation==VERTICAL){
+                    	mTouchState = TOUCH_STATE_SCROLLING;
+                    }
+                }
+                break;
+
+            case MotionEvent.ACTION_DOWN:
+                mLastMotionX = x;
+                mLastMotionY = y;
+            	mTouchState=mScroller.isFinished() ? TOUCH_STATE_REST:TOUCH_STATE_SCROLLING;
+                break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+                mTouchState = TOUCH_STATE_REST;
+                break;
+        }
+
+        return mTouchState != TOUCH_STATE_REST;
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+    	if(!mScrollAllowed){
+    		return super.onTouchEvent(ev);
+    	}
+        final int action = ev.getAction();
+        final float x = ev.getX();
+        final float y = ev.getY();
+        switch (action) {
+        case MotionEvent.ACTION_DOWN:
+            if (!mScroller.isFinished()) {
+                mScroller.abortAnimation();
+            }
+            mTouchState = TOUCH_STATE_DOWN;
+            // Remember where the motion event started
+            mLastMotionX = x;
+            mLastMotionY = y;
+            break;
+        case MotionEvent.ACTION_MOVE:
+        	if (mTouchState == TOUCH_STATE_SCROLLING) {
+            	// Scroll to follow the motion event
+                final int delta = (mOrientation==HORIZONTAL)?(int) (mLastMotionX - x):(int) (mLastMotionY - y);
+                if(Math.abs(delta)>mTouchSlop || mTouchState == TOUCH_STATE_SCROLLING){
+                	mTouchState = TOUCH_STATE_SCROLLING;                	
+	                mLastMotionX = x;
+	                mLastMotionY = y;
+	                if (delta < 0) {
+                        if(mOrientation==HORIZONTAL)
+                        	scrollBy(delta, 0);
+                        else
+                        	scrollBy(0,delta);
+	                } else if (delta > 0) {
+                    	if(mOrientation==HORIZONTAL)
+                    		scrollBy(delta, 0);
+                    	else
+                    		scrollBy(0,delta);
+	                }
+                }
+            }
+            break;
+        case MotionEvent.ACTION_UP:
+            if (mTouchState == TOUCH_STATE_SCROLLING) {
+                snapScroll();
+            }
+            mTouchState = TOUCH_STATE_REST;
+            invalidate();
+            break;
+        case MotionEvent.ACTION_CANCEL:
+            mTouchState = TOUCH_STATE_REST;
+        }
+        return true;
+    }
+    private void snapScroll(){
+        final int actualScroll=(mOrientation==HORIZONTAL)?getScrollX():getScrollY();
+        final int cellSize=(mOrientation==HORIZONTAL)?mCellWidth:mCellHeight;
+        final int actualLimit=(mOrientation==HORIZONTAL)?getWidth():getHeight();
+    	int position = actualScroll-(actualScroll%cellSize);
+    	if(position<0)position=0;
+    	if(position>((getChildCount())*cellSize)-actualLimit) position=(getChildCount()*cellSize)-actualLimit;
+        final int delta=position-actualScroll;
+        if(mOrientation==HORIZONTAL){
+        	mScroller.startScroll(actualScroll, 0, delta, 0, mScrollingSpeed);
+        }else{
+        	mScroller.startScroll(0,actualScroll, 0, delta, mScrollingSpeed);
+        }
+        invalidate();
+    }
+    @Override
+    public void computeScroll() {
+        if (mScroller.computeScrollOffset()) {
+            scrollTo(mScroller.getCurrX(),mScroller.getCurrY());
+            postInvalidate();
+        }
+    }
+
 }

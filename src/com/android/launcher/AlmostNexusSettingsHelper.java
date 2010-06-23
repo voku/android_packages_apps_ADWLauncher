@@ -7,7 +7,7 @@ public final class AlmostNexusSettingsHelper {
 	private static final String ALMOSTNEXUS_PREFERENCES = "launcher.preferences.almostnexus";
 	private static final String[] restart_keys={"desktopScreens","drawerNew","uiHideLabels","highlights_color",
 		"highlights_color_focus","uiNewSelectors","desktopRows","desktopColumns","autosizeIcons",
-		"uiScrollableWidgets","desktopCache"};
+		"uiScrollableWidgets","desktopCache","uiDesktopIndicator","systemPersistent"};
 	public static boolean needsRestart(String key){
 		for(int i=0;i<restart_keys.length;i++){
 			if(restart_keys[i].equals(key))
@@ -24,6 +24,11 @@ public final class AlmostNexusSettingsHelper {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
 		int def_screen = sp.getInt("defaultScreen", context.getResources().getInteger(R.integer.config_defaultScreen));
 		return def_screen;
+	}
+	public static int getPageHorizontalMargin(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = sp.getInt("pageHorizontalMargin", context.getResources().getInteger(R.integer.config_pageHorizontalMargin));
+		return newD;
 	}
 	public static int getColumnsPortrait(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
@@ -209,6 +214,26 @@ public final class AlmostNexusSettingsHelper {
 	public static boolean getDesktopCache(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
 		boolean newD = sp.getBoolean("desktopCache", context.getResources().getBoolean(R.bool.config_desktopCache));
+		return newD;
+	}
+	public static boolean getDesktopIndicator(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("uiDesktopIndicator", context.getResources().getBoolean(R.bool.config_desktop_indicator));
+		return newD;
+	}
+	public static boolean getDesktopIndicatorAutohide(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("uiDesktopIndicatorAutohide", context.getResources().getBoolean(R.bool.config_desktop_indicator_autohide));
+		return newD;
+	}
+	public static int getDesktopIndicatorType(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		int newD = Integer.valueOf(sp.getString("uiDesktopIndicatorType", context.getResources().getString(R.string.config_desktop_indicator_type)));
+		return newD;
+	}
+	public static boolean getSystemPersistent(Context context) {
+		SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+		boolean newD = sp.getBoolean("systemPersistent", context.getResources().getBoolean(R.bool.config_system_persistent));
 		return newD;
 	}
 	
