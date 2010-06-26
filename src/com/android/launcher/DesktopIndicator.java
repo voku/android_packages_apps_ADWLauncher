@@ -186,16 +186,13 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 	}
 
 
-	@Override
 	public void onAnimationEnd(Animation animation) {
 		setVisibility(View.INVISIBLE);
 	}
 
-	@Override
 	public void onAnimationRepeat(Animation animation) {
 	}
 
-	@Override
 	public void onAnimationStart(Animation animation) {
 	}
 }
