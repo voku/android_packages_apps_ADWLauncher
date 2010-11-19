@@ -53,6 +53,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.View.MeasureSpec;
 import android.widget.TextView;
 
 /**
@@ -646,8 +647,10 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         if (heightMode != MeasureSpec.EXACTLY) {
             throw new IllegalStateException("Workspace can only be used in EXACTLY mode.");
         }
-
         // The children are given the same width and height as the workspace
+        int heightSpecSize =  MeasureSpec.getSize(heightMeasureSpec);
+        heightSpecSize-=getPaddingTop();
+        heightMeasureSpec=MeasureSpec.makeMeasureSpec(heightSpecSize, MeasureSpec.EXACTLY);
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             getChildAt(i).measure(widthMeasureSpec, heightMeasureSpec);
@@ -675,13 +678,13 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int childLeft = 0;
-
+        final int mTop=getPaddingTop();
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             if (child.getVisibility() != View.GONE) {
                 final int childWidth = child.getMeasuredWidth();
-                child.layout(childLeft, 0, childLeft + childWidth, child.getMeasuredHeight());
+                child.layout(childLeft, mTop, childLeft + childWidth, mTop+child.getMeasuredHeight());
                 childLeft += childWidth;
             }
         }

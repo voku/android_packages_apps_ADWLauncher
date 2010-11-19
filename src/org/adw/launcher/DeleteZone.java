@@ -167,18 +167,14 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
             createAnimations();
             final int[] location = mLocation;
             getLocationOnScreen(location);
-        	MarginLayoutParams tmp=(MarginLayoutParams) getLayoutParams();
-    		tmp.bottomMargin=0;
-    		tmp.rightMargin=0;
-        	setLayoutParams(tmp);
-            //TODO: ADW we need to hack the real location the first time we move the trash can
+            mLauncher.getWorkspace().setPadding(0, getHeight(), 0, 0);
+            mLauncher.getWorkspace().requestLayout();
             mRegion.set(location[0], location[1], location[0] + getRight() - getLeft(),
                     location[1] + getBottom() - getTop());
             mDragLayer.setDeleteRegion(mRegion);
             mTransition.resetTransition();
             startAnimation(mInAnimation);
             setVisibility(VISIBLE);
-
             //ADW Store app data for uninstall if its an Application
             //ADW Thanks to irrenhaus@xda & Rogro82@xda :)
 			if(item instanceof ApplicationInfo){
@@ -213,16 +209,9 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
             mTrashMode = false;
             mDragLayer.setDeleteRegion(null);
             startAnimation(mOutAnimation);
-            if(mLauncher.isDockBarOpen()){
-            	MarginLayoutParams tmp=(MarginLayoutParams) getLayoutParams();
-            	if(mOrientation==ORIENTATION_HORIZONTAL){
-            		tmp.bottomMargin=0;
-            	}else{
-            		tmp.rightMargin=0;
-            	}
-            	setLayoutParams(tmp);
-            }
             setVisibility(INVISIBLE);
+            mLauncher.getWorkspace().setPadding(0, 0, 0, 0);
+            mLauncher.getWorkspace().requestLayout();
         }
         if(shouldUninstall && UninstallPkg!=null){
 			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:"+UninstallPkg));
