@@ -4311,7 +4311,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
                 int width = (mlauncherAppWidgetInfo.spanX*minw);
                 int height = (mlauncherAppWidgetInfo.spanY*minh);
 
-                final Rect screenRect = new Rect(screen.getLeftPadding(), screen.getTopPadding(), screen.getWidth()-screen.getLeftPadding()-screen.getRightPadding(), screen.getHeight()-screen.getTopPadding()-screen.getBottomPadding());
+                final Rect screenRect = new Rect(0, 0, mWorkspace.getWidth()-screen.getRightPadding(), mWorkspace.getHeight()-screen.getBottomPadding());
                 final int x=mlauncherAppWidgetInfo.cellX*minw;
                 final int y=mlauncherAppWidgetInfo.cellY*minh;
                 final int[]spans=new int[]{1,1};
