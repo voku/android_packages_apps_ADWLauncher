@@ -40,6 +40,8 @@ import org.adw.launcher.catalogue.AppCatalogueFilters;
 import org.adw.launcher.catalogue.AppGroupAdapter;
 import org.adw.launcher.catalogue.AppInfoMList;
 
+import com.devoteam.quickaction.QuickActionWindow;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -64,6 +66,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ActivityInfo;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -76,6 +79,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -99,6 +103,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -4495,7 +4500,106 @@ public final class Launcher extends Activity implements View.OnClickListener, On
                     "or use the exported attribute for this activity.", e);
         }
     }
+    public void showActions(final ItemInfo info, final View view){
+        int[] xy = new int[2];
+        //fills the array with the computed coordinates
+        view.getLocationInWindow(xy);
+        //rectangle holding the clicked view area
+        Rect rect = new Rect(xy[0], xy[1], xy[0]+view.getWidth(), xy[1]+view.getHeight());
+        
+        //a new QuickActionWindow object
+        final QuickActionWindow qa = new QuickActionWindow(this, view, rect);
 
+        //adds an item to the badge and defines the quick action to be triggered
+        //when the item is clicked on
+        qa.addItem(getResources().getDrawable(android.R.drawable.ic_menu_delete), R.string.menu_delete, new OnClickListener() {
+            public void onClick(View v) {
+                final LauncherModel model = Launcher.getModel();
+                if (info.container == LauncherSettings.Favorites.CONTAINER_DESKTOP) {
+                    if (info instanceof LauncherAppWidgetInfo) {
+                        model.removeDesktopAppWidget((LauncherAppWidgetInfo) info);
+                    } else {
+                        model.removeDesktopItem(info);
+                    }
+                } else {
+                    //in a folder?
+                    FolderInfo source=sModel.getFolderById(Launcher.this, info.container);
+                    if (source instanceof UserFolderInfo) {
+                        final UserFolderInfo userFolderInfo = (UserFolderInfo) source;
+                        model.removeUserFolderItem(userFolderInfo, info);
+                    }
+                }
+                if (info instanceof UserFolderInfo) {
+                    final UserFolderInfo userFolderInfo = (UserFolderInfo)info;
+                    LauncherModel.deleteUserFolderContentsFromDatabase(Launcher.this, userFolderInfo);
+                    model.removeUserFolder(userFolderInfo);
+                } else if (info instanceof LauncherAppWidgetInfo) {
+                    final LauncherAppWidgetInfo launcherAppWidgetInfo = (LauncherAppWidgetInfo) info;
+                    final LauncherAppWidgetHost appWidgetHost = Launcher.this.getAppWidgetHost();
+                    Launcher.this.getWorkspace().unbindWidgetScrollableId(launcherAppWidgetInfo.appWidgetId);
+                    if (appWidgetHost != null) {
+                        appWidgetHost.deleteAppWidgetId(launcherAppWidgetInfo.appWidgetId);
+                    }
+                }
+                LauncherModel.deleteItemFromDatabase(Launcher.this, info);
+                ((ViewGroup) view.getParent()).removeView(view);
+                qa.dismiss();
+            }
+        });
+
+        if(info instanceof ApplicationInfo){
+            qa.addItem(getResources().getDrawable(android.R.drawable.ic_menu_edit), R.string.menu_edit, new OnClickListener() {
+                public void onClick(View v) {
+                    editShirtcut((ApplicationInfo)info);
+                    qa.dismiss();
+                }
+            });
+        }else if(info instanceof LauncherAppWidgetInfo){
+            qa.addItem(getResources().getDrawable(android.R.drawable.ic_menu_edit), R.string.menu_edit, new OnClickListener() {
+                public void onClick(View v) {
+                    editWidget(view);
+                    qa.dismiss();
+                }
+            });
+        }
+        if(info instanceof ApplicationInfo|| info instanceof LauncherAppWidgetInfo){
+            qa.addItem(getResources().getDrawable(android.R.drawable.ic_menu_manage), R.string.menu_uninstall, new OnClickListener() {
+                public void onClick(View v) {
+                    String UninstallPkg=null;
+                    if(info instanceof ApplicationInfo){
+                        try{
+                            final ApplicationInfo appInfo=(ApplicationInfo) info;
+                            if(appInfo.iconResource != null)
+                                UninstallPkg = appInfo.iconResource.packageName;
+                            else
+                            {
+                                PackageManager mgr = Launcher.this.getPackageManager();
+                                ResolveInfo res = mgr.resolveActivity(appInfo.intent, 0);
+                                UninstallPkg = res.activityInfo.packageName;
+                            }
+                            // Dont uninstall ADW ;-)
+                            if (this.getClass().getPackage().getName().equals(UninstallPkg))
+                                UninstallPkg = null;
+                        }catch (Exception e) {
+                            Log.w(LOG_TAG, "Could not load shortcut icon: " + info);
+                            UninstallPkg=null;
+                        }
+                    }else if(info instanceof LauncherAppWidgetInfo){
+                        LauncherAppWidgetInfo appwidget=(LauncherAppWidgetInfo) info;
+                        final AppWidgetProviderInfo aw=AppWidgetManager.getInstance(Launcher.this).getAppWidgetInfo(appwidget.appWidgetId);
+                        if(aw!=null)UninstallPkg=aw.provider.getPackageName();
+                    }
+                    if(UninstallPkg!=null){
+                        Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:"+UninstallPkg));
+                        Launcher.this.startActivity(uninstallIntent);
+                    }
+                    qa.dismiss();
+                }
+            });
+        }
+        //shows the quick action window on the screen
+        qa.show();
+    }
     @Override
     public void onSwipe() {
         //TODO: specify different action for each ActionButton?

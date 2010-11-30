@@ -1125,14 +1125,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     LauncherModel.moveItemInDatabase(mLauncher, info,
                             LauncherSettings.Favorites.CONTAINER_DESKTOP, index, lp.cellX, lp.cellY);
                 }else{
-                    if (info instanceof LauncherAppWidgetInfo) {
-                    	// resize widet
-                        mLauncher.editWidget(cell);
-                    }
-                    else if (info instanceof ApplicationInfo) {
-                    	// edit shirtcut
-                    	mLauncher.editShirtcut((ApplicationInfo)info);
-                    }
+                    mLauncher.showActions(info, cell);
                 }
             }
         }
