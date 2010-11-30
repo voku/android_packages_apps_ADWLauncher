@@ -294,6 +294,16 @@
 			  android:entries="@array/desktop_indicator_entries"
 			  />
 		</PreferenceCategory>
+		<PreferenceCategory
+			android:title="@string/pref_title_deletezone_preferencecategory">
+			<ListPreference
+				android:key="deletezone_style"
+				android:title="@string/pref_title_deletezone_style"
+				android:summary="@string/pref_summary_deletezone_style"
+				android:defaultValue="@string/config_deletezone_style"
+				android:entryValues="@array/deletezone_values"
+				android:entries="@array/deletezone_entries"/>
+		</PreferenceCategory>
 	</PreferenceScreen>
 	<PreferenceScreen
 		android:key="themePrefences"

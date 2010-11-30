@@ -426,6 +426,11 @@ public final class AlmostNexusSettingsHelper {
         int newD = Integer.valueOf(sp.getString("drawer_style", context.getResources().getString(R.string.config_drawer_style)));
         return newD;
     }
+    public static int getDeletezoneStyle(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
+        int newD = Integer.valueOf(sp.getString("deletezone_style", context.getResources().getString(R.string.config_deletezone_style)));
+        return newD;
+    }
     public static boolean getUIABTint(Context context) {
         SharedPreferences sp = context.getSharedPreferences(ALMOSTNEXUS_PREFERENCES, Context.MODE_PRIVATE);
         boolean newD = sp.getBoolean("uiABTint", context.getResources().getBoolean(R.bool.config_ab_tint));

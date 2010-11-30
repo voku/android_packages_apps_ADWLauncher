@@ -394,4 +394,7 @@
     <string name="pref_summary_ab_tint">Perform graphic tinting to the dock icons</string>
     <string name="pref_title_ab_tint_color">Tint Color</string>
     <string name="pref_summary_ab_tint_color">Change the tinting color</string>
+    <string name="pref_title_deletezone_preferencecategory">Trash Can</string>
+    <string name="pref_title_deletezone_style">Trash Can Position</string>
+    <string name="pref_summary_deletezone_style">Change the position of the Trash Can</string>
 </resources>

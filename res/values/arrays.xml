@@ -33,6 +33,11 @@
                 <item>5 Icons</item>
                 <item>1 Icon</item>
        </string-array>
+       <string-array name="deletezone_entries">
+                <item>None</item>
+                <item>Top</item>
+                <item>Bottom</item>
+       </string-array>
        <string-array name="app_drawer_style_entries">
                 <item>Vertical plain</item>
                 <item>Horizontal paginated</item>
@@ -71,6 +76,11 @@
                 <item>1</item>
                 <item>2</item>
                 <item>3</item>
+       </string-array>
+       <string-array name="deletezone_values">
+                <item>0</item>
+                <item>1</item>
+                <item>2</item>
        </string-array>
        <string-array name="app_drawer_style_values">
                 <item>0</item>

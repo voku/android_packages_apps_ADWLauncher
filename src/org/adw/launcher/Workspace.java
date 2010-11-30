@@ -649,7 +649,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         }
         // The children are given the same width and height as the workspace
         int heightSpecSize =  MeasureSpec.getSize(heightMeasureSpec);
-        heightSpecSize-=getPaddingTop();
+        heightSpecSize-=getPaddingTop()+getPaddingBottom();
         heightMeasureSpec=MeasureSpec.makeMeasureSpec(heightSpecSize, MeasureSpec.EXACTLY);
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
@@ -679,12 +679,13 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int childLeft = 0;
         final int mTop=getPaddingTop();
+        final int mBottom=getPaddingBottom();
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             if (child.getVisibility() != View.GONE) {
                 final int childWidth = child.getMeasuredWidth();
-                child.layout(childLeft, mTop, childLeft + childWidth, mTop+child.getMeasuredHeight());
+                child.layout(childLeft, mTop, childLeft + childWidth, mTop+child.getMeasuredHeight()-mBottom);
                 childLeft += childWidth;
             }
         }

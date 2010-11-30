@@ -265,7 +265,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 	private ActionButton mRAB;
 	private ActionButton mLAB2;
 	private ActionButton mRAB2;
-	private View mDrawerToolbar;
+	public View mDrawerToolbar;
 	/**
 	 * ADW: variables to store actual status of elements
 	 */
@@ -3790,6 +3790,10 @@ public final class Launcher extends Activity implements View.OnClickListener, On
                 }else if(mDockStyle==DOCK_STYLE_NONE){
                     mShouldRestart=true;
                 }
+            }else if(key.equals("deletezone_style")){
+                int dz=AlmostNexusSettingsHelper.getDeletezoneStyle(this);
+                final DeleteZone deleteZone = (DeleteZone) mDragLayer.findViewById(R.id.delete_zone);
+                deleteZone.setPosition(dz);
 			}
 			updateAlmostNexusUI();
 		}
