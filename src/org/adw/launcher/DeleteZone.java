@@ -179,10 +179,10 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
             getLocationOnScreen(location);
             if(mPosition==POSITION_BOTTOM){
                 mLauncher.getWorkspace().setPadding(0, 0, 0, getHeight());
-                mLauncher.mDrawerToolbar.setPadding(0, 0, 0, getHeight());
+                mLauncher.setDockPadding(getHeight());
             }else{
                 mLauncher.getWorkspace().setPadding(0, getHeight(),0,0);
-                mLauncher.mDrawerToolbar.setPadding(0, 0, 0, 0);
+                mLauncher.setDockPadding(0);
             }
             mLauncher.getWorkspace().requestLayout();
             mRegion.set(location[0], location[1], location[0] + getRight() - getLeft(),
@@ -227,7 +227,7 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
             startAnimation(mOutAnimation);
             setVisibility(INVISIBLE);
             mLauncher.getWorkspace().setPadding(0, 0, 0, 0);
-            mLauncher.mDrawerToolbar.setPadding(0, 0, 0, 0);
+            mLauncher.setDockPadding(0);
             mLauncher.getWorkspace().requestLayout();
         }
         if(shouldUninstall && UninstallPkg!=null){

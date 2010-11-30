@@ -265,7 +265,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 	private ActionButton mRAB;
 	private ActionButton mLAB2;
 	private ActionButton mRAB2;
-	public View mDrawerToolbar;
+	private View mDrawerToolbar;
 	/**
 	 * ADW: variables to store actual status of elements
 	 */
@@ -4608,5 +4608,9 @@ public final class Launcher extends Activity implements View.OnClickListener, On
     public void onSwipe() {
         //TODO: specify different action for each ActionButton?
         if(showDockBar)mDockBar.open();
+    }
+    public void setDockPadding(int pad){
+        mDrawerToolbar.setPadding(0, 0,0,pad);
+        mDockBar.setPadding(0, 0, 0, pad);
     }
 }
