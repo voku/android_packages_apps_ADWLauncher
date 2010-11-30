@@ -111,6 +111,7 @@ import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -2840,6 +2841,28 @@ public final class Launcher extends Activity implements View.OnClickListener, On
                 	Intent anycutIntent=new Intent();
                 	anycutIntent.setClass(Launcher.this, CustomShirtcutActivity.class);
                 	startActivityForResult(anycutIntent, REQUEST_PICK_ANYCUT);
+                    break;
+                }
+                case AddAdapter.ITEM_LAUNCHER_ACTION: {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Launcher.this);
+                    builder.setTitle(getString(R.string.launcher_actions));
+                    final ListAdapter adapter = LauncherActions.getInstance().getSelectActionAdapter();
+                    builder.setAdapter(adapter, new Dialog.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    LauncherActions.Action action = (LauncherActions.Action)adapter.getItem(which);
+                                    Intent result = new Intent();
+                                    result.putExtra(Intent.EXTRA_SHORTCUT_NAME, action.getName());
+                                    result.putExtra(Intent.EXTRA_SHORTCUT_INTENT,
+                                            LauncherActions.getInstance().getIntentForAction(action));
+                                    ShortcutIconResource iconResource = new ShortcutIconResource();
+                                    iconResource.packageName = Launcher.this.getPackageName();
+                                    iconResource.resourceName = getResources().getResourceName(action.getIconResourceId());
+                                    result.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
+                                    onActivityResult(REQUEST_CREATE_SHORTCUT, RESULT_OK, result);
+                                }
+                            });
+                    builder.create().show();
                     break;
                 }
             }
