@@ -4157,8 +4157,8 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 		        info.icon = icon;
 		        info.customIcon = customIcon;
 		        info.iconResource = iconResource;
-		        info.itemType = LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT;
 	        }
+            info.itemType = LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT;
 			info.title = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
 			info.intent = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
 			LauncherModel.updateItemInDatabase(this, info);
