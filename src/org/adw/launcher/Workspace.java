@@ -1534,12 +1534,13 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     // web pages.)
                     final Intent intent = info.intent;
                     final ComponentName name = intent.getComponent();
-                    if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION &&
+                    if ((info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION ||
+                            info.itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT)&&
                             Intent.ACTION_MAIN.equals(intent.getAction()) && name != null &&
                             packageName.equals(name.getPackageName())) {
 
                         final Drawable icon = Launcher.getModel().getApplicationInfoIcon(
-                                mLauncher.getPackageManager(), info);
+                                mLauncher.getPackageManager(), info, mLauncher);
                         if (icon != null && icon != info.icon) {
                             info.icon.setCallback(null);
                             info.icon = Utilities.createIconThumbnail(icon, mLauncher);
@@ -1557,12 +1558,13 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                         final ApplicationInfo appInfo = contents.get(k);
                         final Intent intent = appInfo.intent;
                         final ComponentName name = intent.getComponent();
-                        if (appInfo.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION &&
+                        if ((appInfo.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION ||
+                                info.itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT)&&
                                 Intent.ACTION_MAIN.equals(intent.getAction()) && name != null &&
                                 packageName.equals(name.getPackageName())) {
 
                             final Drawable icon = Launcher.getModel().getApplicationInfoIcon(
-                                    mLauncher.getPackageManager(), appInfo);
+                                    mLauncher.getPackageManager(), appInfo, mLauncher);
                             boolean folderUpdated=false;
                             if (icon != null && icon != appInfo.icon) {
                             	appInfo.icon.setCallback(null);

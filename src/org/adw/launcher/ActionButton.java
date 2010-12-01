@@ -2,7 +2,9 @@ package org.adw.launcher;
 
 import org.adw.launcher.DragController.DragListener;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -256,21 +258,28 @@ public class ActionButton extends CounterImageView implements DropTarget, DragLi
 	 * ADW: Reload the proper icon
 	 * This is mainly used when the apps from SDcard are available in froyo
 	 */
-	public void reloadIcon(){
+	public void reloadIcon(String packageName){
 		if(mCurrentInfo==null)return;
-		if(mCurrentInfo.itemType==LauncherSettings.Favorites.ITEM_TYPE_APPLICATION){
-	        ApplicationInfo info=(ApplicationInfo) mCurrentInfo;
-			final Drawable icon = Launcher.getModel().getApplicationInfoIcon(
-	                mLauncher.getPackageManager(), info);
-	        Drawable myIcon=null;
-			if (icon != null) {
-	            info.icon.setCallback(null);
-	            info.icon = Utilities.createIconThumbnail(icon, mLauncher);
-	            info.filtered = true;
-	            myIcon = mLauncher.createSmallActionButtonIcon(info);
-				setIcon(myIcon);
-		        invalidate();			
-	        }
+		if(mCurrentInfo instanceof ApplicationInfo){
+            final ApplicationInfo info=(ApplicationInfo)mCurrentInfo;
+		    final Intent intent = info.intent;
+            final ComponentName name = intent.getComponent();
+            if ((info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION ||
+                    info.itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT)&&
+                    Intent.ACTION_MAIN.equals(intent.getAction()) && name != null &&
+                    packageName.equals(name.getPackageName())) {
+    			final Drawable icon = Launcher.getModel().getApplicationInfoIcon(
+    	                mLauncher.getPackageManager(), info, mLauncher);
+    	        Drawable myIcon=null;
+    			if (icon != null) {
+    	            info.icon.setCallback(null);
+    	            info.icon = Utilities.createIconThumbnail(icon, mLauncher);
+    	            info.filtered = true;
+    	            myIcon = mLauncher.createSmallActionButtonIcon(info);
+    				setIcon(myIcon);
+    		        invalidate();
+    	        }
+    		}
 		}
 	}
 	private void setIcon(Drawable d){

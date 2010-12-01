@@ -1550,12 +1550,12 @@ public final class Launcher extends Activity implements View.OnClickListener, On
         if (packageName != null && packageName.length() > 0) {
             mWorkspace.updateShortcutsForPackage(packageName);
             //ADW: Update ActionButtons icons
-            mLAB.reloadIcon();
-            mLAB2.reloadIcon();
-            mRAB.reloadIcon();
-            mRAB2.reloadIcon();
-            mHandleView.reloadIcon();
-            mMiniLauncher.reloadIcons();
+            mLAB.reloadIcon(packageName);
+            mLAB2.reloadIcon(packageName);
+            mRAB.reloadIcon(packageName);
+            mRAB2.reloadIcon(packageName);
+            mHandleView.reloadIcon(packageName);
+            mMiniLauncher.reloadIcons(packageName);
         }
     }
 
