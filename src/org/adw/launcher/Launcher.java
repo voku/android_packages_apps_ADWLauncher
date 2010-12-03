@@ -40,8 +40,6 @@ import org.adw.launcher.catalogue.AppCatalogueFilters;
 import org.adw.launcher.catalogue.AppGroupAdapter;
 import org.adw.launcher.catalogue.AppInfoMList;
 
-import com.devoteam.quickaction.QuickActionWindow;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -116,6 +114,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
+
+import com.devoteam.quickaction.QuickActionWindow;
 
 
 /**
@@ -290,7 +290,6 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 	private int uiABTintColor=0xffffffff;
 	private boolean uiHideLabels=false;
 	private boolean wallpaperHack=true;
-	private boolean scrollableSupport=false;
 	private DesktopIndicator mDesktopIndicator;
 	private int savedOrientation;
 	private boolean useDrawerCatalogNavigation=true;
@@ -1325,7 +1324,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
         unregisterReceiver(mApplicationsReceiver);
         unregisterReceiver(mCloseSystemDialogsReceiver);
         if(mCounterReceiver!=null)unregisterReceiver(mCounterReceiver);
-        if(scrollableSupport)mWorkspace.unregisterProvider();
+        mWorkspace.unregisterProvider();
     }
 
     @Override
@@ -1593,32 +1592,6 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 	            					.create().show();
 	            				return;
 	            			}
-	            	}
-	    			// If there are Settings for scrollable or animations test them here too!
-	            	if (metadata.containsKey(LauncherMetadata.Requirements.Scrollable))
-	            	{
-	            		boolean requiresScrolling = metadata.getBoolean(LauncherMetadata.Requirements.Scrollable);
-	            		if (!isScrollableAllowed() && requiresScrolling) {
-	            			// ask the user what to do
-	            			AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-	            			dlg.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									AlmostNexusSettingsHelper.setUIScrollableWidgets(Launcher.this, true);
-									configureOrAddAppWidget(data);
-								}
-							});
-	            			dlg.setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									onActivityResult(REQUEST_CREATE_APPWIDGET, Activity.RESULT_CANCELED, data);
-								}
-							});
-	            			dlg.setMessage(getString(R.string.need_scrollable));
-	            			dlg.create().show();
-	            			return;
-	            		}
 	            	}
             	}
             }
@@ -3122,7 +3095,6 @@ public final class Launcher extends Activity implements View.OnClickListener, On
         	mAllAppsGrid.setAnimationSpeed(animationSpeed);
         }
         wallpaperHack=AlmostNexusSettingsHelper.getWallpaperHack(this);
-        scrollableSupport=AlmostNexusSettingsHelper.getUIScrollableWidgets(this);
         useDrawerCatalogNavigation=AlmostNexusSettingsHelper.getDrawerCatalogsNavigation(this);
     }
     /**
@@ -3781,15 +3753,6 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 					setPersistent(false);
 	        		changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),false);
 				}
-			}else if(key.equals("uiScrollableWidgets")){
-				boolean scroll=AlmostNexusSettingsHelper.getUIScrollableWidgets(this);
-				scrollableSupport=scroll;
-				if(scroll){
-					mWorkspace.registerProvider();
-				}else{
-					mWorkspace.unregisterProvider();
-				}
-				sModel.loadUserItems(false, Launcher.this, false, false);
 			}else if(key.equals("notif_receiver")){
 			    boolean useNotifReceiver=AlmostNexusSettingsHelper.getNotifReceiver(this);
 			    if(!useNotifReceiver){
@@ -3831,14 +3794,12 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 		motosize.putExtra("com.motorola.blur.home.EXTRA_NEW_WIDGET", true);
 		sendBroadcast(motosize);
 
-		if(isScrollableAllowed()){
-			Intent ready = new Intent(LauncherIntent.Action.ACTION_READY).putExtra(
-					LauncherIntent.Extra.EXTRA_APPWIDGET_ID, appWidgetId).putExtra(
-					AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId).putExtra(
-					LauncherIntent.Extra.EXTRA_API_VERSION, LauncherMetadata.CurrentAPIVersion).
-					setComponent(cname);
-			sendBroadcast(ready);
-		}
+		Intent ready = new Intent(LauncherIntent.Action.ACTION_READY).putExtra(
+				LauncherIntent.Extra.EXTRA_APPWIDGET_ID, appWidgetId).putExtra(
+				AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId).putExtra(
+				LauncherIntent.Extra.EXTRA_API_VERSION, LauncherMetadata.CurrentAPIVersion).
+				setComponent(cname);
+		sendBroadcast(ready);
 	}
 	/**
 	 * ADW: Home binding actions
@@ -3968,11 +3929,6 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 		fireHomeBinding(mSwipeupAction,2);
 	}
 
-
-
-	public boolean isScrollableAllowed(){
-		return scrollableSupport;
-	}
 	private void realAddWidget(AppWidgetProviderInfo appWidgetInfo,CellLayout.CellInfo cellInfo, int[]spans,int appWidgetId,boolean insertAtFirst){
         // Try finding open space on Launcher screen
         final int[] xy = mCellCoordinates;
@@ -4533,7 +4489,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
         view.getLocationInWindow(xy);
         //rectangle holding the clicked view area
         Rect rect = new Rect(xy[0], xy[1], xy[0]+view.getWidth(), xy[1]+view.getHeight());
-        
+
         //a new QuickActionWindow object
         final QuickActionWindow qa = new QuickActionWindow(this, view, rect);
 

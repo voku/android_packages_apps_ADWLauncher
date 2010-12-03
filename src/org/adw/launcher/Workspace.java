@@ -27,7 +27,6 @@ import org.metalev.multitouch.controller.MultiTouchController.PointInfo;
 import org.metalev.multitouch.controller.MultiTouchController.PositionAndScale;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.WallpaperManager;
 import android.appwidget.AppWidgetHostView;
 import android.content.ComponentName;
@@ -40,12 +39,10 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Debug;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -53,7 +50,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.View.MeasureSpec;
 import android.widget.TextView;
 
 /**
@@ -1271,7 +1267,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 
     void setLauncher(Launcher launcher) {
         mLauncher = launcher;
-        if(mLauncher.isScrollableAllowed())registerProvider();
+        registerProvider();
         if(mLauncher.getDesktopIndicator()!=null)mLauncher.getDesktopIndicator().setItems(mHomeScreens);
     }
 
