@@ -4492,6 +4492,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 
         //a new QuickActionWindow object
         final QuickActionWindow qa = new QuickActionWindow(this, view, rect);
+        view.setTag(R.id.TAG_PREVIEW, qa);
 
         //adds an item to the badge and defines the quick action to be triggered
         //when the item is clicked on

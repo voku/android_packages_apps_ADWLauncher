@@ -1055,6 +1055,8 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         mDragInfo.screen = mCurrentScreen;
 
         CellLayout current = ((CellLayout) getChildAt(mCurrentScreen));
+        final ItemInfo info = (ItemInfo)child.getTag();
+        mLauncher.showActions(info, child);
 
         current.onDragChild(child);
         mDragger.startDrag(child, this, child.getTag(), DragController.DRAG_ACTION_MOVE);
@@ -1121,8 +1123,8 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     CellLayout.LayoutParams lp = (CellLayout.LayoutParams) cell.getLayoutParams();
                     LauncherModel.moveItemInDatabase(mLauncher, info,
                             LauncherSettings.Favorites.CONTAINER_DESKTOP, index, lp.cellX, lp.cellY);
-                }else{
-                    mLauncher.showActions(info, cell);
+                //}else{
+                    //mLauncher.showActions(info, cell);
                 }
             }
         }
