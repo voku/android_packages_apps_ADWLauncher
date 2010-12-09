@@ -49,6 +49,8 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
     private static final int POSITION_NONE = 0;
     private static final int POSITION_TOP = 1;
     private static final int POSITION_BOTTOM = 2;
+    private static final int POSITION_TOP_SHRINK = 3;
+    private static final int POSITION_BOTTOM_SHRINK = 4;
     private static final int TRANSITION_DURATION = 250;
     private static final int ANIMATION_DURATION = 200;
 	private static final String LOG_TAG = "DeleteZone";
@@ -177,10 +179,10 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
             
             final int[] location = mLocation;
             getLocationOnScreen(location);
-            if(mPosition==POSITION_BOTTOM){
+            if(mPosition==POSITION_BOTTOM_SHRINK){
                 mLauncher.getWorkspace().setPadding(0, 0, 0, getHeight());
                 mLauncher.setDockPadding(getHeight());
-            }else{
+            }else if(mPosition==POSITION_TOP_SHRINK){
                 mLauncher.getWorkspace().setPadding(0, getHeight(),0,0);
                 mLauncher.setDockPadding(0);
             }
@@ -333,9 +335,9 @@ public class DeleteZone extends ImageView implements DropTarget, DragController.
 	    if(position!=mPosition){
 	        mPosition=position;
 	        FrameLayout.LayoutParams params=(LayoutParams) getLayoutParams();
-	        if(mPosition==POSITION_TOP) {
+	        if(mPosition==POSITION_TOP||mPosition==POSITION_TOP_SHRINK) {
 	            params.gravity=Gravity.TOP|Gravity.CENTER_HORIZONTAL;
-	        }else if(mPosition==POSITION_BOTTOM){
+	        }else if(mPosition==POSITION_BOTTOM||mPosition==POSITION_BOTTOM_SHRINK){
 	            params.gravity=Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
 	        }
 	        mInAnimation=null;
