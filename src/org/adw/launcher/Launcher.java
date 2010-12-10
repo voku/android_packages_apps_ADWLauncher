@@ -3117,7 +3117,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 			mHandleView.updateIcon();
 		}
 		if(!showDockBar){
-			mDockBar.close();
+			if(mDockBar.isOpen())mDockBar.close();
 		}
     	fullScreen(hideStatusBar);
     	if(!mDockBar.isOpen() && !showingPreviews){
