@@ -73,4 +73,5 @@
     <integer name="config_ab_tint_color">0xffffffff</integer>
     <bool name="config_wallpaper_scroll">true</bool>
     <string name="config_deletezone_style">1</string>
+    <bool name="config_close_apps_dockbar">true</bool>
 </resources>

@@ -252,6 +252,11 @@
 				android:dependency="uiDockbar"
 				android:summary="@string/pref_summary_closing_dockbar"
 				android:key="uiCloseDockbar" />
+			<CheckBoxPreference android:title="@string/pref_title_close_apps_dockbar"
+				android:dependency="uiDockbar"
+				android:defaultValue="@bool/config_close_apps_dockbar"
+				android:summary="@string/pref_summary_close_apps_dockbar"
+				android:key="uiCloseAppsDockbar" />
 		</PreferenceCategory>
 		<PreferenceCategory
             android:title="@string/pref_title_highlights_preferencecategory">
