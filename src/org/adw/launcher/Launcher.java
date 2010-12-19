@@ -3284,7 +3284,9 @@ public final class Launcher extends Activity implements View.OnClickListener, On
     	                String packageName=AlmostNexusSettingsHelper.getThemePackageName(this, THEME_DEFAULT);
     	                if(!packageName.equals(THEME_DEFAULT)){
     	                	d=FolderIcon.loadFolderFromTheme(this, getPackageManager(), packageName, "ic_launcher_folder");
-    	                }
+    	                }else{
+                            d = Utilities.createIconThumbnail(resources.getDrawable(R.drawable.ic_launcher_folder), this);
+                        }
                 	}else{
                 		d = Utilities.createIconThumbnail(resources.getDrawable(R.drawable.ic_launcher_folder), this);
                 	}
@@ -3296,7 +3298,9 @@ public final class Launcher extends Activity implements View.OnClickListener, On
     	            String packageName=AlmostNexusSettingsHelper.getThemePackageName(this, THEME_DEFAULT);
     	            if(!packageName.equals(THEME_DEFAULT)){
     	            	d=FolderIcon.loadFolderFromTheme(this, getPackageManager(), packageName, "ic_launcher_folder");
-    	            }
+    	            }else{
+                        d = resources.getDrawable(R.drawable.ic_launcher_folder);
+                    }
             	}else{
             		d = resources.getDrawable(R.drawable.ic_launcher_folder);
             	}
