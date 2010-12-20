@@ -813,6 +813,12 @@ public final class Launcher extends Activity implements View.OnClickListener, On
         mRAB.setSwipeListener(this);
         mRAB2.setSwipeListener(this);
 
+        mHandleView.setDragger(dragLayer);
+        mLAB.setDragger(dragLayer);
+        mRAB.setDragger(dragLayer);
+        mRAB2.setDragger(dragLayer);
+        mLAB2.setDragger(dragLayer);
+
 		//ADW linearlayout with apptray, lab and rab
 		mDrawerToolbar=findViewById(R.id.drawer_toolbar);
 		mHandleView.setNextFocusUpId(R.id.drag_layer);
@@ -4123,6 +4129,17 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 			info.intent = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
 			LauncherModel.updateItemInDatabase(this, info);
 
+			if (info.container == LauncherSettings.Favorites.CONTAINER_MAB)
+				mHandleView.UpdateLaunchInfo(info);
+			else if (info.container == LauncherSettings.Favorites.CONTAINER_LAB)
+				mLAB.UpdateLaunchInfo(info);
+			else if (info.container == LauncherSettings.Favorites.CONTAINER_LAB2)
+				mLAB2.UpdateLaunchInfo(info);
+			else if (info.container == LauncherSettings.Favorites.CONTAINER_RAB)
+				mRAB.UpdateLaunchInfo(info);
+			else if (info.container == LauncherSettings.Favorites.CONTAINER_RAB2)
+				mRAB2.UpdateLaunchInfo(info);
+
 			mWorkspace.updateShortcutFromApplicationInfo(info);
 		}
 	}
@@ -4530,7 +4547,11 @@ public final class Launcher extends Activity implements View.OnClickListener, On
                     }
                 }
                 LauncherModel.deleteItemFromDatabase(Launcher.this, info);
-                ((ViewGroup) view.getParent()).removeView(view);
+                if (view instanceof ActionButton)
+                	((ActionButton)view).UpdateLaunchInfo(null);
+                else
+                	((ViewGroup) view.getParent()).removeView(view);
+
                 qa.dismiss();
             }
         });
