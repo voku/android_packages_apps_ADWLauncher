@@ -22,8 +22,6 @@
     <skip />
     <!-- Application name -->
     <string name="application_name">ADW.Launcher</string>
-    <!-- Name for all applications running as this uid. -->
-    <string name="uid_name">안드로이드 Core 어플리케이션</string>
     <!-- Default folder name -->
     <string name="folder_name">폴더</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->

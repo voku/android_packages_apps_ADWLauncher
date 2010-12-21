@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="application_name">ADW.Launcher</string>
-  <string name="uid_name">Aplicacions base d\'Android</string>
   <string name="folder_name">Directori</string>
   <string name="chooser_wallpaper">Selecciona fons des de</string>
   <string name="wallpaper_instructions">Estableix fons</string>
