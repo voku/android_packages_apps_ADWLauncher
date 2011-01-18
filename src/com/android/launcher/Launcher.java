@@ -1445,6 +1445,9 @@ public final class Launcher extends Activity implements View.OnClickListener, On
         menu.add(MENU_GROUP_NORMAL, MENU_NOTIFICATIONS, 0, R.string.menu_edit)
                 .setIcon(android.R.drawable.ic_menu_edit)
                 .setAlphabeticShortcut('E');
+        menu.add(MENU_GROUP_NORMAL, MENU_LOCK_DESKTOP, 0, R.string.menu_lock)
+            .setIcon(android.R.drawable.ic_menu_preferences)
+            .setAlphabeticShortcut('X');
 
         final Intent settings = new Intent(android.provider.Settings.ACTION_SETTINGS);
         settings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
@@ -1466,9 +1469,6 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 			.setIcon(android.R.drawable.ic_menu_manage);
    		menu.add(MENU_GROUP_CATALOGUE, MENU_APP_DELETE_GRP, 0, R.string.AppGroupDel)
 			.setIcon(android.R.drawable.ic_menu_delete);
-        menu.add(MENU_GROUP_NORMAL, MENU_LOCK_DESKTOP, 0, R.string.menu_lock)
-            .setIcon(android.R.drawable.ic_menu_preferences)
-            .setAlphabeticShortcut('X');
      return true;
     }
 
