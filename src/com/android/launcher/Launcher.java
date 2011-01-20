@@ -1446,7 +1446,7 @@ public final class Launcher extends Activity implements View.OnClickListener, On
                 .setIcon(android.R.drawable.ic_menu_edit)
                 .setAlphabeticShortcut('E');
         menu.add(MENU_GROUP_NORMAL, MENU_LOCK_DESKTOP, 0, R.string.menu_lock)
-            .setIcon(android.R.drawable.ic_menu_preferences)
+            .setIcon(com.android.internal.R.drawable.ic_menu_block)
             .setAlphabeticShortcut('X');
 
         final Intent settings = new Intent(android.provider.Settings.ACTION_SETTINGS);
