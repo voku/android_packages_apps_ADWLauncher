@@ -374,4 +374,6 @@
     <string name="pref_summary_drawer_navigate_catalogs">Afficher les boutons de navigation par groupes</string>
     <string name="pref_title_notif_receiver">Afficher notifications</string>
     <string name="pref_summary_notif_receiver">Activer les compteurs de notifications globaux</string>
+    <string name="pref_title_behaviour_preferences">Comportement général</string>
+    <string name="pref_summary_behaviour_preferences">Configuration du comportement général des applications</string>
 </resources>
