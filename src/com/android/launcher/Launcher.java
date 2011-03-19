@@ -86,6 +86,7 @@ import android.os.Message;
 import android.os.MessageQueue;
 import android.os.Parcelable;
 import android.provider.LiveFolders;
+import android.provider.Settings;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -229,6 +230,14 @@ public final class Launcher extends Activity implements View.OnClickListener, On
     private CellLayout.CellInfo mMenuAddInfo;
     private final int[] mCellCoordinates = new int[2];
     private FolderInfo mFolderInfo;
+
+    //Quick Action Options
+    private static final String ANDROID_MARKET_PACKAGE = "com.android.vending";
+    private Drawable mMarketIcon;
+    private CharSequence mMarketLabel;
+
+    private static final String ANDROID_SETTINGS_PACKAGE = "com.android.settings";
+    private String mAppInfoLabel;
 
     /**
      * ADW: now i use an ActionButton instead of a fixed app-drawer button
@@ -4644,40 +4653,125 @@ public final class Launcher extends Activity implements View.OnClickListener, On
                 }
             });
         }
-        if(info instanceof ApplicationInfo|| info instanceof LauncherAppWidgetInfo){
-            qa.addItem(getResources().getDrawable(android.R.drawable.ic_menu_manage), R.string.menu_uninstall, new OnClickListener() {
+        else if(info instanceof FolderInfo){
+            qa.addItem(getResources().getDrawable(android.R.drawable.ic_menu_edit), R.string.menu_edit, new OnClickListener() {
                 public void onClick(View v) {
-                    String UninstallPkg=null;
-                    if(info instanceof ApplicationInfo){
-                        try{
-                            final ApplicationInfo appInfo=(ApplicationInfo) info;
-                            if(appInfo.iconResource != null)
-                                UninstallPkg = appInfo.iconResource.packageName;
-                            else
-                            {
-                                PackageManager mgr = Launcher.this.getPackageManager();
-                                ResolveInfo res = mgr.resolveActivity(appInfo.intent, 0);
-                                UninstallPkg = res.activityInfo.packageName;
-                            }
-                            // Dont uninstall ADW ;-)
-                            if (this.getClass().getPackage().getName().equals(UninstallPkg))
-                                UninstallPkg = null;
-                        }catch (Exception e) {
-                            Log.w(LOG_TAG, "Could not load shortcut icon: " + info);
-                            UninstallPkg=null;
-                        }
-                    }else if(info instanceof LauncherAppWidgetInfo){
-                        LauncherAppWidgetInfo appwidget=(LauncherAppWidgetInfo) info;
-                        final AppWidgetProviderInfo aw=AppWidgetManager.getInstance(Launcher.this).getAppWidgetInfo(appwidget.appWidgetId);
-                        if(aw!=null)UninstallPkg=aw.provider.getPackageName();
-                    }
-                    if(UninstallPkg!=null){
-                        Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:"+UninstallPkg));
-                        Launcher.this.startActivity(uninstallIntent);
-                    }
+                    showRenameDialog((FolderInfo)info);
                     qa.dismiss();
                 }
             });
+        }
+        
+        if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION 
+                || info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET)
+        {
+            String infoPackage = null;
+            boolean isADWShortcut = false;
+            if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION)
+            {
+                ApplicationInfo appInfo = (ApplicationInfo) info;
+                infoPackage = appInfo.intent.getComponent().getPackageName();
+                isADWShortcut = (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT && appInfo.intent.getComponent().getPackageName()
+                        .equals(Launcher.class.getPackage().getName()));
+            }
+            else if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET)
+            {
+                LauncherAppWidgetInfo appwidget = (LauncherAppWidgetInfo) info;
+                final AppWidgetProviderInfo appWidgetInfo = AppWidgetManager.getInstance(this).getAppWidgetInfo(appwidget.appWidgetId);
+                if (appWidgetInfo != null)
+                {
+                    infoPackage = appWidgetInfo.provider.getPackageName();
+                }
+            }
+
+            if (infoPackage != null && !isADWShortcut)
+            {
+                final String appPackage = infoPackage;
+                
+                // get the application info label 
+                if ( mAppInfoLabel == null )
+                {
+                    try
+                    {
+                        Resources resources = createPackageContext(ANDROID_SETTINGS_PACKAGE, Context.CONTEXT_IGNORE_SECURITY).getResources();
+                        int nameID = resources.getIdentifier("application_info_label", "string", ANDROID_SETTINGS_PACKAGE);
+                        if ( nameID != 0 )
+                        {
+                            mAppInfoLabel = resources.getString(nameID);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        // can't lookup the name!
+                    }
+                }
+                // if application info label loaded show the option
+                if ( mAppInfoLabel != null )
+                {
+                    qa.addItem(getResources().getDrawable(android.R.drawable.ic_menu_info_details), mAppInfoLabel, new OnClickListener()
+                    {
+                        public void onClick(View v)
+                        {
+                            qa.dismiss();
+                            try
+                            {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", appPackage, null);
+                                intent.setData(uri);
+                                startActivity(intent);
+                            }
+                            catch (Exception e)
+                            {
+                                // failed to start app info
+                            }
+                        }
+                    });
+                }
+                
+                // get the market icon
+                if (mMarketIcon == null && mMarketLabel == null)
+                {
+                    try
+                    {
+                        PackageManager packageManager = getPackageManager();
+                        android.content.pm.ApplicationInfo applicationInfo = packageManager.getApplicationInfo(ANDROID_MARKET_PACKAGE, 0);
+                        mMarketIcon = applicationInfo.loadIcon(packageManager);
+                        mMarketLabel = applicationInfo.loadLabel(packageManager);
+                        if (mMarketLabel == null)
+                        {
+                            mMarketLabel = applicationInfo.name;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        // would appear there is no market
+                        mMarketIcon = null;
+                        mMarketLabel = "";  // empty string so we don't try to load this again
+                    }
+                }
+                // if market, show it as an option
+                if (mMarketIcon != null && mMarketLabel != null)
+                {
+                    qa.addItem(mMarketIcon, (String) mMarketLabel, new OnClickListener()
+                    {
+                        public void onClick(View v)
+                        {
+                            qa.dismiss();
+                            try
+                            {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse("market://search?q=pname:" + appPackage));
+                                startActivity(intent);
+                            }
+                            catch (Exception e)
+                            {
+                                // failed to tell market to find the app
+                            }
+                        }
+                    });
+                }
+            }
         }
         //shows the quick action window on the screen
         qa.show();
