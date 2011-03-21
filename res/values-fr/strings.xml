@@ -93,6 +93,8 @@
     <!-- Noun, menu item used to show the system settings -->
     <string name="menu_settings">Paramètres</string>
     <string name="menu_adw_settings">Préférences</string>
+    <string name="menu_lock">Verrouiller</string>
+    <string name="menu_unlock">Déverrouiller</string>
 
     <!-- Permissions: -->
     <string name="permlab_install_shortcut">Installer des raccourcis</string>
