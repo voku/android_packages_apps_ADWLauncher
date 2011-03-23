@@ -33,6 +33,13 @@
                 <item>5 Iconos</item>
                 <item>1 Icono</item>
        </string-array>
+       <string-array name="deletezone_entries">
+                <item>Ninguno</item>
+                <item>Superior</item>
+                <item>Inferior</item>
+                <item>Superior (Reducir escritorio)</item>
+                <item>Inferior (Reducir escritorio)</item>
+       </string-array>
        <string-array name="app_drawer_style_entries">
                 <item>Vertical</item>
                 <item>Horizontal paginado</item>

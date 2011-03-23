@@ -320,5 +320,16 @@
     <string name="pref_summary_behaviour_preferences">Configuración general de comportamiento de la aplicación</string>
     <string name="pref_title_drawer_style">Estilo</string>
     <string name="pref_summary_drawer_style">Elige entre distintos estilos de lista de aplicaciones</string>
-
+    <string name="pref_title_dockbar_preferencecategory">Barra iconos oculta</string>
+    <string name="pref_title_ab_tint">Tinte iconos del Dock</string>
+    <string name="pref_summary_ab_tint">Perform graphic tinting to the dock icons</string>
+    <string name="pref_title_ab_tint_color">Tono de color</string>
+    <string name="pref_summary_ab_tint_color">Cambiar el tintado de color</string>
+    <string name="pref_title_deletezone_preferencecategory">Papelera</string>
+    <string name="pref_title_deletezone_style">Posición de la papelera</string>
+    <string name="pref_summary_deletezone_style">Cambia la posición de la papelera</string>
+    <string name="pref_title_close_apps_dockbar">Cierre el cajón de la aplicación</string>
+    <string name="pref_summary_close_apps_dockbar">Cierra el cajón de aplicaciones con pulsación larga sobre un elemento cuando la barra de iconos es visible</string>
+    <string name="menu_lock">Bloquear Escritorio</string>
+    <string name="menu_unlock">Desbloquear Escritorio</string>
 </resources>
