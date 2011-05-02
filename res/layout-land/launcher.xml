@@ -102,15 +102,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn_scroll_left"
         android:layout_width="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:onClick="previousScreen"/>
+        android:layout_gravity="bottom|right"/>
     <ImageView
     	android:src="@drawable/home_arrows_right"
         android:layout_height="wrap_content"
         android:id="@+id/btn_scroll_right"
         android:layout_width="wrap_content" 
-        android:layout_gravity="top|right"
-        android:onClick="nextScreen"/>
+        android:layout_gravity="top|right"/>
     <com.android.launcher.DockBar
         android:id="@+id/dockbar"
         android:layout_width="wrap_content"

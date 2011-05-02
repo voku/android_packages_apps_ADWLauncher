@@ -855,7 +855,19 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 		//ADW: Dots ImageViews
         mPreviousView = (ImageView)findViewById(R.id.btn_scroll_left);
 		mNextView = (ImageView)findViewById(R.id.btn_scroll_right);
+		mNextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWorkspace.scrollRight();
+            }
+        });
 		mPreviousView.setOnLongClickListener(this);
+		mPreviousView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWorkspace.scrollLeft();
+            }
+        });
 		mNextView.setOnLongClickListener(this);
         //ADW: ActionButtons swipe gestures
 		mHandleView.setSwipeListener(this);

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.util.Log;
 
 public class PreviewPreference extends Preference {
 	private CharSequence themeName;
@@ -39,6 +40,20 @@ public class PreviewPreference extends Preference {
 	protected void onBindView(View view) {
 		// TODO Auto-generated method stub
 		super.onBindView(view);
+		final MyLauncherSettings context = (MyLauncherSettings)view.getContext();
+		Button applyButton= (Button) view.findViewById(R.id.ThemeApply);
+		view.findViewById(R.id.ThemeSearch).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.getThemes(v);
+            }
+        });
+        applyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.applyTheme(v);
+            }
+        });
 		if(themePackageName!=null && themePackageName.toString().length()>0){
 			TextView vThemeTitle= (TextView) view.findViewById(R.id.ThemeTitle);
 			vThemeTitle.setText(themeName);
@@ -52,10 +67,8 @@ public class PreviewPreference extends Preference {
 				vThemePreview.setImageResource(R.drawable.ic_launcher_wallpaper);
 			vThemeTitle.setText(themeName);
 			
-			Button applyButton= (Button) view.findViewById(R.id.ThemeApply);
 			applyButton.setEnabled(true);
 		}else{
-			Button applyButton= (Button) view.findViewById(R.id.ThemeApply);
 			applyButton.setEnabled(false);
 		}
 	}
