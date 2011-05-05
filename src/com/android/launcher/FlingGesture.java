@@ -44,17 +44,19 @@ public class FlingGesture {
             mVelocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
             final int velocityX = (int) mVelocityTracker.getXVelocity();
             final int velocityY = (int) mVelocityTracker.getYVelocity();
+            final int absVelocityX = Math.abs(velocityX);
+            final int absVelocityY = Math.abs(velocityY);
 
             if (mListener != null) {
             	int Direction = FLING_NONE;
-	            if (velocityX > SNAP_VELOCITY) {
-	            	Direction = FLING_LEFT;
-	            } else if (velocityX < -SNAP_VELOCITY) {
-	            	Direction = FLING_RIGHT;
-	            } else if (velocityY > SNAP_VELOCITY) {
-	            	Direction = FLING_DOWN;
-	            } else if (velocityY < -SNAP_VELOCITY) {
-	            	Direction = FLING_UP;
+	            if (absVelocityX > SNAP_VELOCITY || absVelocityY > SNAP_VELOCITY) {
+                        if (absVelocityX > absVelocityY) {
+                            if (velocityX > 0) Direction = FLING_LEFT;
+                            else Direction = FLING_RIGHT;
+                        } else {
+                            if (velocityY > 0) Direction = FLING_DOWN;
+                            else Direction = FLING_UP;
+                        }
 	            }
 	            mListener.OnFling(Direction);
             }
