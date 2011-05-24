@@ -297,16 +297,18 @@
         <string name="shirtcuts_icon_packs">IconPack TemaADW</string>
         <string name="shirtcuts_select_icon_type">Seleziona tipo icona</string>
         <string name="shirtcuts_select_icon_pack">Seleziona icon pack</string>
+        <string name="shirtcuts_restore_original">Ripristina originali</string>
 
         <string name="selectAll">Seleziona tutte</string>
         <string name="AppGroupAll">"TUTTE"</string>
+        <string name="AppGroupUn">"NON CATALOGATE"</string>
         <string name="AppGroupAdd">"Nuovo Catalogo"</string>
         <string name="AppGroupDel">"Rimuovi Catalogo"</string>
     <string name="AppGroupDelLong">"Rimuovere realmente\nCatalogo attuale?"</string>
-        <string name="AppGroupChoose">"Scegli Gruppo"</string>
-        <string name="AppGroupConfig">"Imp. Gruppo"</string>
+        <string name="AppGroupChoose">"Scegli Catalogo"</string>
+        <string name="AppGroupConfig">"Imp. Catalogo"</string>
         <string name="AppGroupRename">"Nuovo Catalogo"</string>
-        <string name="AppGroupConfigError">"Non puoi configurare questo gruppo"</string>
+        <string name="AppGroupConfigError">"Non puoi configurare questo catalogo"</string>
         <string name="rename_group_title">Nuovo Catalogo</string>
         <string name="rename_group_label">Nome Catalogo</string>
         <string name="show_catalog">Visualizza Catalogo \"%s\"</string>
@@ -318,6 +320,10 @@
 
         <string name="pref_title_drawer_navigate_catalogs">Navigazione cataloghi</string>
         <string name="pref_summary_drawer_navigate_catalogs">Visualizza i tasti per navigare tra i cataloghi</string>
+        <string name="pref_title_drawer_ungroup_catalog">Solo cataloghi</string>
+        <string name="pref_summary_drawer_ungroup_catalog">Rimuove la categoria TUTTE e usa solo i cataloghi</string>
+        <string name="pref_title_drawer_show_catalogs">Mostra nome catalogo</string>
+        <string name="pref_summary_drawer_show_catalogs">Mostra il nome del catalogo nel drawer</string>
         <string name="pref_title_notif_receiver">Visualizza notifiche</string>
         <string name="pref_summary_notif_receiver">Attiva i contatori globali delle notifiche</string>
 
