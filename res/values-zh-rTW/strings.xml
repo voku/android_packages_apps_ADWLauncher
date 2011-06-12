@@ -139,6 +139,9 @@
     <string name="pref_summary_desktop_overshoot">開啟桌面滑動時的彈性效果</string>
     <string name="pref_dialog_desktop_overshoot">設置為0時禁用桌面彈性效果</string>
 
+    <string name="pref_title_desktop_transition">桌面過場動畫</string>
+    <string name="pref_summary_desktop_transition">桌面分頁切換時要使用的變動效果</string>
+
     <!-- Drawer Settings -->
     <string name="pref_title_drawer_settings">託盤設置</string>
     <string name="pref_summary_drawer_settings">託盤動畫顯示設定</string>
