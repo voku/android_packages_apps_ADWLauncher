@@ -84,6 +84,9 @@
     <string name="pref_summary_desktop_overshoot">Effetto di rimbalzo tra la schermata precedente e successiva</string>
     <string name="pref_dialog_desktop_overshoot">Impostato a 0 disabilita l\'overshooting</string>
 
+    <string name="pref_title_desktop_transition">Transizioni Desktop</string>
+    <string name="pref_summary_desktop_transition">Effetti di transizione tra le schermate del desktop</string>
+
     <!-- Drawer Settings -->
     <string name="pref_title_drawer_settings">Impostazioni del Drawer</string>
     <string name="pref_summary_drawer_settings">Preferenze della griglia delle applicazioni</string>
