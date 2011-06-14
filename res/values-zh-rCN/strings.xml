@@ -41,6 +41,8 @@
     <string name="title_select_shortcut" msgid="2858897527672831763">"选择快捷方式"</string>
     <string name="title_select_live_folder" msgid="3753447798805166749">"选择文件夹"</string>
     <string name="menu_add" msgid="3065046628354640854">"添加"</string>
+    <string name="menu_delete">移除</string>
+    <string name="menu_uninstall">卸载</string>
     <string name="menu_wallpaper" msgid="5837429080911269832">"壁纸"</string>
     <string name="menu_search" msgid="4826514464423239041">"搜索"</string>
     <string name="menu_settings" msgid="6233960148378443661">"设置"</string>
