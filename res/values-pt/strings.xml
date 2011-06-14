@@ -352,4 +352,6 @@
     <string name="pref_summary_drawer_show_catalogs">Mostra os títulos de catálogos</string>
     <string name="AppGroupUn">NÃO CATALOGADO</string>
     <string name="shirtcuts_restore_original">Restaura Original</string>
+    <string name="pref_title_desktop_transition">Transição da área de trabalho</string>
+    <string name="pref_summary_desktop_transition">Como a transição de telas são realizadas quando é modificado</string>
 </resources>
