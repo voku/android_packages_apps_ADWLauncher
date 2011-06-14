@@ -17,6 +17,13 @@
                 <item>Полоска вверху</item>
                 <item>Полоска внизу</item>
        </string-array>
+       <string-array name="desktop_transition_entries">
+                <item>Обычно</item>
+                <item>Вращение</item>
+                <item>Пролистывание</item>
+                <item>Куб</item>
+                <item>Разброс</item>
+       </string-array>
        <string-array name="home_orientation_entries">
                 <item>Авто/датчик</item>
                 <item>Книжная</item>
