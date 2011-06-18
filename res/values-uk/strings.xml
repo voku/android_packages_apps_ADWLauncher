@@ -78,6 +78,8 @@
   <string name="pref_title_desktop_overshoot">Пружна стільниця</string>
   <string name="pref_summary_desktop_overshoot">Пружна прокрутка областей стільниці</string>
   <string name="pref_dialog_desktop_overshoot">Встановіть значення в 0 щоб вимкнути ефект пружності</string>
+  <string name="pref_title_desktop_transition">Перехід між областями стільниці</string>
+  <string name="pref_summary_desktop_transition">Яким чином відбуватиметься перехід між областями стільниці</string>
   <string name="pref_title_drawer_settings">Головне меню</string>
   <string name="pref_summary_drawer_settings">Налаштування сітки та візуальних ефектів головного меню</string>
   <string name="pref_title_zoom_effect_speed">Тривалість масштабування</string>

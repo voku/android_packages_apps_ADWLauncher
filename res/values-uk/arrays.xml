@@ -17,6 +17,13 @@
     <item>Повзунок зверху</item>
     <item>Повзунок знизу</item>
   </string-array>
+  <string-array name="desktop_transition_entries">
+    <item>Звичайний</item>
+    <item>Повертанням</item>
+    <item>Гортанням</item>
+    <item>Кубічний</item>
+    <item>Розпорошенням</item>
+  </string-array>
   <string-array name="home_orientation_entries">
     <item>Автоматичне/датчик</item>
     <item>Книжне</item>
