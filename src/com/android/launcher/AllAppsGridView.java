@@ -202,174 +202,175 @@ public class AllAppsGridView extends GridView implements
 	/**
 	 * ADW: Override drawing methods to do animation
 	 */
-	@Override
-	public void draw(Canvas canvas) {
+    @Override
+    public void draw(Canvas canvas) {
         int saveCount = canvas.save();
-		if (isAnimating) {
-			long currentTime;
-			if (startTime == 0) {
-				startTime = SystemClock.uptimeMillis();
-				currentTime = 0;
-			} else {
-				currentTime = SystemClock.uptimeMillis() - startTime;
-			}
-			if (mStatus == OPENING) {
-				mScaleFactor = easeOut(currentTime, 3.0f, 1.0f, mAnimationDuration);
-				mLabelFactor = easeOut(currentTime, -1.0f, 1.0f, mAnimationDuration);
-			} else if (mStatus == CLOSING) {
-				mScaleFactor = easeIn(currentTime, 1.0f, 3.0f, mAnimationDuration);
-				mLabelFactor = easeIn(currentTime, 1.0f, -1.0f, mAnimationDuration);
-			}
-			if (mLabelFactor < 0)
-				mLabelFactor = 0;
-			if (currentTime >= mAnimationDuration) {
-				isAnimating = false;
-				if (mStatus == OPENING) {
-					mStatus = OPEN;
-				} else if (mStatus == CLOSING) {
-					mStatus = CLOSED;
-					mLauncher.getWorkspace().clearChildrenCache();
-					setVisibility(View.GONE);
-				}
-			}
-		}
-		shouldDrawLabels = mFadeDrawLabels && mDrawLabels
-				&& (mStatus == OPENING || mStatus == CLOSING);
-		float porcentajeScale = 1.0f;
-		if (isAnimating) {
-			porcentajeScale = 1.0f - ((mScaleFactor - 1) / 3.0f);
-			if (porcentajeScale > 0.9f)
-				porcentajeScale = 1f;
-			if (porcentajeScale < 0)
-				porcentajeScale = 0;
-			mBgAlpha = (int) (porcentajeScale * 255);
-		}
-		mPaint.setAlpha(mBgAlpha);
-		if (getVisibility() == View.VISIBLE) {
-			canvas
-					.drawARGB((int) (porcentajeScale * mTargetAlpha), Color
-							.red(mBgColor), Color.green(mBgColor), Color
-							.blue(mBgColor));
-            int index = ((ApplicationsAdapter) getAdapter()).getCatalogueFilter().getCurrentFilterIndex();
-            if (mLastIndexDraw != index)
-            {
-                mLastIndexDraw = index;
-                int title = isUngroupMode?R.string.AppGroupUn:R.string.AppGroupAll;
-                mGroupTitle = (index == AppGroupAdapter.APP_GROUP_ALL ? mLauncher.getString(title) : AppCatalogueFilters.getInstance()
-                        .getGroupTitle(index));
+        float porcentajeScale = 1.0f;
+        if (isAnimating) {
+            long currentTime;
+            if (startTime == 0) {
+                startTime = SystemClock.uptimeMillis();
+                currentTime = 0;
+            } else {
+                currentTime = SystemClock.uptimeMillis() - startTime;
+            }
+            if (mStatus == OPENING) {
+                mScaleFactor = easeOut(currentTime, 3.0f, 1.0f, mAnimationDuration);
+                mLabelFactor = easeOut(currentTime, -1.0f, 1.0f, mAnimationDuration);
+            } else if (mStatus == CLOSING) {
+                mScaleFactor = easeIn(currentTime, 1.0f, 3.0f, mAnimationDuration);
+                mLabelFactor = easeIn(currentTime, 1.0f, -1.0f, mAnimationDuration);
+            }
+            porcentajeScale = 1.0f - ((mScaleFactor - 1) / 3.0f);
+            if (porcentajeScale > 0.9f) porcentajeScale = 1f;
+            if (porcentajeScale < 0) porcentajeScale = 0;
+            if (mLabelFactor < 0) mLabelFactor = 0;
+            if (currentTime >= mAnimationDuration) {
+                isAnimating = false;
+                porcentajeScale = 1.0f;
+                if (mStatus == OPENING) {
+                    mStatus = OPEN;
+                } else if (mStatus == CLOSING) {
+                    mStatus = CLOSED;
+                    mLauncher.getWorkspace().clearChildrenCache();
+                    setVisibility(View.GONE);
+                }
+            }
+            shouldDrawLabels = mFadeDrawLabels && mDrawLabels
+                    && (mStatus == OPENING || mStatus == CLOSING);
+        }
+        if (getVisibility() == View.VISIBLE) {
+            mPaint.setAlpha(mBgAlpha);
+            canvas.drawARGB((int) (porcentajeScale * mTargetAlpha),
+                    Color.red(mBgColor), Color.green(mBgColor),
+                    Color.blue(mBgColor));
+            if (getAdapter() != null) {
+                int index = ((ApplicationsAdapter) getAdapter()).getCatalogueFilter().getCurrentFilterIndex();
+                if (mLastIndexDraw != index) {
+                    mLastIndexDraw = index;
+                    int title = isUngroupMode?R.string.AppGroupUn:R.string.AppGroupAll;
+                    mGroupTitle = (index == AppGroupAdapter.APP_GROUP_ALL ?
+                            mLauncher.getString(title) : AppCatalogueFilters.getInstance()
+                            .getGroupTitle(index));
 
-                // ((LauncherPlus)mLauncher).groupTitlePopupWindow(mLauncher,
-                // AllAppsGridView.this, name);
-                mGroupTitleText = new TextView(getContext());
-                mGroupTitleText.setTextSize(15);
-                mGroupTitleText.setText(mGroupTitle);
-                mGroupTitleText.setTextColor(Color.WHITE);
+                    // ((LauncherPlus)mLauncher).groupTitlePopupWindow(mLauncher,
+                    // AllAppsGridView.this, name);
+                    mGroupTitleText = new TextView(getContext());
+                    mGroupTitleText.setTextSize(15);
+                    mGroupTitleText.setText(mGroupTitle);
+                    mGroupTitleText.setTextColor(Color.WHITE);
 
-                int textWidth = (int) mGroupTitleText.getPaint().measureText(mGroupTitle);
-                mGroupTextX = (getWidth() / 2) - (textWidth / 2);
+                    int textWidth = (int) mGroupTitleText.getPaint().measureText(mGroupTitle);
+                    mGroupTextX = (getWidth() / 2) - (textWidth / 2);
 
-                int textSize = (int) mGroupTitleText.getPaint().getTextSize();
-                mGroupTextY = textSize;
+                    int textSize = (int) mGroupTitleText.getPaint().getTextSize();
+                    mGroupTextY = textSize;
 
-                mGroupPaint = new Paint();
-                mGroupPaint.setColor(Color.WHITE);
-                mGroupPaint.setTextSize(mGroupTitleText.getTextSize());
-                mGroupPaint.setAntiAlias(true);
+                    mGroupPaint = new Paint();
+                    mGroupPaint.setColor(Color.WHITE);
+                    mGroupPaint.setTextSize(mGroupTitleText.getTextSize());
+                    mGroupPaint.setAntiAlias(true);
                 
-                mShouldDrawGroupText = mLauncher.useDrawerTitleCatalog 
-                    && AppCatalogueFilters.getInstance().getAllGroups().size() > 0;
+                    mShouldDrawGroupText = mLauncher.useDrawerTitleCatalog 
+                            && AppCatalogueFilters.getInstance().getAllGroups().size() > 0;
+                }
             }
 
-            if ( mShouldDrawGroupText )
-            {
-                if (mStatus == OPEN )
-                {
+            if (mShouldDrawGroupText) {
+                if (mStatus == OPEN) {
                     mGroupPaint.setAlpha(255);
                     canvas.drawText(mGroupTitle, mGroupTextX, mGroupTextY, mGroupPaint);
                 }
-                else if ( isAnimating && mStatus == OPENING)
-                {
+                else if ( isAnimating && mStatus == OPENING) {
                     mGroupPaint.setAlpha((int) (mLabelFactor * 255));
                     canvas.drawText(mGroupTitle, mGroupTextX, mGroupTextY, mGroupPaint);
                 }
                 canvas.translate(0, mGroupTextY);
             }
 
-			super.draw(canvas);
-			canvas.restoreToCount(saveCount);
-		}
+            super.draw(canvas);
+            canvas.restoreToCount(saveCount);
+        }
+    }
 
-	}
+    @Override
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        int saveCount = canvas.save();
 
-	@Override
-	protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-		int saveCount = canvas.save();
-		Drawable[] tmp = ((TextView) child).getCompoundDrawables();
-                Bitmap b = null;
-		if (mIconSize == 0) {
-			mIconSize = tmp[1].getIntrinsicHeight() + child.getPaddingTop();
-		}
-		int childLeft = child.getLeft();
-        int childWidth = child.getWidth();
-        int childTop = child.getTop();
-        if (isAnimating) {
-			postInvalidate();
-			float distH = (childLeft + (childWidth / 2))
-					- (getWidth() / 2);
-			float distV = (childTop + (child.getHeight() / 2))
-					- (getHeight() / 2);
-			float scaleFactor = mScaleFactor;
-            float x = childLeft + (distH * (scaleFactor - 1)) * scaleFactor;
-			float y = childTop + (distV * (scaleFactor - 1)) * scaleFactor;
-			float width = childWidth * scaleFactor;
-			if (shouldDrawLabels) {
-				child.setDrawingCacheEnabled(true);
-                                child.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-                                b = child.getDrawingCache();
-    			if ( b != null) {
-    				// ADW: try to manually draw labels
-    				int bHeight = b.getHeight();
-                    int bWidth = b.getWidth();
-                    rl1.set(0, mIconSize, bWidth, bHeight);
-    				rl2.set(childLeft, childTop + mIconSize, childLeft + bWidth,childTop + bHeight);
-    				mLabelPaint.setAlpha((int) (mLabelFactor * 255));
-    				canvas.drawBitmap(b, rl1, rl2, mLabelPaint);
-    			}
-			}
-			float scale = ((width) / childWidth);
-			int xx = (childWidth / 2) - (tmp[1].getBounds().width() / 2);
-			canvas.translate(x + xx, y + child.getPaddingTop());
-			canvas.scale(scale, scale);
-			tmp[1].draw(canvas);
-		} else {
-            if (mDrawLabels) {
-                if (mStatusTransformation) {
-                    getChildStaticTransformation( child, mTransformation);
-                    int alpha = (int) (mTransformation.getAlpha() * 255);
+/* disable the catalog switch transformations for now
+   be done with drawChild as fast as possible in the most common case,
+   which is drawer scrolling, labels enabled
+   not using the drawingCache seems to be the smoothest option, at least on Milestone */
+
+        if (mDrawLabels && !isAnimating) {
+            canvas.translate(child.getLeft(), child.getTop());
+            child.draw(canvas);
+        } else {
+            Drawable[] tmp = ((TextView) child).getCompoundDrawables();
+            if (mIconSize == 0) {
+                mIconSize = tmp[1].getIntrinsicHeight() + child.getPaddingTop();
+            }
+            int childLeft = child.getLeft();
+            int childWidth = child.getWidth();
+            int childTop = child.getTop();
+            if (isAnimating) {
+                postInvalidate();
+                float distH = (childLeft + (childWidth / 2)) - (getWidth() / 2);
+                float distV = (childTop + (child.getHeight() / 2)) - (getHeight() / 2);
+                float scaleFactor = mScaleFactor;
+                float x = childLeft + (distH * (scaleFactor - 1)) * scaleFactor;
+                float y = childTop + (distV * (scaleFactor - 1)) * scaleFactor;
+                float width = childWidth * scaleFactor;
+                if (shouldDrawLabels) {
                     child.setDrawingCacheEnabled(true);
-                    b = child.getDrawingCache();
+                    child.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
+                    Bitmap b = child.getDrawingCache();
+                    if ( b != null) {
+                        // ADW: try to manually draw labels
+                        int bHeight = b.getHeight();
+                        int bWidth = b.getWidth();
+                        rl1.set(0, mIconSize, bWidth, bHeight);
+                        rl2.set(childLeft, childTop + mIconSize, childLeft + bWidth,childTop + bHeight);
+                        mLabelPaint.setAlpha((int) (mLabelFactor * 255));
+                        canvas.drawBitmap(b, rl1, rl2, mLabelPaint);
+                    }
+                }
+                float scale = ((width) / childWidth);
+                int xx = (childWidth / 2) - (tmp[1].getBounds().width() / 2);
+                canvas.translate(x + xx, y + child.getPaddingTop());
+                canvas.scale(scale, scale);
+                tmp[1].draw(canvas);
+            } else {
+
+// disable the catalogue switch transformations for now
+
+/*              int alpha=255;
+                if (mStatusTransformation) {
+                    getChildStaticTransformation(child, mTransformation);
+                    alpha = (int) (mTransformation.getAlpha() * 255);
+                }
+                if (mDrawLabels) {
                     if (b != null) {
                         mPaint.setAlpha(alpha);
                         canvas.drawBitmap(b, childLeft, childTop, mPaint);
                     } else {
-                        canvas.saveLayerAlpha(childLeft, childTop, childLeft + childWidth, childTop + child.getHeight(), (int) (mTransformation.getAlpha() * 255),
-                            Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG);
+                        canvas.saveLayerAlpha(childLeft, childTop, childLeft + childWidth,
+                                childTop + child.getHeight(), alpha,
+                                Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG);
                         canvas.translate(childLeft, childTop);
                         child.draw(canvas);
                     }
-                } else {
-                    canvas.translate(childLeft, childTop);
-                    child.draw(canvas);
-                }
-            } else {
-                int xx = (childWidth / 2) - (tmp[1].getBounds().width() / 2);
-                canvas.translate(childLeft + xx, childTop + child.getPaddingTop());
-                tmp[1].draw(canvas);
+                } else {*/
+                    int xx = (childWidth / 2) - (tmp[1].getBounds().width() / 2);
+                    canvas.translate(childLeft + xx, childTop + child.getPaddingTop());
+                    //tmp[1].setAlpha(alpha);
+                    tmp[1].draw(canvas);
+                //}
             }
         }
         canvas.restoreToCount(saveCount);
         return true;
-	}
+    }
 
 	/**
 	 * Open/close public methods
@@ -464,8 +465,9 @@ public class AllAppsGridView extends GridView implements
         this.mSwitchGroups = switchGroups;
         mFadeEnd = System.currentTimeMillis() + 150;
         mFadeType = FADE_OUT;
-        
-        if ( getAdapter().getCount() == 0 )
+
+// disable the catalogue switch transformations for now
+        if ( true || getAdapter().getCount() == 0 )
         {
             // nothing to fade so we can't use draw events :( 
             setStaticTransformationsEnabled(false);
