@@ -815,12 +815,18 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             if (getCurrentScreen() > 0) {
                 snapToScreen(getCurrentScreen() - 1);
                 return true;
-            }
+            } else if (getCurrentScreen() == 0) {
+				snapToScreen(getChildCount() - 1);
+				return true;
+			}
         } else if (direction == View.FOCUS_RIGHT) {
             if (getCurrentScreen() < getChildCount() - 1) {
                 snapToScreen(getCurrentScreen() + 1);
                 return true;
-            }
+            } else if (getCurrentScreem() == getChildCount() - 1) {
+				snapToScreen(0);
+				return true;
+			}
         }
         return super.dispatchUnhandledMove(focused, direction);
     }
