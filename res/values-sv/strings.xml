@@ -74,6 +74,9 @@
     <string name="pref_title_desktop_overshoot">Skrivbordsöverskjutning</string>
     <string name="pref_summary_desktop_overshoot">Tillåter skrivbordsskärmar med studsande scrollning</string>
     <string name="pref_dialog_desktop_overshoot">Sätt detta till 0 för att inaktivera överskjutning</string>
+    <string name="pref_title_desktop_transition">Skrivbordsövergångar</string>
+    <string name="pref_summary_desktop_transition">Hur det ser ut när man byter mellan skrivbord</string>
+
     <string name="pref_title_drawer_settings">Programlådans inställningar</string>
     <string name="pref_summary_drawer_settings">Inställningar för programlådans rutnät</string>
     <string name="pref_title_zoom_effect_speed">Snabbhet på zoom-effekt</string>
@@ -236,8 +239,10 @@
     <string name="shirtcuts_icon_packs">ADWTheme IconPacks</string>
     <string name="shirtcuts_select_icon_type">Välj ikontyp</string>
     <string name="shirtcuts_select_icon_pack">Välj ikonpaket</string>
+    <string name="shirtcuts_restore_original">Återställ ursprunglig</string>
     <string name="selectAll">Välj alla</string>
     <string name="AppGroupAll">"ALLA"</string>
+    <string name="AppGroupUn">"Okategoriserad"</string>
     <string name="AppGroupAdd">"Ny katalog"</string>
     <string name="AppGroupDel">"Ta bort katalog"</string>
     <string name="AppGroupDelLong">"Säker på att ta bort\nAktuell katalog?"</string>
@@ -256,6 +261,10 @@
     <string name="scrollable_api_required">Denna widget behöver en uppdaterad version av ADWLauncher.\nVar god uppdatera eller kontakta widget-utvecklaren</string>
     <string name="pref_title_drawer_navigate_catalogs">Katalognavigering</string>
     <string name="pref_summary_drawer_navigate_catalogs">Visa navigeringsknappar för programkatalogerna</string>
+    <string name="pref_title_drawer_ungroup_catalog">Endast kataloger</string>
+    <string name="pref_summary_drawer_ungroup_catalog">Ta bort ALLA-kategorin och använd endast kategorier</string>
+    <string name="pref_title_drawer_show_catalogs">Visa katalogtitel</string>
+    <string name="pref_summary_drawer_show_catalogs">Visa katalogers titlar i programlådan</string>
     <string name="pref_title_notif_receiver">Visa aviseringar</string>
     <string name="pref_summary_notif_receiver">Aktivera de globala aviseringsräknarna</string>
     <string name="pref_title_notif_size">Bubblors fontstorlek</string>
