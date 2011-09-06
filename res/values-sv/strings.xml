@@ -16,11 +16,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="application_name" msgid="5865630159700533006">"ADW.Launcher"</string>
-    <string name="uid_name" msgid="3371120195364560632">"Android Core Apps"</string>
     <string name="folder_name" msgid="4588446541914685904">"Mapp"</string>
     <string name="chooser_wallpaper" msgid="5988031014201479733">"Välj bakgrund från"</string>
     <string name="wallpaper_instructions" msgid="4215640646180727542">"Ange bakgrund"</string>
-    <string name="pick_wallpaper" msgid="2674908923379130941">"Bakgrundsgalleri"</string>
     <string name="activity_not_found" msgid="3571057450431950427">"Programmet är inte installerat på din telefon."</string>
     <string name="configure_wallpaper" msgid="2820186271419674623">"Konfigurera..."</string>
     <string name="rename_folder_label" msgid="5646236631298452787">"Mappnamn"</string>
@@ -44,7 +42,6 @@
     <string name="title_select_live_folder" msgid="3753447798805166749">"Välj mapp"</string>
     <string name="menu_add" msgid="3065046628354640854">"Lägg till"</string>
     <string name="menu_delete">Ta bort</string>
-    <string name="menu_uninstall">Avinstallera</string>
     <string name="menu_wallpaper" msgid="5837429080911269832">"Bakgrund"</string>
     <string name="menu_search" msgid="4826514464423239041">"Sök"</string>
     <string name="menu_settings" msgid="6233960148378443661">"Inställningar"</string>
@@ -184,8 +181,6 @@
     <string name="pref_dialog_desktop_rows">Välj antalet rader att använda på skrivbordet</string>
     <string name="pref_title_autosize_icons">Auto-Utsträckning</string>
     <string name="pref_summary_autosize_icons">Försök sträcka ut ikoner/widgetar så de inte överlappar</string>
-    <string name="pref_title_scrollable_widgets">Stöd för scrollbara widgetar</string>
-    <string name="pref_summary_scrollable_widgets">Inaktivera detta om du inte använder scrollbara widgetar</string>
     <string name="pref_title_drawer_labels">Visa programetiketter</string>
     <string name="pref_summary_drawer_labels">Visa etiketter i Programlådan</string>
     <string name="pref_title_fade_drawer_labels">Tona in programetiketter</string>
@@ -257,7 +252,6 @@
     <string name="pref_summary_adw_restart">Stäng och starta om ADWLauncher</string>
     <string name="pref_title_adw_reset">Återställ ADW</string>
     <string name="pref_summary_adw_reset">Rensa inställningar för ADWLauncher och starta om</string>
-    <string name="need_scrollable">Widgeten du vill lägga till behöver \'stöd för scrollbara widgetar\' som för närvarande är inaktiverat.\nVill du aktivera detta nu?</string>
     <string name="scrollable_api_required">Denna widget behöver en uppdaterad version av ADWLauncher.\nVar god uppdatera eller kontakta widget-utvecklaren</string>
     <string name="pref_title_drawer_navigate_catalogs">Katalognavigering</string>
     <string name="pref_summary_drawer_navigate_catalogs">Visa navigeringsknappar för programkatalogerna</string>

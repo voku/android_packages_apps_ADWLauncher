@@ -23,16 +23,12 @@
     <skip />
     <!-- Application name -->
     <string name="application_name" msgid="5865630159700533006">"ADW.Launcher"</string>
-    <!-- Name for all applications running as this uid. -->
-    <string name="uid_name" msgid="3371120195364560632">"Android 核心應用程式"</string>
     <!-- Default folder name -->
     <string name="folder_name" msgid="4588446541914685904">"資料夾"</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper" msgid="5988031014201479733">"從…選取桌布"</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
     <string name="wallpaper_instructions" msgid="4215640646180727542">"設定桌布"</string>
-    <!-- Option in "Select wallpaper from" dialog box -->
-    <string name="pick_wallpaper" msgid="2674908923379130941">"桌布集"</string>
     <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
     <string name="activity_not_found" msgid="3571057450431950427">"應用程式未安裝到手機。"</string>
     <!-- List item for configuring the current wallpaper -->
@@ -88,7 +84,6 @@
     <!-- Verb, menu item used to add an item on the desktop -->
     <string name="menu_add" msgid="3065046628354640854">"新增"</string>
     <string name="menu_delete">移除</string>
-    <string name="menu_uninstall">解除安裝</string>
     <!-- Noun, menu item used to set the desktop's wallpaper -->
     <string name="menu_wallpaper" msgid="5837429080911269832">"桌布"</string>
     <!-- Verb, menu item used to initiate global search -->
@@ -287,8 +282,6 @@
     <string name="pref_title_autosize_icons">自動伸展</string>
     <string name="pref_summary_autosize_icons">自動伸展小外掛程式和圖示</string>
 
-    <string name="pref_title_scrollable_widgets">支援可滾動的小工具</string>
-    <string name="pref_summary_scrollable_widgets">禁用該選項如果你不喜歡可滾動的小工具</string>
 
     <string name="pref_title_drawer_labels">顯示程式標籤</string>
     <string name="pref_summary_drawer_labels">在程式抽屜顯示標籤</string>
@@ -374,7 +367,6 @@
     <string name="pref_title_adw_reset">重置ADW</string>
     <string name="pref_summary_adw_reset">清除ADW主介面設置並重新啟動</string>
 
-    <string name="need_scrollable">您想添加的“可滾動的”小工具目前已禁用。\n現在開啟？</string>
     <string name="scrollable_api_required">此小工具需要更新您的ADW.Launcher。\n請及時更新或者聯繫小工具開發者</string>
 
     <string name="pref_title_drawer_navigate_catalogs">目錄導航</string>

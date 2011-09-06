@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="application_name">ADW.Launcher</string>
-  <string name="uid_name">Aplicacions base d\'Android</string>
   <string name="folder_name">Directori</string>
   <string name="chooser_wallpaper">Selecciona fons des de</string>
   <string name="wallpaper_instructions">Estableix fons</string>
-  <string name="pick_wallpaper">Galeria de fons</string>
   <string name="activity_not_found">L\'aplicació no està instal·lada al telèfon.</string>
   <string name="configure_wallpaper">Configura...</string>
   <string name="rename_folder_label">Nom del directori</string>
@@ -165,8 +163,6 @@
   <string name="pref_dialog_desktop_rows">Seleccioneu el nombre de files per a usar en l\'escriptori</string>
   <string name="pref_title_autosize_icons">Mida automàtica</string>
   <string name="pref_summary_autosize_icons">Intenta ajustar la mida de les icones/estris perquè no se superposin</string>
-  <string name="pref_title_scrollable_widgets">Suport per a estris desplaçables</string>
-  <string name="pref_summary_scrollable_widgets">Desactiveu aquesta opció si no feu servir estris desplaçables</string>
   <string name="pref_title_drawer_labels">Mostra les etiquetes de les aplicacions</string>
   <string name="pref_summary_drawer_labels">Mostra les etiquetes al calaix d\'aplicacions</string>
   <string name="pref_title_fade_drawer_labels">Esvaeix les etiquetes de les aplicacions</string>
@@ -236,7 +232,6 @@
   <string name="pref_summary_adw_restart">Tanca i reinicia ADW.Launcher</string>
   <string name="pref_title_adw_reset">Restableix ADW</string>
   <string name="pref_summary_adw_reset">Esborra configuració d\'ADW.Launcher i reinicia</string>
-  <string name="need_scrollable">L\'estri que voleu afegir requereix \'suport per a estris desplaçables\' que es troba actualment desactivat.\nVoleu habilitar-ho ara?</string>
   <string name="scrollable_api_required">Aquest estri necessita una versió actualitzada de ADW.Launcher.\nSi us plau, actualitzeu o contacteu amb un desenvolupador de l\'estri</string>
   <string name="pref_title_drawer_navigate_catalogs">Navegació de catàlegs</string>
   <string name="pref_summary_drawer_navigate_catalogs">Mostra els botons de navegació als catàlegs d\'aplicacions</string>

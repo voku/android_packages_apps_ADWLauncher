@@ -21,11 +21,9 @@
   <!-- General -->
   <skip />
   <string name="application_name">ADW.Launcher</string>
-  <string name="uid_name">Android Core Apps</string>
   <string name="folder_name">Složka</string>
   <string name="chooser_wallpaper">Zvolit tapetu ze složky</string>
   <string name="wallpaper_instructions">Nastavit tapetu</string>
-  <string name="pick_wallpaper">Galerie tapet</string>
   <string name="activity_not_found">Aplikace není nainstalována.</string>
   <string name="configure_wallpaper">Konfigurace\u2026</string>
 
@@ -59,7 +57,6 @@
   <skip />
   <string name="menu_add">Přidat</string>
   <string name="menu_delete">Odebrat</string>
-  <string name="menu_uninstall">Odinstalovat</string>
   <string name="menu_wallpaper">Tapeta</string>
   <string name="menu_search">Hledat</string>
   <string name="menu_settings">Nastavení</string>
@@ -251,8 +248,6 @@
   <string name="pref_title_autosize_icons">Přizpůsobovat</string>
   <string name="pref_summary_autosize_icons">Pokoušet se přizpůsobovat ikony/widgety tak, aby se nepřekrývali</string>
 
-  <string name="pref_title_scrollable_widgets">Podporovat posouvací widgety</string>
-  <string name="pref_summary_scrollable_widgets">Zakázat pokud nejsou posouvací widgety použity</string>
 
   <string name="pref_title_drawer_labels">Zobrazit popisy aplikací</string>
   <string name="pref_summary_drawer_labels">Zobrazit popisy na složce aplikací</string>
@@ -340,7 +335,6 @@
   <string name="pref_title_adw_reset">Obnovit ADW</string>
   <string name="pref_summary_adw_reset">Vyčistit nastavení spouštěče ADW a restartovat jej</string>
 
-  <string name="need_scrollable">Přidávaný widget vyžaduje \'Podporovat posouvací widgety\' což je nyní zakázáno.\nChcete jej povolit?</string>
   <string name="scrollable_api_required">Tento widget vyžaduje novější verzi spouštěče ADW.\nProveďte aktualizaci nebo kontaktujte tvůrce widgetu</string>
 
   <string name="pref_title_drawer_navigate_catalogs">Prohlížení katalogů</string>

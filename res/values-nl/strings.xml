@@ -16,11 +16,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="application_name" msgid="5865630159700533006">"ADW.Launcher"</string>
-    <string name="uid_name" msgid="3371120195364560632">"Android-kerntoepassingen"</string>
     <string name="folder_name" msgid="4588446541914685904">"Map"</string>
     <string name="chooser_wallpaper" msgid="5988031014201479733">"Achtergrond selecteren in"</string>
     <string name="wallpaper_instructions" msgid="4215640646180727542">"Achtergrond instellen"</string>
-    <string name="pick_wallpaper" msgid="2674908923379130941">"Achtergrondgalerij"</string>
     <string name="activity_not_found" msgid="3571057450431950427">"Deze toepassing is niet geïnstalleerd op uw telefoon."</string>
     <string name="configure_wallpaper" msgid="2820186271419674623">"Configureren..."</string>
     <string name="rename_folder_label" msgid="5646236631298452787">"Mapnaam"</string>
@@ -227,8 +225,6 @@
     <string name="pref_title_autosize_icons">Automatisch rekken</string>
     <string name="pref_summary_autosize_icons">Iconen/widgets worden automatisch uitgerekt zodat deze elkaar niet overlappen</string>
 
-    <string name="pref_title_scrollable_widgets">Support voor scrollbare widgets</string>
-    <string name="pref_summary_scrollable_widgets">Schakel deze optie uit als je geen gebruik maakt van scrollbare widgets</string>
 
     <string name="pref_title_drawer_labels">Geef app labels weer</string>
     <string name="pref_summary_drawer_labels">Geef app labels in de drawer weer</string>
@@ -312,7 +308,6 @@
 	<string name="pref_title_adw_reset">Reset ADW</string>
 	<string name="pref_summary_adw_reset">Verwijder ADW instellingen en herstart</string>
 	
-	<string name="need_scrollable">Om deze widget te gebruiken moet de optie \'Support voor scrollbare widgets\' aan staan.\nWil je deze optie nu aanzetten?</string>
 	<string name="scrollable_api_required">Om deze widget te gebruiken moet ADW geupdate worden.</string>
     
     <string name="pref_title_drawer_navigate_catalogs">Catalogus navigatie</string>

@@ -22,16 +22,12 @@
     <skip />
     <!-- Application name -->
     <string name="application_name">ADW.Launcher</string>
-    <!-- Name for all applications running as this uid. -->
-    <string name="uid_name">Android Core Apps</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper">Επιλογη ταπετσαριας απο</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
     <string name="wallpaper_instructions">Ορισμός ταπετσαρίας</string>
-    <!-- Option in "Select wallpaper from" dialog box -->
-    <string name="pick_wallpaper">Wallpaper gallery</string>
     <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
     <string name="activity_not_found">Η εφαρμογή δεν βρέθηκε εγκατεστημένη.</string>
     <!-- List item for configuring the current wallpaper -->

@@ -19,11 +19,9 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="application_name">ADW.Launcher</string>
-  <string name="uid_name">Служби Android Core</string>
   <string name="folder_name">Каталог</string>
   <string name="chooser_wallpaper">Встановлення шпалер з</string>
   <string name="wallpaper_instructions">Встановити</string>
-  <string name="pick_wallpaper">Галерея</string>
   <string name="activity_not_found">Прогама не встановлена на вашому телефоні.</string>
   <string name="configure_wallpaper">Налаштування\u2026</string>
   <string name="rename_folder_label">Назва каталогу</string>
@@ -47,7 +45,6 @@
   <string name="title_select_live_folder">Вибір каталогу</string>
   <string name="menu_add">Додати</string>
   <string name="menu_delete">Видалити</string>
-  <string name="menu_uninstall">Деінсталювати</string>
   <string name="menu_wallpaper">Шпалери</string>
   <string name="menu_search">Пошук</string>
   <string name="menu_settings">Налаштування</string>
@@ -187,8 +184,6 @@
   <string name="pref_dialog_desktop_rows">Встановіть кількість рядків стільниці</string>
   <string name="pref_title_autosize_icons">Автомасштабування</string>
   <string name="pref_summary_autosize_icons">Масштабування іконок (віджетів) з метою уникнення перекривання</string>
-  <string name="pref_title_scrollable_widgets">Віджети з прокручуванням</string>
-  <string name="pref_summary_scrollable_widgets">Вимкніть, якщо ви не використовуєте віджети з прокручуванням</string>
   <string name="pref_title_drawer_labels">Підписи ярликів</string>
   <string name="pref_summary_drawer_labels">Відображення підписів ярликів головного меню</string>
   <string name="pref_title_fade_drawer_labels">Затухання підписів</string>
@@ -260,7 +255,6 @@
   <string name="pref_summary_adw_restart">Закритття і перезавантаження ADW Launcher</string>
   <string name="pref_title_adw_reset">Скинути налаштування ADW</string>
   <string name="pref_summary_adw_reset">Очищення налаштувань ADW Launcher і перезавантаження</string>
-  <string name="need_scrollable">Віджет, який ви хочете додати, потребує підтримки віджетів з прокручуванням, що зараз вимкнена.\nУвімкнути її зараз?</string>
   <string name="scrollable_api_required">Цей віджет потребує нову версію ADW Launcher.\nВиконайте оновлення або зверніться до розробника віджету</string>
   <string name="pref_title_drawer_navigate_catalogs">Навігаційні кнопки</string>
   <string name="pref_summary_drawer_navigate_catalogs">Кнопки переміщення між групами</string>

@@ -16,11 +16,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
            xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="application_name">ADW.Launcher</string>
-  <string name="uid_name">Android Core Apps</string>
   <string name="folder_name">Ordner</string>
   <string name="chooser_wallpaper">Hintergrund auswählen</string>
   <string name="wallpaper_instructions">Hintergrund festlegen</string>
-  <string name="pick_wallpaper">Galerie</string>
   <string name="activity_not_found">Anwendung ist nicht auf dem Telefon installiert.</string>
   <string name="configure_wallpaper">Konfigurieren\u2026</string>
   <string name="rename_folder_label">Ordnername</string>
@@ -44,7 +42,6 @@
   <string name="title_select_live_folder">Ordner auswählen</string>
   <string name="menu_add">Hinzufügen</string>
   <string name="menu_delete">Entfernen</string>
-  <string name="menu_uninstall">Deinstallieren</string>
   <string name="menu_wallpaper">Hintergrund</string>
   <string name="menu_search">Suchen</string>
   <string name="menu_settings">Einstellungen</string>
@@ -233,8 +230,6 @@
   <string name="pref_title_autosize_icons">Auto-Ausdehnung</string>
   <string name="pref_summary_autosize_icons">Versuche Symbole/Widgets so zu dehnen, dass sie nicht überlappen</string>
 
-  <string name="pref_title_scrollable_widgets">Scrollbare Widgets</string>
-  <string name="pref_summary_scrollable_widgets">Ausschalten, wenn scrollbare Widgets nicht genutzt werden sollen</string>
 
   <string name="pref_title_drawer_labels">App-Namen zeigen</string>
   <string name="pref_summary_drawer_labels">Namen der Apps im Drawer zeigen</string>
@@ -320,7 +315,6 @@
   <string name="pref_title_adw_reset">ADW zurücksetzten</string>
   <string name="pref_summary_adw_reset">Einstellungen des ADW.Launchers zurücksetzen und neu starten</string>
 
-  <string name="need_scrollable">Das Widget, das Sie hinzufügen wollen, benötigt die Unterstützung für scrollbare Widgets.\nDies ist momentan deaktiviert.\nMöchten Sie es nun aktivieren?</string>
   <string name="scrollable_api_required">Das Widget benötigt eine neuere Version von ADW.Launcher.\nBitte updaten Sie oder kontaktieren Sie den Widget-Entwickler.</string>
 
   <string name="pref_title_drawer_navigate_catalogs">Katalog-Navigation</string>

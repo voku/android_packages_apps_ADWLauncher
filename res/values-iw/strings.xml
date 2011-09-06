@@ -22,16 +22,12 @@
     <skip />
     <!-- Application name -->
     <string name="application_name">ADW.Launcher</string>
-    <!-- Name for all applications running as this uid. -->
-    <string name="uid_name">Android Core Apps</string>
     <!-- Default folder name -->
     <string name="folder_name">סיפריה</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper">...בחר רקע מ</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
     <string name="wallpaper_instructions">בחר כרקע</string>
-    <!-- Option in "Select wallpaper from" dialog box -->
-    <string name="pick_wallpaper">גלריית רקעים</string>
     <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
     <string name="activity_not_found">האפליקציה אינה מותקנת על המכשירך</string>
     <!-- List item for configuring the current wallpaper -->
@@ -278,8 +274,6 @@
     <string name="pref_title_autosize_icons">מתח אוטומטית</string>
     <string name="pref_summary_autosize_icons">"מנסה למתוח סמלים ווידג'טים"</string>
 
-    <string name="pref_title_scrollable_widgets">"תמיכה בגלילת ווידג'ט"</string>
-    <string name="pref_summary_scrollable_widgets">"בטל אפשרות זאת אם אתה לא משתמש בווידג'ט נגלל"</string>
 
     <string name="pref_title_drawer_labels">הצג תוית אפליקציה</string>
     <string name="pref_summary_drawer_labels">הראה תוויות במגירת האפליקציות</string>

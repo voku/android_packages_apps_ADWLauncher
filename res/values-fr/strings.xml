@@ -22,16 +22,12 @@
     <skip />
     <!-- Application name -->
     <string name="application_name">ADW.Launcher</string>
-    <!-- Name for all applications running as this uid. -->
-    <string name="uid_name">Android Core Apps</string>
     <!-- Default folder name -->
     <string name="folder_name">Dossier</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper">Sélectionner l\'arrière plan depuis</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
     <string name="wallpaper_instructions">Sélectionner</string>
-    <!-- Option in "Select wallpaper from" dialog box -->
-    <string name="pick_wallpaper">Galerie</string>
     <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
     <string name="activity_not_found">L\'application n\'est pas installée sur votre téléphone.</string>
     <!-- List item for configuring the current wallpaper -->
@@ -281,8 +277,6 @@
     <string name="pref_title_autosize_icons">Taille automatique</string>
     <string name="pref_summary_autosize_icons">Tenter de retailler les icônes/widgets pour qu\'ils ne soient pas déformés</string>
 
-    <string name="pref_title_scrollable_widgets">Support des widgets défilants</string>
-    <string name="pref_summary_scrollable_widgets">Désactivez si vous n\'utilisez pas les widgets défilants</string>
 
     <string name="pref_title_drawer_labels">Voir le libellé des applications</string>
     <string name="pref_summary_drawer_labels">Voir le libellé des applications dans le menu</string>
@@ -369,7 +363,6 @@
 	<string name="pref_title_adw_reset">Remettre à zéro ADW</string>
 	<string name="pref_summary_adw_reset">Vider les préférences et relancer ADW.Launcher</string>
 
-    <string name="need_scrollable">Le widget que vous essayez d\'ajouter nécessite le support des Widgets défilants, qui est actuellement désactivé.\nVoulez-vous l\'activer maintenant ?</string>
     <string name="scrollable_api_required">Ce widget nécessite une nouvelle version d\'ADW.Launcher.\nVeuillez le mettre à jour ou contactez le développeur du widget</string>
 
     <string name="pref_title_drawer_navigate_catalogs">Navigation par groupes</string>

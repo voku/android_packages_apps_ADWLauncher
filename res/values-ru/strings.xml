@@ -28,8 +28,6 @@
     <string name="chooser_wallpaper">Выбрать обои из</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
     <string name="wallpaper_instructions">Установить обои</string>
-    <!-- Option in "Select wallpaper from" dialog box -->
-    <string name="pick_wallpaper">Галерея: Обои</string>
     <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
     <string name="activity_not_found">Приложение не установлено</string>
     <!-- List item for configuring the current wallpaper -->
@@ -278,8 +276,6 @@
     <string name="pref_title_autosize_icons">Автоматическое масштабирование</string>
     <string name="pref_summary_autosize_icons">иконок и виджетов на домашнем экране</string>
 
-    <string name="pref_title_scrollable_widgets">Поддержка прокручиваемых виджетов</string>
-    <string name="pref_summary_scrollable_widgets">Лучше отключить, если не используются</string>
 
     <string name="pref_title_drawer_labels">Показывать подписи иконок</string>
     <string name="pref_summary_drawer_labels">в главном меню</string>
@@ -373,7 +369,6 @@
     <string name="pref_title_adw_reset">Сброс настроек ADW</string>
     <string name="pref_summary_adw_reset">Удалить настройки ADW Launcher и перезапустить?</string>
     
-    <string name="need_scrollable">Виджет который Вы хотите добавить требует поддержки прокрутки для виджетов, которая в данный момент отключена.\nХотите включить поддержку прокрутки?</string>
     <string name="scrollable_api_required">Этот виджет требует новую версию ADW.\nОбновите приложение, либо свяжитесь с разработчиком виджета.</string>
 
     <string name="pref_title_drawer_navigate_catalogs">Навигация папок</string>

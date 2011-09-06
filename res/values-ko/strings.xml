@@ -22,16 +22,12 @@
     <skip />
     <!-- Application name -->
     <string name="application_name">ADW.Launcher</string>
-    <!-- Name for all applications running as this uid. -->
-    <string name="uid_name">안드로이드 Core 어플리케이션</string>
     <!-- Default folder name -->
     <string name="folder_name">폴더</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper">배경화면 선택</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
     <string name="wallpaper_instructions">배경화면 설정</string>
-    <!-- Option in "Select wallpaper from" dialog box -->
-    <string name="pick_wallpaper">배경화면 갤러리</string>
     <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
     <string name="activity_not_found">휴대기기에 설치되어 있지 않은 어플리케이션입니다.</string>
     <!-- List item for configuring the current wallpaper -->
@@ -280,8 +276,6 @@
     <string name="pref_title_autosize_icons">자동 맞춤</string>
     <string name="pref_summary_autosize_icons">자동으로 크기를 맞추어 겹치지 않게 조정합니다.</string>
 
-    <string name="pref_title_scrollable_widgets">스크롤 위젯 적용</string>
-    <string name="pref_summary_scrollable_widgets">스크롤 위젯을 사용하지 않으면 이 기능을 비활성화하세요.</string>
 
     <string name="pref_title_drawer_labels">어플 이름 보이기</string>
     <string name="pref_summary_drawer_labels">메뉴에서 어플 이름을 보여줍니다.</string>
@@ -365,7 +359,6 @@
     <string name="pref_title_adw_reset">ADW 초기화</string>
     <string name="pref_summary_adw_reset">ADW를 초기화합니다.</string>
 
-    <string name="need_scrollable">이 위젯은 스크롤 위젯 설정을 허용해야 합니다. 설정하시겠습니까?</string>
     <string name="scrollable_api_required">이 위젯은 ADW업데이트를 통해 지원됩니다.</string>
 
     <string name="pref_title_drawer_navigate_catalogs">메뉴 이동점</string>
