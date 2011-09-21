@@ -36,7 +36,7 @@
     <string name="menu_item_add_item" msgid="6233177331075781114">"Añadir a pantalla principal"</string>
     <string name="group_applications" msgid="4118484163419674240">"Aplicaciones"</string>
     <string name="group_shortcuts" msgid="9133529424900391877">"Accesos directos"</string>
-        <string name="launcher_actions">Acciones del Launcher</string>
+    <string name="launcher_actions">Acciones del Launcher</string>
     <string name="group_search" msgid="5905328940867162196">"Búsqueda"</string>
     <string name="group_folder" msgid="5143593791798929193">"Nueva carpeta"</string>
     <string name="group_live_folders" msgid="2664945399140647217">"Carpetas"</string>
@@ -101,7 +101,7 @@
     <string name="pref_summary_desktop_transition">Cómo cambian entre ellas las pantallas del escritorio</string>
 
     <!-- Drawer Settings -->
-    <string name="pref_title_drawer_settings">Lista de Apls</string>
+    <string name="pref_title_drawer_settings">Lista de Aplicaciones</string>
     <string name="pref_summary_drawer_settings">Configuración de la lista de aplicaciones</string>
 
     <string name="pref_title_zoom_effect_speed">Velocidad de animación</string>
@@ -315,6 +315,8 @@
     <string name="shirtcuts_select_icon_pack">Elige un pack</string>
     <string name="shirtcuts_restore_original">Restaurar original</string>
 
+    <!-- Catalogs strings -->
+    <string name="sortType">Ordenar por\:</string>
     <string name="selectAll">Seleccionar todos</string>
     <string name="AppGroupAll">"TODAS"</string>
     <string name="AppGroupAdd">"Nuevo grupo"</string>
