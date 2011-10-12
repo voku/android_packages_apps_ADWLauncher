@@ -137,6 +137,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     private int mScrollingSpeed=600;
     //ADW: bounce scroll
     private int mScrollingBounce=50;
+    private boolean mScrollingLoop=false;
     //ADW: sense zoom constants
 	private static final int SENSE_OPENING = 1;
 	private static final int SENSE_CLOSING = 2;
@@ -1073,9 +1074,9 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 	@Override
 	public void OnFling(int Direction) {
 		if (mTouchState == TOUCH_STATE_SCROLLING) {
-			if (Direction == FlingGesture.FLING_LEFT && mCurrentScreen > 0) {
+			if (Direction == FlingGesture.FLING_LEFT) {
 				snapToScreen(mCurrentScreen - 1);
-	        } else if (Direction == FlingGesture.FLING_RIGHT && mCurrentScreen < getChildCount() - 1) {
+	        } else if (Direction == FlingGesture.FLING_RIGHT) {
 	        	snapToScreen(mCurrentScreen + 1);
 	        } else {
 				final int screenWidth = getWidth();
@@ -1089,9 +1090,18 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     void snapToScreen(int whichScreen) {
         //if (!mScroller.isFinished()) return;
         clearVacantCache();
-        enableChildrenCache(mCurrentScreen, whichScreen);
 
-        whichScreen = Math.max(0, Math.min(whichScreen, getChildCount() - 1));
+		if (mScrollingLoop) {
+			if (whichScreen < 0) {
+				whichScreen = getChildCount() - 1;
+			}
+			if (whichScreen >= getChildCount()) {
+				whichScreen = 0;
+			}
+		} else {
+			whichScreen = Math.max(0, Math.min(whichScreen, getChildCount() - 1));
+		}
+        enableChildrenCache(mCurrentScreen, whichScreen);
         boolean changingScreens = whichScreen != mCurrentScreen;
 
         mNextScreen = whichScreen;
@@ -1783,6 +1793,9 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 	public void setBounceAmount(int amount){
 		mScrollingBounce=amount;
 		mScroller.setInterpolator(new ElasticInterpolator(mScrollingBounce/10));
+	}
+	public void setDesktopLooping(boolean looping){
+		mScrollingLoop=looping;
 	}
 	public void openSense(boolean open){
 		mScroller.abortAnimation();
