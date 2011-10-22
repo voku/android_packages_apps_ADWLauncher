@@ -124,6 +124,9 @@
     <string name="pref_title_hide_statusbar">Скрывать строку статуса</string>
     <string name="pref_summary_hide_statusbar">Автоматически скрывать строку статуса</string>
 
+    <string name="pref_title_looping">Цикл рабочих столов</string>
+    <string name="pref_summary_looping">Позволить циклическую прокрутку рабочих столов</string>
+
     <string name="pref_title_default_screen">Рабочий стол по умолчанию</string>
 
     <string name="pref_title_desktop_scrolling_speed">Скорость прокрутки</string>
@@ -184,6 +187,9 @@
     
     <string name="pref_title_swipeup_actions">Жест: Вверх</string>
     <string name="pref_summary_swipeup_actions">Выбор действия при жесте</string>
+
+    <string name="pref_title_doubletap_actions">Двойное нажатие</string>
+    <string name="pref_summary_doubletap_actions">Выбор действия для двойного нажатия</string>
 
     <string name="pref_title_desktop_dots">Отображение точек</string>
     <string name="pref_summary_desktop_dots">для индикации рабочих столов</string>
