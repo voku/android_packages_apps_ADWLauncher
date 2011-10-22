@@ -21,11 +21,9 @@
   <!-- General -->
   <skip />
   <string name="application_name">ADW.Launcher</string>
-  <string name="uid_name">Android Core Apps</string>
   <string name="folder_name">Zložka</string>
   <string name="chooser_wallpaper">Zvoliť tapetu zo zložky</string>
   <string name="wallpaper_instructions">Nastaviť tapetu</string>
-  <string name="pick_wallpaper">Galéria tapiet</string>
   <string name="activity_not_found">Aplikácia nie je nainštalovaná.</string>
   <string name="configure_wallpaper">Konfigurácia\u2026</string>
 
@@ -59,7 +57,6 @@
   <skip />
   <string name="menu_add">Pridať</string>
   <string name="menu_delete">Odobrať</string>
-  <string name="menu_uninstall">Odinštalovať</string>
   <string name="menu_wallpaper">Tapeta</string>
   <string name="menu_search">Hľadať</string>
   <string name="menu_settings">Nastavenia</string>
@@ -251,9 +248,6 @@
   <string name="pref_title_autosize_icons">Prispôsobiť</string>
   <string name="pref_summary_autosize_icons">Pokúsiť sa prispôsobiť ikony/widgety tak, aby sa neprekrývali</string>
 
-  <string name="pref_title_scrollable_widgets">Podporovať posúvacie widgety</string>
-  <string name="pref_summary_scrollable_widgets">Zakázať ak posúvacie widgety nie sú použité</string>
-
   <string name="pref_title_drawer_labels">Zobraziť popisy aplikácií</string>
   <string name="pref_summary_drawer_labels">Zobraziť popisy na zložke aplikácií</string>
   <string name="pref_title_fade_drawer_labels">Miznutie popisov</string>
@@ -340,7 +334,6 @@
   <string name="pref_title_adw_reset">Obnoviť ADW</string>
   <string name="pref_summary_adw_reset">Vyčistiť nastavenie  spúšťača ADW a reštartovať ho</string>
 
-  <string name="need_scrollable">Pridávaný widget vyžaduje \'Podporovať posúvacie widgety\' čo je teraz zakázané.\nPrajete si povoliť?</string>
   <string name="scrollable_api_required">Tento widget vyžaduje novšiu verziu spúšťača ADW.\nVykonajte aktualizáciu alebo kontaktujte tvorcu widgetu</string>
 
   <string name="pref_title_drawer_navigate_catalogs">Prezeranie katalógov</string>
