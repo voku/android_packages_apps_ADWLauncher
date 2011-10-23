@@ -89,6 +89,9 @@
   <string name="pref_title_hide_statusbar">Skrýt stavový řádek</string>
   <string name="pref_summary_hide_statusbar">Skryje stavový řádek</string>
 
+  <string name="pref_title_looping">Smyčka obrazovek</string>
+  <string name="pref_summary_looping">Umožnit prochízet pracovní plochy ve smyčce</string>
+
   <string name="pref_title_default_screen">Základní obrazovka</string>
 
   <string name="pref_title_desktop_scrolling_speed">Rychlost posouvání plochy</string>
@@ -148,6 +151,9 @@
 
   <string name="pref_title_swipeup_actions">Akce pro &quot;nahoru&quot;</string>
   <string name="pref_summary_swipeup_actions">Zvolit akci pro gesto &quot;nahoru&quot;</string>
+
+  <string name="pref_title_doubletap_actions">Akce dvojího klepnutí</string>
+  <string name="pref_summary_doubletap_actions">Zvolte akci pro dvojí klepnutí</string>
 
   <string name="pref_title_desktop_dots">Plochy jako body</string>
   <string name="pref_summary_desktop_dots">Zobrazit/skrýt stránkování ve stylu bodů (Nexus)</string>
