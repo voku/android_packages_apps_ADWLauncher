@@ -64,6 +64,8 @@
     <string name="pref_summary_orientation_sensor">Välj din önskade orientering</string>
     <string name="pref_title_hide_statusbar">Göm statusraden</string>
     <string name="pref_summary_hide_statusbar">Gömmer din statusrad</string>
+    <string name="pref_title_looping">Skärmloop</string>
+    <string name="pref_summary_looping">Möjliggör loop för arbetsytor</string>
     <string name="pref_title_default_screen">Standardskärm</string>
     <string name="pref_title_desktop_scrolling_speed">Scrollhastighet för skrivbord</string>
     <string name="pref_summary_desktop_scrolling_speed">Ställ in hastigheten som används vid hopp mellan skrivbordsskärmar</string>
@@ -106,6 +108,8 @@
     <string name="pref_summary_swipedown_actions">Välj en händelse för nedåtsveps-gesten</string>
     <string name="pref_title_swipeup_actions">Händelse för uppåtsvep</string>
     <string name="pref_summary_swipeup_actions">Välj en händelse för uppåtsveps-gesten</string>
+    <string name="pref_title_doubletap_actions">Åtgärder vid dubbelklick</string>
+    <string name="pref_summary_doubletap_actions">Välj åtgärd vid dubbelklick</string>
     <string name="pref_title_desktop_dots">Skrivbordsprickar</string>
     <string name="pref_summary_desktop_dots">Visa/göm pagineringsprickarna (Nexus-stil)</string>
     <string name="pref_title_dockbar">Dockarad</string>
