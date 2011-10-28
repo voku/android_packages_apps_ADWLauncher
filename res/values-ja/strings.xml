@@ -57,7 +57,7 @@
     <string name="gadget_error_text" msgid="8359351016167075858">"ウィジェットを表示できません"</string>
 
     <!-- ADW Settings -->
-    <string name="pref_label_settings">AlmostNexus設定</string>
+    <string name="pref_label_settings">ADW設定</string>
 
     <!-- Screen preferences -->
     <string name="pref_title_screen_preferences">スクリーン設定</string>
@@ -71,6 +71,9 @@
 
     <string name="pref_title_hide_statusbar">ステータスバーを隠す</string>
     <string name="pref_summary_hide_statusbar">ステータスバーを隠す</string>
+
+    <string name="pref_title_looping">スクリーンループ</string>
+    <string name="pref_summary_looping">ワークスペースをループできるようにする</string>
 
     <string name="pref_title_default_screen">デフォルトスクリーン</string>
 
@@ -127,9 +130,12 @@
 
     <string name="pref_title_swipedown_actions">スワイプダウンアクション</string>
     <string name="pref_summary_swipedown_actions">スワイプダウンしたときのアクションを設定する</string>
-    
+
     <string name="pref_title_swipeup_actions">スワイプアップアクション</string>
     <string name="pref_summary_swipeup_actions">スワイプアップしたときのアクションを設定する</string>
+
+    <string name="pref_title_doubletap_actions">ダブルタップアクション</string>
+    <string name="pref_summary_doubletap_actions">ダブルタップしたときのアクションを設定する</string>
 
     <string name="pref_title_desktop_dots">デスクトップドット</string>
     <string name="pref_summary_desktop_dots">Nexusのようなページめくりのドットを表示する</string>
