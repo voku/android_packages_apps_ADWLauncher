@@ -32,7 +32,7 @@
     <!-- Displayed when user selects a shortcut for an app that was uninstalled -->
     <string name="activity_not_found" msgid="3571057450431950427">"應用程式未安裝到手機。"</string>
     <!-- List item for configuring the current wallpaper -->
-    <string name="configure_wallpaper" msgid="2820186271419674623">"設定..."</string>
+    <string name="configure_wallpaper" msgid="2820186271419674623">"設定…"</string>
 
     <!-- Folders -->
     <skip />
@@ -71,7 +71,7 @@
     <string name="shortcut_installed" msgid="7071557296331322355">"已建立「<xliff:g id="NAME">%s</xliff:g>」捷徑。"</string>
     <!-- Message displayed when a shortcut is uninstalled by an external application -->
     <string name="shortcut_uninstalled" msgid="2129499669449749995">"已移除「<xliff:g id="NAME">%s</xliff:g>」捷徑。"</string>
-    <!-- Message displayed when an external application attemps to create a shortcut that already exists -->
+    <!-- Message displayed when an external application attempts to create a shortcut that already exists -->
     <string name="shortcut_duplicate" msgid="4757756326465060694">"「<xliff:g id="NAME">%s</xliff:g>」捷徑已經存在。"</string>
 
     <!-- Title of dialog when user is selecting shortcut to add to homescreen -->
@@ -113,26 +113,29 @@
     <string name="pref_label_settings">桌面設置</string>
     <!-- Screen preferences -->
     <string name="pref_title_screen_preferences">桌面設置</string>
-    <string name="pref_summary_screen_preferences">桌面數量，默認桌面...</string>
+    <string name="pref_summary_screen_preferences">桌面數量，預設桌面…</string>
 
     <string name="pref_title_wallpaper_hack">桌布優化</string>
-    <string name="pref_summary_wallpaper_hack">在使用較大桌布時出現FC時，請禁用此選項，開啟此選項後可提升螢幕滾動的表現</string>
+    <string name="pref_summary_wallpaper_hack">在使用較大桌布時若發生強制關閉，請停用此選項。啟用此選項後可提升螢幕捲動的表現</string>
 
     <string name="pref_title_orientation_sensor">旋轉方向</string>
-    <string name="pref_summary_orientation_sensor">選擇默認桌面旋轉方向</string>
+    <string name="pref_summary_orientation_sensor">選擇預設桌面旋轉方向</string>
 
     <string name="pref_title_hide_statusbar">隱藏狀態列</string>
     <string name="pref_summary_hide_statusbar">隱藏螢幕上方的狀態列</string>
 
-    <string name="pref_title_default_screen">默認桌面</string>
+    <string name="pref_title_looping">循環桌面</string>
+    <string name="pref_summary_looping">讓桌面循環顯示</string>
 
-    <string name="pref_title_desktop_scrolling_speed">滾動速度</string>
-    <string name="pref_summary_desktop_scrolling_speed">設置滾動時切換桌面的速度</string>
-    <string name="pref_dialog_desktop_scrolling_speed">數值越小，滾動速度越快</string>
+    <string name="pref_title_default_screen">預設桌面</string>
+
+    <string name="pref_title_desktop_scrolling_speed">捲動速度</string>
+    <string name="pref_summary_desktop_scrolling_speed">設置捲動時切換桌面的速度</string>
+    <string name="pref_dialog_desktop_scrolling_speed">數值越小，捲動速度越快</string>
 
     <string name="pref_title_desktop_overshoot">彈性特效</string>
-    <string name="pref_summary_desktop_overshoot">開啟桌面滑動時的彈性效果</string>
-    <string name="pref_dialog_desktop_overshoot">設置為0時禁用桌面彈性效果</string>
+    <string name="pref_summary_desktop_overshoot">桌面滑動時的彈性效果</string>
+    <string name="pref_dialog_desktop_overshoot">設置為0時停用桌面彈性效果</string>
 
     <string name="pref_title_desktop_transition">桌面過場動畫</string>
     <string name="pref_summary_desktop_transition">桌面分頁切換時要使用的變動效果</string>
@@ -184,11 +187,14 @@
     <string name="pref_title_swipeup_actions">上滑手勢</string>
     <string name="pref_summary_swipeup_actions">選擇向上滑動手勢動作</string>
 
+    <string name="pref_title_doubletap_actions">雙輕觸動作</string>
+    <string name="pref_summary_doubletap_actions">選擇雙輕觸所採取的動作</string>
+
     <string name="pref_title_desktop_dots">桌面分頁點</string>
-    <string name="pref_summary_desktop_dots">開啟/關閉Nexus風格的桌面分頁點</string>
+    <string name="pref_summary_desktop_dots">啟用/停用Nexus風格的桌面分頁點</string>
 
     <string name="pref_title_dockbar">擴展欄</string>
-    <string name="pref_summary_dockbar">開啟/關閉桌面底部的快捷方式擴展欄</string>
+    <string name="pref_summary_dockbar">啟用/停用桌面底部的快捷方式擴展欄</string>
 
     <string name="pref_title_closing_dockbar">自動關閉擴展欄</string>
     <string name="pref_summary_closing_dockbar">應用程式啟動後，自動關閉打開的擴展欄</string>
@@ -225,7 +231,7 @@
     <string name="pref_message_restart_froyo">更改這個設置會使得ADW主介面自動重啟，退出設置後，請按主頁鍵重新啟動ADW主介面</string>
     <string name="drop_to_uninstall">卸載應用程式</string>
 
-    <string name="toast_widgets_not_supported">不支援小工具... 抱歉 :-)</string>
+    <string name="toast_widgets_not_supported">不支援小工具… 抱歉 :-)</string>
     <string name="toast_unknown_item">未知的項目。無法加入未知類型的項目 :-)</string>
     <string name="toast_no_application_def">還沒有已定義的應用程式，放一些進來吧！ :)</string>
 
@@ -247,12 +253,12 @@
 
     <!-- XML Import/Export strings -->
     <string name="message_dialog_export">原有文件將被覆蓋！確認備份 ADW 設置？</string>
-    <string name="xml_export_dialog">正在備份 ADW 設置...</string>
+    <string name="xml_export_dialog">正在備份 ADW 設置…</string>
     <string name="xml_export_success">ADW 設置備份成功！</string>
     <string name="xml_export_error">備份 ADW 設置時出現錯誤！</string>
 
     <string name="message_dialog_import">ADW將會重啟！確認恢復 ADW 設置？</string>
-    <string name="xml_import_dialog">正在恢復 ADW 設置...</string>
+    <string name="xml_import_dialog">正在恢復 ADW 設置…</string>
     <string name="xml_file_not_found">未找到 ADW 設置備份檔案！</string>
     <string name="xml_not_readable">ADW 設置備份檔案存在，但無法讀取！</string>
     <string name="xml_import_success">ADW 設置恢復成功！</string>
@@ -260,12 +266,12 @@
 
     <!-- Config Import/Export strings -->
     <string name="message_dialog_export_config">原有文件將被覆蓋！確認備份桌面設置？</string>
-    <string name="dbfile_export_dialog">正在備份桌面設置...</string>
+    <string name="dbfile_export_dialog">正在備份桌面設置…</string>
     <string name="dbfile_export_success">桌面設置備份成功！</string>
     <string name="dbfile_export_error">備份桌面設置時出現錯誤！</string>
 
     <string name="message_dialog_import_config">ADW將會重啟！確認恢復桌面設置？</string>
-    <string name="dbfile_import_dialog">正在恢復桌面設置...</string>
+    <string name="dbfile_import_dialog">正在恢復桌面設置…</string>
     <string name="dbfile_not_found">未找到桌面設置備份檔案！</string>
     <string name="dbfile_not_readable">桌面設置備份檔案存在，但無法讀取！</string>
     <string name="dbfile_import_success">桌面設置恢復成功！</string>
@@ -282,7 +288,6 @@
     <string name="pref_title_autosize_icons">自動伸展</string>
     <string name="pref_summary_autosize_icons">自動伸展小外掛程式和圖示</string>
 
-
     <string name="pref_title_drawer_labels">顯示程式標籤</string>
     <string name="pref_summary_drawer_labels">在程式抽屜顯示標籤</string>
     <string name="pref_title_fade_drawer_labels">程式標籤漸現</string>
@@ -294,7 +299,7 @@
     <string name="widget_rows">小工具行數</string>
 
     <string name="pref_title_screen_cache">使用桌面緩存</string>
-    <string name="pref_summary_screen_cache">更平滑的滾動，如果你設置了很多小工具則禁止該選項</string>
+    <string name="pref_summary_screen_cache">更平滑的捲動，如果你設置了很多小工具則應停用此選項</string>
 
     <string name="pref_title_desktop_indicator">顯示頁面指示器</string>
     <string name="pref_summary_desktop_indicator">滑動桌面時顯示視覺提示</string>
@@ -327,7 +332,7 @@
     <string name="pref_themes_apply_theme">應用主題</string>
     <string name="pref_themes_get_themes">獲取更多主題</string>
 
-    <string name="pref_title_wallpaper_scrolling">桌布滾動</string>
+    <string name="pref_title_wallpaper_scrolling">桌布捲動</string>
     <string name="pref_summary_wallpaper_scrolling">允許桌布隨著螢幕移動</string>
     <string name="message_delete_desktop_screen">移除本螢幕及其所有內容？</string>
     <string name="message_cannot_delete_desktop_screen">無法刪除最後一個螢幕</string>
