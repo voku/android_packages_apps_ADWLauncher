@@ -28,7 +28,7 @@
     <item>Zobrazit/skrýt oznámení</item>
     <item>Přesunout na plochu/Otevřít oznámení</item>
     <item>Zobrazit/skrýt dok</item>
-    <item>Otevřít aplikaci...</item>
+    <item>Otevřít aplikaci\u2026</item>
   </string-array>
 
   <string-array name="desktop_indicator_entries">
