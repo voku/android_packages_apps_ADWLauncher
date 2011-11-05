@@ -177,16 +177,16 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 
     // used for transitions
     private static PaintFlagsDrawFilter sFilterBitmap = new PaintFlagsDrawFilter(0, Paint.FILTER_BITMAP_FLAG);
-    private static PaintFlagsDrawFilter sFilterBitmapRemove = new PaintFlagsDrawFilter(Paint.FILTER_BITMAP_FLAG, 0); 
+    private static PaintFlagsDrawFilter sFilterBitmapRemove = new PaintFlagsDrawFilter(Paint.FILTER_BITMAP_FLAG, 0);
 
     private boolean mIsTransformRotate = false;
     private int mTransformRotateAnchor = 0;
     private boolean mIsTransitionNegative = false;
-    
+
     private boolean mIsTransformOtherView = false;
     private float mTransformAmount = 0;
 
-    
+
     /**
      * Used to inflate the Workspace from XML.
      *
@@ -600,14 +600,14 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             boolean isNextScreen = ( nextScreen == INVALID_SCREEN );
             boolean fastDraw = mTouchState != TOUCH_STATE_SCROLLING && isNextScreen;
             // If we are not scrolling or flinging, draw only the current screen
-            
+
             if (fastDraw) {
                 drawChild(canvas, getChildAt(mCurrentScreen), getDrawingTime());
             } else {
                 // If we are flinging, draw only the current screen and the target screen
                 final long drawingTime = getDrawingTime();
 
-                // lets calculate the current screen since it can move on use 
+                // lets calculate the current screen since it can move on use
                 int currentScreen;
                 int width = getWidth();
                 int scrollX = mScrollX;
@@ -625,10 +625,10 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                 {
                     currentScreen = leftSideScreen + 1;
                 }
-                
+
                 CellLayout currentView = (CellLayout) getChildAt(currentScreen);
                 int viewLeft = currentView.getLeft();
-                
+
                 int mTransitionStyle = mLauncher.mTransitionStyle;
                 if ( mTransitionStyle != 1 )
                 {
@@ -643,21 +643,25 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     drawChild(canvas, currentView, getDrawingTime());
                 }
 
-                if (viewLeft > scrollX )
-                {
-                    if ( currentScreen > 0 )
-                    {
+                if (viewLeft > scrollX ) {
+                    if (mScrollingLoop && ( currentScreen == 0 )) {
+                        // Move from left from screen 0 to last screen
+                        drawChild(canvas, getChildAt(getChildCount() - 1), drawingTime);
+                    }
+                    else if ( currentScreen > 0 ) {
                         drawChild(canvas, getChildAt(currentScreen - 1), drawingTime);
                     }
                 }
-                else if (isMovingRight )
-                {
-                    if ( currentScreen < getChildCount() - 1 )
-                    {
+                else if (isMovingRight ) {
+                    if (mScrollingLoop && ( currentScreen == (getChildCount() - 1))) {
+                        // Move right from last screen to screen 0
+                        drawChild(canvas, getChildAt(0), drawingTime);
+                    }
+                    else if ( currentScreen < (getChildCount() - 1)) {
                         drawChild(canvas, getChildAt(currentScreen + 1), drawingTime);
                     }
                 }
-                
+
                 if (mTransitionStyle != 1 )
                 {
                     finishTransitionDraw(canvas, mTransitionStyle);
@@ -1004,7 +1008,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     layout.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
                 else
                     layout.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
-                
+
                 layout.setChildrenDrawnWithCacheEnabled(true);
                 layout.setChildrenDrawingCacheEnabled(true);
             }
@@ -1085,37 +1089,60 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         return true;
     }
 
-	@Override
-	public void OnFling(int Direction) {
-		if (mTouchState == TOUCH_STATE_SCROLLING) {
-			if (Direction == FlingGesture.FLING_LEFT) {
-				snapToScreen(mCurrentScreen - 1);
-	        } else if (Direction == FlingGesture.FLING_RIGHT) {
-	        	snapToScreen(mCurrentScreen + 1);
-	        } else {
-				final int screenWidth = getWidth();
-				final int nextScreen = (getScrollX() + (screenWidth / 2)) / screenWidth;
-	            snapToScreen(nextScreen);
-	        }
-		}
-	}
+    @Override
+    public void OnFling(int Direction) {
+        if (mTouchState == TOUCH_STATE_SCROLLING) {
+            // If mScrollingLoop is enabled we can move to the next screen even
+            // if we are on the first or last screens. Otherwise we can only
+            // move if we between 2nd and last - 1, inclusive.
+            final int minScreenIndex = mScrollingLoop ? 0 : 1;
+            final int maxScreenIndex = mScrollingLoop ? getChildCount() - 1 : getChildCount() - 2;
+
+            if ((Direction == FlingGesture.FLING_LEFT) && (mCurrentScreen >= minScreenIndex)) {
+                if (mCurrentScreen == 0) {  // Can only be true if mScrollingLoop is true
+                    snapToScreen(maxScreenIndex);
+                }
+                else {
+                    snapToScreen(mCurrentScreen - 1);
+                }
+            } else if ((Direction == FlingGesture.FLING_RIGHT) && (mCurrentScreen <= maxScreenIndex)) {
+                if (mCurrentScreen == (getChildCount() - 1)) {  // Can only be true if mScrollingLoop is true
+                    snapToScreen(0);
+                }
+                else {
+                    snapToScreen(mCurrentScreen + 1);
+                }
+            } else {
+                // This isn't a fling so only advance to the next screen if we scrolled at least half of a screen.
+                final int screenWidth = getWidth();
+                int xPos = getScrollX();
+                // Setup the default nextScreen. This might change if mScrollingLoop is enabled.
+                int nextScreen = (xPos + (screenWidth / 2)) / screenWidth;
+
+                if (mScrollingLoop && (mCurrentScreen == 0)) {
+                    if (xPos < -(screenWidth / 2)) {
+                        nextScreen = getChildCount() - 1;
+                    }
+                }
+                else if (mScrollingLoop && (mCurrentScreen == (getChildCount() - 1))) {
+                    if (xPos > (((getChildCount() - 1) * screenWidth) + (screenWidth / 2))) {
+                        nextScreen = 0;
+                    }
+                }
+                snapToScreen(nextScreen);
+            }
+        }
+    }
 
 
     void snapToScreen(int whichScreen) {
+        int maxScreenIndex =  getChildCount() - 1;
+
         //if (!mScroller.isFinished()) return;
         clearVacantCache();
-
-		if (mScrollingLoop) {
-			if (whichScreen < 0) {
-				whichScreen = getChildCount() - 1;
-			}
-			if (whichScreen >= getChildCount()) {
-				whichScreen = 0;
-			}
-		} else {
-			whichScreen = Math.max(0, Math.min(whichScreen, getChildCount() - 1));
-		}
         enableChildrenCache(mCurrentScreen, whichScreen);
+
+        whichScreen = Math.max(0, Math.min(whichScreen, maxScreenIndex));
         boolean changingScreens = whichScreen != mCurrentScreen;
 
         mNextScreen = whichScreen;
@@ -1127,23 +1154,44 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             focusedChild.clearFocus();
         }
 
-
         final int screenDelta = Math.abs(whichScreen - mCurrentScreen);
-        int durationOffset = 1;
-		// Faruq: Added to allow easing even when Screen doesn't changed (when revert happens)
-		//Log.d("Workspace", "whichScreen: "+whichScreen+"; mCurrentScreen: "+mCurrentScreen+"; getChildCount: "+(getChildCount()-1));
-		if (screenDelta == 0) {
-		durationOffset = 400;
-		//Log.d("Workspace", "Increasing duration by "+durationOffset+" times");
-		}
-		final int duration = mScrollingSpeed + durationOffset;
-        final int newX = whichScreen * getWidth();
-        final int delta = newX - mScrollX;
+
+        int duration =  mScrollingSpeed + 1;
+        int delta = (whichScreen * getWidth()) - mScrollX;
         //mScroller.startScroll(mScrollX, 0, delta, 0, Math.abs(delta) * 2);
-        if(!mSensemode)
-        	mScroller.startScroll(getScrollX(), 0, delta, 0, duration);
-        else
-        	mScroller.startScroll(getScrollX(), 0, delta, 0, mAnimationDuration);
+        // Faruq: Added to allow easing even when Screen doesn't changed (when revert happens)
+        //Log.d("Workspace", "whichScreen: "+whichScreen+"; mCurrentScreen: "+mCurrentScreen+"; getChildCount: "+(getChildCount()-1));
+        if (screenDelta == 0) {
+            duration += 400;
+        //Log.d("Workspace", "Increasing duration by "+durationOffset+" times");
+        }
+
+        // The cases that deal with mScrollingLoop attempt to provide a reasonable visual effect.
+        // Probably the better solution is to add a copy of the last screen before screen 0 and
+        // add a copy of screen 0 after the last screen, which of course that uses up more memory.
+        // If that is done then in theory normal scrolling can occur during a wrap and then we
+        // would need to immediately switch to the other "real" copy of the screen.
+        if (mScrollingLoop && (whichScreen == 0) && (mCurrentScreen == maxScreenIndex)) {
+            delta = ((mCurrentScreen + 1) * getWidth()) - mScrollX;         // delta should be positive
+            int fakeStartX = (whichScreen * getWidth()) - delta;            // same as 0 - delta.
+
+            mScroller.startScroll(fakeStartX, 0, delta, 0, duration);
+        }
+        else if (mScrollingLoop && (whichScreen == maxScreenIndex) && (mCurrentScreen == 0)) {
+            delta = ((mCurrentScreen - 1) * getWidth()) - mScrollX;         // delta should be negative (same as 0 - delta)
+            int fakeStartX = (whichScreen * getWidth()) - delta;
+
+            mScroller.startScroll(fakeStartX, 0, delta, 0, duration);
+        }
+        else {
+            if(!mSensemode) {
+                mScroller.startScroll(getScrollX(), 0, delta, 0, duration);
+            }
+            else {
+                mScroller.startScroll(getScrollX(), 0, delta, 0, mAnimationDuration);
+            }
+        }
+
         invalidate();
     }
 
@@ -1155,7 +1203,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         /*if (!child.isInTouchMode() && !(child instanceof Search)) {
             return;
         }*/
-        
+
         mDragInfo = cellInfo;
         mDragInfo.screen = mCurrentScreen;
 
@@ -1203,13 +1251,13 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     }
 
     public void onDrop(DragSource source, int x, int y, int xOffset, int yOffset, Object dragInfo) {
-        
+
     	// if drawer is still open, then don't drop on workspace!
     	if ( mLauncher.isAllAppsVisible() )
     	{
     		return;
     	}
-    	
+
     	final CellLayout cellLayout = getCurrentDropLayout();
         if (source != this) {
             onDropExternal(x - xOffset, y - yOffset, dragInfo, cellLayout);
@@ -1415,8 +1463,15 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         	mCurrentScreen=mNextScreen;
         	mNextScreen=INVALID_SCREEN;
         }
-        if (mNextScreen == INVALID_SCREEN && mCurrentScreen > 0) {
-            snapToScreen(mCurrentScreen - 1);
+
+        int minScreenIndex = mScrollingLoop ? 0 : 1;
+        if ((mNextScreen == INVALID_SCREEN) && (mCurrentScreen >= minScreenIndex)) {
+            if (mCurrentScreen == 0) {  // Can only be true if mScrollingLoop is enabled.
+                snapToScreen(getChildCount() - 1);
+            }
+            else {
+                snapToScreen(mCurrentScreen - 1);
+            }
         }
     }
 
@@ -1426,8 +1481,17 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         	mCurrentScreen=mNextScreen;
         	mNextScreen=INVALID_SCREEN;
         }
-        if (mNextScreen == INVALID_SCREEN && mCurrentScreen < getChildCount() -1) {
-            snapToScreen(mCurrentScreen + 1);
+
+        // Instead of having separate cases for testing "<=" or "<" we always use "<=",
+        // but adjust the max screen index that is allowed.
+        int maxScreenIndex = mScrollingLoop ? getChildCount() - 1 : getChildCount() - 2;
+        if ((mNextScreen == INVALID_SCREEN) && (mCurrentScreen <= maxScreenIndex)) {
+            if (mCurrentScreen == getChildCount() - 1) {    // Can only be true if mScrollingLoop is enabled.
+                snapToScreen(0);
+            }
+            else {
+                snapToScreen(mCurrentScreen + 1);
+            }
         }
     }
 
@@ -2217,7 +2281,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     protected boolean getChildStaticTransformation(View child, Transformation transformation)
     {
         float transformAmount = mTransformAmount;
-        
+
         if ( mIsTransformRotate )
         {
             Matrix matrix = transformation.getMatrix();
@@ -2228,7 +2292,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                 offset = -offset;
             }
             matrix.setRotate(transformAmount * 90 + offset, mTransformRotateAnchor, 0);
-            
+
             float amount;
             if ( mIsTransformOtherView )
             {
@@ -2265,7 +2329,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     targetMatrix[7] *= ( 1 - ( -transformAmount / 3));
                     targetMatrix[1] = height - targetMatrix[7];
 
-                    targetMatrix[0] = targetMatrix[2] * -transformAmount; 
+                    targetMatrix[0] = targetMatrix[2] * -transformAmount;
                     targetMatrix[6] = targetMatrix[0];
                 }
                 else
@@ -2282,7 +2346,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                 targetMatrix[7] *= ( 1 - ( -transformAmount / 3));
                 targetMatrix[1] = height - targetMatrix[7];
 
-                targetMatrix[2] *= ( 1 - -transformAmount ); 
+                targetMatrix[2] *= ( 1 - -transformAmount );
                 targetMatrix[4] = targetMatrix[2];
             }
             else
@@ -2290,7 +2354,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                 targetMatrix[5] *= ( 1 - ( transformAmount / 3));
                 targetMatrix[3] = height - targetMatrix[5];
 
-                targetMatrix[2] *= ( 1 - transformAmount ); 
+                targetMatrix[2] *= ( 1 - transformAmount );
                 targetMatrix[4] = targetMatrix[2];
             }
 
@@ -2319,7 +2383,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                 transformation.setAlpha(amount * 2);
             }
         }
-    
+
         return true;
     }
 
@@ -2352,7 +2416,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         else if ( mTransitionStyle == 3 )  // flip
         {
             canvas.save();
-        
+
             mIsTransitionNegative = !isMovingRight;
             if( isMovingRight )
             {
@@ -2363,7 +2427,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             {
                 mTransformAmount = -transformAmount;
             }
-            
+
             if ( mDesktopCacheType == AlmostNexusSettingsHelper.CACHE_AUTO )
             {
                 canvas.setDrawFilter(sFilterBitmap);
@@ -2384,7 +2448,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             {
                 mTransformAmount = transformAmount;
             }
-            
+
             if ( mDesktopCacheType == AlmostNexusSettingsHelper.CACHE_AUTO )
             {
                 canvas.setDrawFilter(sFilterBitmap);
@@ -2451,7 +2515,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         else if ( mTransitionStyle == 5 ) // scatter
         {
             canvas.translate(-xOffset, 0);
-            
+
             CellLayout.mIsTransitionOther = true;
             if( isMovingRight )
             {
@@ -2475,11 +2539,11 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         }
         else
         {
-            // since we needed to alter the other screen, 
+            // since we needed to alter the other screen,
             // we had to wait to clean this mess up
             setStaticTransformationsEnabled( false );
             canvas.setDrawFilter(sFilterBitmapRemove);
-            
+
             mIsTransformRotate = false;
             mIsTransformOtherView = false;
             canvas.restore();
