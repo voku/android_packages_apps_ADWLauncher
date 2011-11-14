@@ -1,6 +1,6 @@
 package com.android.launcher;
 
-import static android.util.Log.e;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,6 +57,8 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
     private static final String PREF_BACKUP_FILENAME = "adw_settings.xml";
     private static final String CONFIG_BACKUP_FILENAME = "adw_launcher.db";
     private static final String NAMESPACE = "com.android.launcher";
+    private static final String LAUNCHER_DB_BASE = "/data/" + NAMESPACE + "/databases/launcher.db";
+
     // Request codes for onResultActivity. That way we know the request donw when startActivityForResult was fired
     private static final int REQUEST_SWIPE_DOWN_APP_CHOOSER = 0;
     private static final int REQUEST_HOME_BINDING_APP_CHOOSER = 1;
@@ -725,7 +727,7 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
                 return getResources().getString(R.string.import_export_sdcard_unmounted);
             }
 
-            File dbFile = new File(Environment.getDataDirectory() + "/data/" + NAMESPACE + "/databases/launcher.db");
+            File dbFile = new File(Environment.getDataDirectory() + LAUNCHER_DB_BASE);
             File file = new File(Environment.getExternalStorageDirectory(), CONFIG_BACKUP_FILENAME);
 
             try {
@@ -737,7 +739,7 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
                 return getResources().getString(R.string.dbfile_export_error);
             }
         }
-        
+
         private void exportCategories() throws IOException
         {
             File prefFolder = new File(Environment.getDataDirectory() + "/data/" + NAMESPACE + "/shared_prefs");
@@ -789,10 +791,20 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
                 return getResources().getString(R.string.dbfile_not_readable);
             }
 
-            File dbFile = new File(Environment.getDataDirectory() + "/data/" + NAMESPACE + "/databases/launcher.db");
+            // If you don't also delete the '-shm' and '-wal' files the copy of the '.db' file
+            // doesn't work. The home screens will not be changed.
+            File dbFile = new File(Environment.getDataDirectory() + LAUNCHER_DB_BASE);
+            File dbFile_shm = new File(Environment.getDataDirectory() + LAUNCHER_DB_BASE + "-shm");
+            File dbFile_wal = new File(Environment.getDataDirectory() + LAUNCHER_DB_BASE + "-wal");
 
             if (dbFile.exists()) {
                 dbFile.delete();
+            }
+            if (dbFile_shm.exists()) {
+                dbFile_shm.delete();
+            }
+            if (dbFile_wal.exists()) {
+                dbFile_wal.delete();
             }
 
             try {
@@ -817,7 +829,7 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
                     File importFile = new File(Environment.getExternalStorageDirectory(), fileName);
                     File prefFile = new File(Environment.getDataDirectory() + "/data/" + NAMESPACE +
                             "/shared_prefs/" + fileName);
-                    
+
                     if (!importFile.canRead()) {
                         throw new IOException();
                     }
@@ -865,7 +877,7 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
             Toast.makeText(this, R.string.activity_not_found, Toast.LENGTH_SHORT).show();
         } catch (SecurityException e) {
             Toast.makeText(this, R.string.activity_not_found, Toast.LENGTH_SHORT).show();
-            e("ADW", "Launcher does not have the permission to launch " + marketIntent +
+            Log.e("ADW", "Launcher does not have the permission to launch " + marketIntent +
                     ". Make sure to create a MAIN intent-filter for the corresponding activity " +
                     "or use the exported attribute for this activity.", e);
         }
