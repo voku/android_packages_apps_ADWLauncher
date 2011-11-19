@@ -160,8 +160,8 @@ public class PreviewPager extends ViewGroup {
 			td.setCrossFadeEnabled(true);
 			dot.setImageDrawable(td);
 	        ViewGroup.LayoutParams p;
-	        p = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-	        		ViewGroup.LayoutParams.FILL_PARENT);
+	        p = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+	        		ViewGroup.LayoutParams.MATCH_PARENT);
             dot.setLayoutParams(p);
             int childHeightSpec = getChildMeasureSpec(
                     MeasureSpec.makeMeasureSpec(dotWidth, MeasureSpec.UNSPECIFIED), 0, p.height);

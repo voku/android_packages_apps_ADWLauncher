@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.android.launcher.ApplicationInfo;
+import com.android.launcher.ApplicationsAdapter;
 import com.android.launcher.LauncherModel;
 import com.android.launcher.R;
 import com.android.launcher.catalogue.AppCatalogueFilters.Catalogue;
@@ -157,7 +158,7 @@ public class AppInfoMList extends ListActivity implements
 	/* update app into */
 	private void updateAppList() {
 
-		ArrayList<ApplicationInfo> appInfos = LauncherModel.mApplicationsAdapter.allItems;
+		ArrayList<ApplicationInfo> appInfos = ApplicationsAdapter.allItems;
 		/* app info */
 		final List<AppListInfo> savedAppInfos = new ArrayList<AppListInfo>();
 

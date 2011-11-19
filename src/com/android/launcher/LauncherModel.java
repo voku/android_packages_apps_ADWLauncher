@@ -223,7 +223,7 @@ public class LauncherModel {
             final ApplicationsAdapter adapter = mApplicationsAdapter;
 
             final List<ApplicationInfo> toRemove = new ArrayList<ApplicationInfo>();
-            final ArrayList<ApplicationInfo> allItems = adapter.allItems;
+            final ArrayList<ApplicationInfo> allItems = ApplicationsAdapter.allItems;
             final int count = allItems.size();
 
             for (int i = 0; i < count; i++) {

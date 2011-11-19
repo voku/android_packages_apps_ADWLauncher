@@ -99,14 +99,14 @@ public class DesktopIndicator extends ViewGroup implements AnimationListener {
 		LinearLayout.LayoutParams params;
 		switch(mIndicatorType){
 		case INDICATOR_TYPE_PAGER:
-	        params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+	        params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 	        mIndicator.measure(getWidth(), 20);
 	        mIndicator.setLayoutParams(params);
 	        mIndicator.layout(0, 0, getWidth(), 20);
 			break;
 		case INDICATOR_TYPE_SLIDER_BOTTOM:
 		case INDICATOR_TYPE_SLIDER_TOP:
-	        params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+	        params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 	        mIndicator.measure(getWidth(), SliderIndicator.INDICATOR_HEIGHT);
 	        mIndicator.setLayoutParams(params);
 	        mIndicator.layout(0, 0, getWidth(), SliderIndicator.INDICATOR_HEIGHT);

@@ -401,11 +401,9 @@ public final class Launcher extends Activity implements View.OnClickListener, On
     protected void onCreate(Bundle savedInstanceState) {
 		mMessWithPersistence=AlmostNexusSettingsHelper.getSystemPersistent(this);
 		if(mMessWithPersistence){
-	        changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),true);
-			setPersistent(true);
+		    changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),true);
 		}else{
-			setPersistent(false);
-	        changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),false);
+		    changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),false);
 		}
         mBlockDesktop=AlmostNexusSettingsHelper.getDesktopBlocked(this);
     	super.onCreate(savedInstanceState);
@@ -2541,9 +2539,9 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 					.create();
    	        case DIALOG_PICK_GROUPS:
    	            return new PickGrpDialog().createDialog();
+   	        default:
+   	            return null;
         }
-
-        return super.onCreateDialog(id);
     }
 
     @Override
@@ -3876,7 +3874,6 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
 		//ADW: Try to add the restart flag here instead on preferences activity
 		if(AlmostNexusSettingsHelper.needsRestart(key)){
-			setPersistent(false);
 			mShouldRestart=true;
 		}else{
 			//TODO: ADW Move here all the updates instead on updateAlmostNexusUI()
@@ -3884,24 +3881,14 @@ public final class Launcher extends Activity implements View.OnClickListener, On
 		        if(!mMessWithPersistence){
 		        	changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),false);
 		        }else{
-		        	//ADW: If a user changes between different orientation modes
-		        	//we temporarily disable persistence to change the app orientation
-		        	//it will be re-enabled on the next onCreate
-		        	setPersistent(false);
 		        	changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),true);
 		        }
 			}else if(key.equals("systemPersistent")){
 				mMessWithPersistence=AlmostNexusSettingsHelper.getSystemPersistent(this);
 				if(mMessWithPersistence){
-					changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),true);
-					//ADW: If previously in portrait, set persistent
-					//else, it will call the setPersistent on the next onCreate
-					//caused by the orientation change
-					if(savedOrientation==ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-						setPersistent(true);
+				    changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),true);
 				}else{
-					setPersistent(false);
-	        		changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),false);
+				    changeOrientation(AlmostNexusSettingsHelper.getDesktopOrientation(this),false);
 				}
 			}else if(key.equals("notif_receiver")){
 			    boolean useNotifReceiver=AlmostNexusSettingsHelper.getNotifReceiver(this);

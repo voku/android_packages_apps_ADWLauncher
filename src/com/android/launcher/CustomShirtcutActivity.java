@@ -431,9 +431,8 @@ public class CustomShirtcutActivity extends Activity implements OnClickListener 
 		case DIALOG_ICON_TYPE:
 			return new IconTypeDialog().createDialog();
 		default:
-			break;
+			return null;
 		}
-		return super.onCreateDialog(id);
 	}
     protected class IconTypeDialog implements DialogInterface.OnClickListener,
 	    DialogInterface.OnCancelListener, DialogInterface.OnDismissListener,

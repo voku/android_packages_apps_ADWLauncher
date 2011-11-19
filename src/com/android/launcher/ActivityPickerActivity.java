@@ -104,9 +104,9 @@ public class ActivityPickerActivity extends ExpandableListActivity {
             leftPadding=getResources().getDimensionPixelSize(android.R.dimen.app_icon_size);
 
             lpGroup = new AbsListView.LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             lpChild = new AbsListView.LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT, leftPadding);
+                    ViewGroup.LayoutParams.MATCH_PARENT, leftPadding);
 		}
         public ActivityInfo getChild(int groupPosition, int childPosition) {
         	//return groups.get(groupPosition).activities[childPosition];

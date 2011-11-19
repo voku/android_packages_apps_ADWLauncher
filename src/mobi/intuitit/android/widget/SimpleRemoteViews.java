@@ -426,7 +426,6 @@ public class SimpleRemoteViews implements Parcelable {
            }
        }
 
-       @SuppressWarnings("unchecked")
        private Class getParameterType() {
            switch (this.type) {
                case BOOLEAN:

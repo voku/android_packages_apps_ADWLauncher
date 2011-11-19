@@ -418,7 +418,7 @@ public class MyLauncherSettings extends PreferenceActivity implements OnPreferen
                 AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
                 am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
                 ActivityManager acm = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-                acm.restartPackage("com.android.launcher");
+                acm.killBackgroundProcesses("com.android.launcher");
             }else{
                 android.os.Process.killProcess(android.os.Process.myPid());
             }

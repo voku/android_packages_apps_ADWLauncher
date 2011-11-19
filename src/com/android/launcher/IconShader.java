@@ -494,7 +494,7 @@ class IconShader {
                 Bitmap.Config.ARGB_8888 : icon_bitmap.getConfig();
         Bitmap output_bitmap = Bitmap.createBitmap(pixels, width, height, c);
         output_bitmap.setDensity(DisplayMetrics.DENSITY_DEFAULT);
-        BitmapDrawable output_bd = new BitmapDrawable(output_bitmap);
+        BitmapDrawable output_bd = new BitmapDrawable(null, output_bitmap);
         return output_bd;
     }
     

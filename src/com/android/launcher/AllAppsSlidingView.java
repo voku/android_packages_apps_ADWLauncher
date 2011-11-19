@@ -332,7 +332,7 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
     	if(mFirstLayout){
             mPager.setTotalItems(mTotalScreens);
             mPager.setAlwaysDrawnWithCacheEnabled(false);
-            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     		mPager.measure(mPageWidth, paginatorSpace);
     		mPager.layout(0, 0, mPageWidth, paginatorSpace);
             addViewInLayout(mPager, getChildCount(), params);
@@ -381,8 +381,8 @@ public class AllAppsSlidingView extends AdapterView<ApplicationsAdapter> impleme
         final int rowHeight=actualHeight/mNumRows;
 
         AllAppsSlidingView.LayoutParams p;
-        p = new AllAppsSlidingView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-        		ViewGroup.LayoutParams.FILL_PARENT);
+        p = new AllAppsSlidingView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        		ViewGroup.LayoutParams.MATCH_PARENT);
         int pos=startPos;
         int x=marginLeft;
         int y=marginTop;
