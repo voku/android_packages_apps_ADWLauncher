@@ -9,7 +9,7 @@
                 <item>Muestra/oculta la barra de estado</item>
                 <item>Abre/cierra las notificaciones</item>
                 <item>Ir al escritorio por defecto/abrir las notificaciones</item>
-                <item>Abre/cierra el DockBar</item>
+                <item>Abre/cierra la Barra de Iconos</item>
                 <item>Elige una App...</item>
        </string-array>
        <string-array name="desktop_indicator_entries">
@@ -44,8 +44,8 @@
                 <item>Ninguno</item>
                 <item>Superior</item>
                 <item>Inferior</item>
-                <item>Superior (Reducir escritorio)</item>
-                <item>Inferior (Reducir escritorio)</item>
+                <item>Superior (reducir escritorio)</item>
+                <item>Inferior (reducir escritorio)</item>
        </string-array>
        <string-array name="app_drawer_style_entries">
                 <item>Vertical</item>

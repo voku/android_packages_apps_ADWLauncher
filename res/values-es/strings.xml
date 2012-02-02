@@ -73,10 +73,10 @@
 
     <!-- Screen preferences -->
     <string name="pref_title_screen_preferences">Pantalla</string>
-    <string name="pref_summary_screen_preferences">Escritorio por defecto, disposición, etc...</string>
+    <string name="pref_summary_screen_preferences">Escritorio por defecto, disposición, etc\u2026</string>
 
     <string name="pref_title_wallpaper_hack">Wallpaper Hack</string>
-    <string name="pref_summary_wallpaper_hack">Mejora el desplazamiento entre escritorios. Desactívalo si tienes FCs con wallpapers grandes.</string>
+    <string name="pref_summary_wallpaper_hack">Mejora el desplazamiento entre escritorios. Desactívalo si tienes problemas con fondos de pantalla grandes.</string>
 
     <string name="pref_title_orientation_sensor">Orientación</string>
     <string name="pref_summary_orientation_sensor">Selecciona la orientación que deseas</string>
@@ -95,13 +95,13 @@
 
     <string name="pref_title_desktop_overshoot">Rebote</string>
     <string name="pref_summary_desktop_overshoot">Efecto de rebote al desplazarte entre escritorios</string>
-    <string name="pref_dialog_desktop_overshoot">Establecido a 0 no habrá rebote</string>
+    <string name="pref_dialog_desktop_overshoot">Establecido a cero no habrá rebote</string>
 
     <string name="pref_title_desktop_transition">Transicion escritorios</string>
-    <string name="pref_summary_desktop_transition">Cómo las pantallas de escritorio cambian entre ellas</string>
+    <string name="pref_summary_desktop_transition">Cómo cambian entre ellas las pantallas del escritorio</string>
 
     <!-- Drawer Settings -->
-    <string name="pref_title_drawer_settings">Lista de apps</string>
+    <string name="pref_title_drawer_settings">Lista de Apls</string>
     <string name="pref_summary_drawer_settings">Configuración de la lista de aplicaciones</string>
 
     <string name="pref_title_zoom_effect_speed">Velocidad de animación</string>
@@ -140,61 +140,61 @@
     <string name="pref_summary_ui_settings">Activa/Desactiva elementos</string>
 
     <string name="pref_title_home_button_binding">Botón Home</string>
-    <string name="pref_summary_home_button_binding">Selecciona una acción para el botón HOME</string>
+    <string name="pref_summary_home_button_binding">Selecciona una acción para el botón Home</string>
 
     <string name="pref_title_swipedown_actions">Acción deslizar abajo</string>
-    <string name="pref_summary_swipedown_actions">Seleccione acción para el gesto de deslizar abajo</string>
+    <string name="pref_summary_swipedown_actions">Seleccione acción para el gesto de deslizar hacia abajo</string>
 
     <string name="pref_title_swipeup_actions">Acción deslizar arriba</string>
-    <string name="pref_summary_swipeup_actions">Seleccione acción para el gesto de deslizar arriba</string>
+    <string name="pref_summary_swipeup_actions">Seleccione acción para el gesto de deslizar hacia arriba</string>
 
     <string name="pref_title_doubletap_actions">Acciones doble toque</string>
     <string name="pref_summary_doubletap_actions">Seleccionar acción para el doble toque en pantalla</string>
 
     <string name="pref_title_desktop_dots">Paginador</string>
-    <string name="pref_summary_desktop_dots">Muestra/oculta los puntitos estilo Nexus</string>
+    <string name="pref_summary_desktop_dots">Muestra/oculta un indicador de la pantalla en la que estamos</string>
 
-    <string name="pref_title_dockbar">Dockbar</string>
-    <string name="pref_summary_dockbar">Activa/desactiva el dockbar</string>
+    <string name="pref_title_dockbar">Barra de Iconos</string>
+    <string name="pref_summary_dockbar">Activa/desactiva la barra de iconos</string>
 
-    <string name="pref_title_closing_dockbar">Auto cerrar dockbar</string>
-    <string name="pref_summary_closing_dockbar">Cierra el dockbar automáticamente al abrir una aplicación</string>
+    <string name="pref_title_closing_dockbar">Autocierre de Barra de Iconos</string>
+    <string name="pref_summary_closing_dockbar">Cierra la barra de iconos automáticamente al abrir una aplicación</string>
 
-    <string name="pref_title_ab_scale_factor">Tamaño AB</string>
-    <string name="pref_summary_ab_scale_factor">Selecciona la escala de los iconos de los ActionButton</string>
-    <string name="pref_dialog_ab_scale_factor">Selecciona la escala de los iconos de los ActionButton</string>
+    <string name="pref_title_ab_scale_factor">Tamaño Botones de Acción</string>
+    <string name="pref_summary_ab_scale_factor">Selecciona el tamaño de los botones de acción</string>
+    <string name="pref_dialog_ab_scale_factor">Escala de los botones de acción</string>
 
     <string name="pref_title_closing_folder">Auto cerrar carpetas</string>
-    <string name="pref_summary_closing_folder">Cierra las carpetas tras abrir una app</string>
+    <string name="pref_summary_closing_folder">Cierra las carpetas tras abrir una aplicación</string>
 
-    <string name="pref_title_hide_ab_bg">Ocultar el fondo de AB</string>
-    <string name="pref_summary_hide_ab_bg">Oculta el fondo de los Action Buttons</string>
+    <string name="pref_title_hide_ab_bg">Ocultar fondo Botones de Acción</string>
+    <string name="pref_summary_hide_ab_bg">Oculta el fondo de los botones de acción</string>
 
     <string name="pref_title_hide_icon_labels">Ocultar nombres</string>
     <string name="pref_summary_hide_icon_labels">Oculta los nombres de los iconos del escritorio</string>
 
     <string name="pref_title_build_info">Información de compilación</string>
-    <string name="pref_title_adw_version">ADW Version</string>
+    <string name="pref_title_adw_version">Versión ADW</string>
 
     <string name="pref_title_icon_highlights">Color presionado</string>
-    <string name="pref_summary_icon_highlights">Elige color al presionar iconos</string>
+    <string name="pref_summary_icon_highlights">Elige el color al presionar iconos</string>
     <string name="pref_title_icon_highlights_focus">Color con foco</string>
-    <string name="pref_summary_icon_highlights_focus">Elige color al seleccionar iconos</string>
+    <string name="pref_summary_icon_highlights_focus">Elige el color al seleccionar iconos</string>
     <string name="pref_title_new_selectors">Nuevos selectores</string>
     <string name="pref_summary_new_selectors">Desactivar para usar las imágenes de siempre</string>
     <string name="pref_title_drawer_color">Color de fondo</string>
-    <string name="pref_summary_drawer_color">Elige el color de fondo de la lista de apps</string>
+    <string name="pref_summary_drawer_color">Elige el color de fondo de la lista de aplicaciones</string>
 
     <string name="pref_dialog_title_color_picker">Elige un color</string>
     <string name="pref_dialog_message_color_picker">Pulsa el centro para aceptar.\nPulsa atrás para cancelar</string>
     <string name="pref_dialog_color_picker_alpha">transparencia</string>
-    <string name="pref_message_restart_normal">Cambiar esto hará que el launcher se reinicie</string>
-    <string name="pref_message_restart_froyo">Cambiar esto hará que el launcher se reinicie</string>
+    <string name="pref_message_restart_normal">Cambiar esto hará que el Launcher se reinicie</string>
+    <string name="pref_message_restart_froyo">Cambiar esto hará que el Launcher se reinicie</string>
     <string name="drop_to_uninstall">Soltar para desinstalar</string>
 
     <string name="toast_widgets_not_supported">Widgets no soportados\u2026</string>
-    <string name="toast_unknown_item">Elemento desconocido. No puedo añadir un tipo de elemento desconocido :-)</string>
-    <string name="toast_no_application_def">No hay aplicación definida, arrastre alguna aquí! :)</string>
+    <string name="toast_unknown_item">Elemento desconocido. No puedo añadir un tipo de elemento desconocido</string>
+    <string name="toast_no_application_def">No hay aplicación definida, ¡arrastra alguna aquí!</string>
 
     <string name="pref_title_import_export">Copia de Seguridad</string>
     <string name="pref_title_xml">ADW settings</string>
@@ -214,12 +214,12 @@
 
     <!-- XML Import/Export strings -->
     <string name="message_dialog_export">¿Exportar ADW settings? La copia anterior se eliminará.</string>
-    <string name="xml_export_dialog">Exportando ADW settings...</string>
+    <string name="xml_export_dialog">Exportando ADW settings\u2026</string>
     <string name="xml_export_success">¡ADW settings exportado con éxito!</string>
     <string name="xml_export_error">¡Error exportando ADW settings!</string>
 
     <string name="message_dialog_import">¿Restaurar ADW settings? ADW.Launcher se reiniciará.</string>
-    <string name="xml_import_dialog">Restaurando ADW settings...</string>
+    <string name="xml_import_dialog">Restaurando ADW settings\u2026</string>
     <string name="xml_file_not_found">¡No existe ninguna copia de seguridad!</string>
     <string name="xml_not_readable">¡La copia de seguridad no pudo leerse!</string>
     <string name="xml_import_success">¡ADW settings restaurado con éxito!</string>
@@ -227,12 +227,12 @@
 
     <!-- Config Import/Export strings -->
     <string name="message_dialog_export_config">¿Exportar escritorio? La copia anterior se eliminará.</string>
-    <string name="dbfile_export_dialog">Exportando escritorio...</string>
+    <string name="dbfile_export_dialog">Exportando escritorio\u2026</string>
     <string name="dbfile_export_success">¡Escritorio exportado con éxito!</string>
     <string name="dbfile_export_error">¡Error exportando escritorio!</string>
 
     <string name="message_dialog_import_config">¿Restaurar escritorio? ADW.Launcher se reiniciará.</string>
-    <string name="dbfile_import_dialog">Restaurando escritorio...</string>
+    <string name="dbfile_import_dialog">Restaurando escritorio\u2026</string>
     <string name="dbfile_not_found">¡No existe ninguna copia de seguridad!</string>
     <string name="dbfile_not_readable">¡La copia de seguridad no pudo leerse!</string>
     <string name="dbfile_import_success">¡Escritorio restaurado con éxito!</string>
@@ -251,7 +251,7 @@
     <string name="pref_summary_autosize_icons">Intenta evitar solapamiento de iconos/widgets</string>
 
     <string name="pref_title_drawer_labels">Mostrar etiquetas</string>
-    <string name="pref_summary_drawer_labels">Muestra las etiquetas en la lista de apps</string>
+    <string name="pref_summary_drawer_labels">Muestra las etiquetas en la lista de aplicaciones</string>
     <string name="pref_title_fade_drawer_labels">Desvanecer etiquetas</string>
     <string name="pref_summary_fade_drawer_labels">Las etiquetas se desvaneceen en la animación. Usa más ram/cpu</string>
 
@@ -264,8 +264,8 @@
     <string name="pref_summary_screen_cache">Mejora el scroll a costa de usar memoria</string>
 
     <string name="pref_title_desktop_indicator">Mostrar indicador de pantalla</string>
-    <string name="pref_summary_desktop_indicator">Muestra una ayuda visual de scroll de escritorio</string>
-    <string name="pref_title_desktop_indicator_autohide">Autoocultar indicador</string>
+    <string name="pref_summary_desktop_indicator">Muestra una ayuda visual de desplazamiento entre escritorios</string>
+    <string name="pref_title_desktop_indicator_autohide">Auto-ocultar indicador</string>
     <string name="pref_summary_desktop_indicator_autohide">Oculta el indicador automáticamente</string>
     <string name="pref_title_desktop_indicator_type">Tipo de indicador</string>
     <string name="pref_summary_desktop_indicator_type">Elige entre diferentes estilos de indicador</string>
@@ -281,7 +281,7 @@
     <string name="pref_title_indicators_preferencecategory">Indicador de pantalla</string>
 
     <string name="pref_title_system_persistent">Persistencia</string>
-    <string name="pref_summary_system_persistent">PELIGRO. Evita que se cierre el launcher</string>
+    <string name="pref_summary_system_persistent">PELIGRO. Evita que se cierre el Launcher</string>
     <!-- Theme preferences -->
     <string name="pref_title_theme_settings">Preferencias de Temas</string>
     <string name="pref_summary_theme_settings">Elige temas para ADW.Launcher</string>
@@ -294,8 +294,8 @@
     <string name="pref_themes_apply_theme">¡Aplicar tema!</string>
     <string name="pref_themes_get_themes">¡Obtener temas!</string>
 
-    <string name="pref_title_wallpaper_scrolling">Desplazar wallpaper</string>
-    <string name="pref_summary_wallpaper_scrolling">Mover el wallpaper junto con el escritorio</string>
+    <string name="pref_title_wallpaper_scrolling">Desplazar fondo de pantalla</string>
+    <string name="pref_summary_wallpaper_scrolling">Mover el fondo de pantalla junto con el escritorio</string>
     <string name="message_delete_desktop_screen">¿Eliminar esta pantalla y todo su contenido?</string>
     <string name="message_cannot_delete_desktop_screen">No puedes eliminar la última pantalla</string>
     <string name="message_cannot_add_desktop_screen">No puedes añadir más pantallas</string>
@@ -313,7 +313,7 @@
     <string name="shirtcuts_icon_packs">ADWTheme IconPacks</string>
     <string name="shirtcuts_select_icon_type">Elige el tipo de icono</string>
     <string name="shirtcuts_select_icon_pack">Elige un pack</string>
-    <string name="shirtcuts_restore_original">Restaurar Original</string>
+    <string name="shirtcuts_restore_original">Restaurar original</string>
 
     <string name="selectAll">Seleccionar todos</string>
     <string name="AppGroupAll">"TODAS"</string>
@@ -325,7 +325,7 @@
     <string name="AppGroupRename">"Nuevo grupo"</string>
     <string name="AppGroupConfigError">"No puedes modificar este grupo"</string>
     <string name="rename_group_title">Nuevo grupo</string>
-    <string name="rename_group_label">Nombre de Catálogo</string>
+    <string name="rename_group_label">Nombre de catálogo</string>
     <string name="show_catalog">Ver catálogo \"%s\"</string>
 
     <string name="pref_title_adw_restart">Reiniciar ADW</string>
@@ -348,22 +348,22 @@
     <string name="pref_summary_notif_size">Elige el tamaño de letra para las notificaciones</string>
     <string name="pref_dialog_notif_size">Elige el tamaño de letra para las notificaciones</string>
 
-    <string name="pref_title_ab_preferencecategory">Barra principal</string>
-    <string name="pref_title_main_dock_style">Estilo barra principal</string>
+    <string name="pref_title_ab_preferencecategory">Barra de iconos</string>
+    <string name="pref_title_main_dock_style">Estilo Barra de Iconos</string>
     <string name="pref_summary_main_dock_style">Elige el estilo para la barra de iconos principal</string>
     <string name="pref_title_behaviour_preferences">Comportamiento general</string>
     <string name="pref_summary_behaviour_preferences">Configuración general de comportamiento de la aplicación</string>
     <string name="pref_title_drawer_style">Estilo</string>
     <string name="pref_summary_drawer_style">Elige entre distintos estilos de lista de aplicaciones</string>
-    <string name="pref_title_dockbar_preferencecategory">Barra iconos oculta</string>
-    <string name="pref_title_ab_tint">Tinte iconos del Dock</string>
+    <string name="pref_title_dockbar_preferencecategory">Barra de iconos oculta</string>
+    <string name="pref_title_ab_tint">Tinte iconos de la barra</string>
     <string name="pref_summary_ab_tint">Especificar el color de los iconos</string>
     <string name="pref_title_ab_tint_color">Tono de color</string>
     <string name="pref_summary_ab_tint_color">Cambiar el tintado de color</string>
     <string name="pref_title_deletezone_preferencecategory">Papelera</string>
     <string name="pref_title_deletezone_style">Posición de la papelera</string>
     <string name="pref_summary_deletezone_style">Cambia la posición de la papelera</string>
-    <string name="pref_title_close_apps_dockbar">Cierre el cajón de la aplicación</string>
+    <string name="pref_title_close_apps_dockbar">Cierre del cajón de aplicaciones</string>
     <string name="pref_summary_close_apps_dockbar">Cierra el cajón de aplicaciones con pulsación larga sobre un elemento cuando la barra de iconos es visible</string>
     <string name="menu_lock">Bloquear Escritorio</string>
     <string name="menu_unlock">Desbloquear Escritorio</string>
